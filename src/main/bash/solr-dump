@@ -1,0 +1,8 @@
+#!/bin/sh
+#
+# A command line tool for solr.
+#
+# author: tbl
+#
+
+java -cp $SOLR_CMD_UTILS_HOME/lib/*.jar de.tblsoft.solr.cmd.Cmd -cmd solrDump $@
