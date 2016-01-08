@@ -6,13 +6,18 @@
 * documentation for all the available functions
 
 ## Installation
-Assuming you want to install the lib to the `~/dev`directory, you have to do the following tasks:
+Assuming you want to install the lib to the `~/dev/solr-cmd-utils` directory, you have to do the following tasks:
 
 
     cd $SOURCE_CODE/solr-cmd-utils
     mvn clean install
     cd target
     tar xvfz solr-cmd-utils-1.0-SNAPSHOT-cmd.tar.gz -C ~/dev
+
+To call the util function from every location, you have to add the following exports to your `.profile`
+
+    export SOLR_CMD_UTILS_HOME=~/dev/solr-cmd-utils
+    export PATH=$SOLR_CMD_UTILS_HOME/bin:$PATH
 
 ## solr-dump
     solr-dump -in "http://localhost:8983/solr/source-core/select?q=*&rows=1000" \
