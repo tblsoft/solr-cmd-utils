@@ -16,6 +16,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.List;
 
 /**
  * Created by tblsoft
@@ -89,17 +90,29 @@ public class Solr {
         if(showHeaders) {
             responseBuilder.append(response.getStatusLine());
             responseBuilder.append("\n");
-            for(Header header :response.getAllHeaders()) {
-                responseBuilder.append(header.getName());
-                responseBuilder.append(": ");
-                responseBuilder.append(header.getValue());
-                responseBuilder.append("\n");
+            responseBuilder.append("\n");
+            responseBuilder.append("Request Header\n");
+            printHeader(httpPost.getAllHeaders(), responseBuilder);
 
-            }
+            responseBuilder.append("\n");
+            responseBuilder.append("Response Header\n");
+            printHeader(response.getAllHeaders(), responseBuilder);
+
         }
         responseBuilder.append(EntityUtils.toString(response.getEntity()));
         httpclient.close();
         return responseBuilder.toString();
+    }
+
+    void printHeader(Header[] headers, StringBuilder responseBuilder) {
+        for(Header header :headers) {
+            responseBuilder.append(header.getName());
+            responseBuilder.append(": ");
+            responseBuilder.append(header.getValue());
+            responseBuilder.append("\n");
+
+        }
+
     }
 
     public String deleteByQuery(String url, String query) throws Exception {
