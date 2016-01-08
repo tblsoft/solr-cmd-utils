@@ -13,6 +13,8 @@ import de.tblsoft.solr.util.XPathUtils;
 import de.tblsoft.solr.xml.Formatter;
 
 import java.io.File;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
@@ -55,8 +57,12 @@ public class Cmd {
             cmd.extractSpecialCharacters(solrArgs);
         } else if ("numFound".equals(command)) {
             cmd.numFound(solrArgs);
-        }else if ("xPath".equals(command)) {
+        } else if ("xPath".equals(command)) {
             cmd.xPath(solrArgs);
+        } else if ("urlencode".equals(command)) {
+            cmd.urlencode(solrArgs);
+        }else if ("urldecode".equals(command)) {
+            cmd.urldecode(solrArgs);
         } else {
             JCommander.getConsole().println("--comand=feedFileToSolr");
             JCommander.getConsole().println("--comand=indexFileToSolr");
@@ -74,6 +80,27 @@ public class Cmd {
 
     }
 
+    public void urlencode(SolrArgs solrArgs) throws Exception {
+        String encoding = solrArgs.getEnocding();
+        String input = solrArgs.getInput();
+
+        if (Strings.isNullOrEmpty(encoding)) {
+            encoding = "UTF-8";
+        }
+        String output = URLEncoder.encode(input,encoding);
+        System.out.println(output);
+    }
+
+    public void urldecode(SolrArgs solrArgs) throws Exception {
+        String encoding = solrArgs.getEnocding();
+        String input = solrArgs.getInput();
+
+        if (Strings.isNullOrEmpty(encoding)) {
+            encoding = "UTF-8";
+        }
+        String output = URLDecoder.decode(input,encoding);
+        System.out.println(output);
+    }
 
     public void countUsedFields(SolrArgs solrArgs) throws Exception {
         String inputFileName = solrArgs.getInput();
@@ -293,8 +320,8 @@ public class Cmd {
         String input = solrArgs.getInput();
         String query = solrArgs.getQuery();
 
-        verifiy(input, "--input");
-        verifiy(query, "--query");
+        verifiy(input, "-input");
+        verifiy(query, "-query");
 
         String response = solr.deleteByQuery(input, query);
         System.out.println(response);
@@ -304,7 +331,7 @@ public class Cmd {
         Solr solr = new Solr(solrArgs.isShowHeaders());
         String input = solrArgs.getInput();
 
-        verifiy(input, "--input");
+        verifiy(input, "-input");
 
         String response = solr.deleteAll(input);
         System.out.println(response);

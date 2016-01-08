@@ -28,6 +28,9 @@ public class SolrArgs {
     @Parameter(names = { "-input","-in"}, description = "The location of the input. Example: -input=/data/my-file.xml")
     private String input = null;
 
+    @Parameter(names = { "-url"}, description = "The url. Example: -url=http://localhost:8983/solr/my-core/select?q=*")
+    private String url = null;
+
     @Parameter(names = { "-output","-out"}, description = "The location of the output. Example: -output=/data/my-file.xml")
     private String output = null;
 
@@ -51,6 +54,9 @@ public class SolrArgs {
 
     @Parameter(names = { "-v"}, description = "Enable debug mode.")
     private boolean debug = false;
+
+    @Parameter(names = { "-encoding"}, description = "The encoding. Example: -encoding=UTF-8")
+    private String enocding = null;
 
 
     public String getInput() {
@@ -95,5 +101,14 @@ public class SolrArgs {
 
     public boolean isDebug() {
         return debug;
+    }
+
+    public String getEnocding() {
+        return enocding;
+    }
+
+
+    public String getUrl() {
+        return url;
     }
 }
