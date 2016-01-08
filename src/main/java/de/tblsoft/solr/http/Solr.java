@@ -81,6 +81,8 @@ public class Solr {
 
         StringEntity entity = new StringEntity(postString);
         httpPost.setEntity(entity);
+        httpPost.setHeader("Content-Type","application/xml");
+
 
         CloseableHttpResponse response = httpclient.execute(httpPost);
         StringBuilder responseBuilder = new StringBuilder();

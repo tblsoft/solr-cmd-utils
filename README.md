@@ -6,7 +6,13 @@
 * documentation for all the available functions
 
 ## Installation
-TODO 
+Assuming you want to install the lib to the `~/dev`directory, you have to do the following tasks:
+
+
+    cd $SOURCE_CODE/solr-cmd-utils
+    mvn clean install
+    cd target
+    tar xvfz solr-cmd-utils-1.0-SNAPSHOT-cmd.tar.gz -C ~/dev
 
 ## solr-dump
     solr-dump -in "http://localhost:8983/solr/source-core/select?q=*&rows=1000" \
