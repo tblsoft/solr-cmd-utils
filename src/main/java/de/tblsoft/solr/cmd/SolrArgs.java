@@ -49,7 +49,7 @@ public class SolrArgs {
     @Parameter(names = "-i", description = "Show http headers")
     private boolean showHeaders = false;
 
-    @Parameter(names = { "--help", "-h", "-?"}, description = "Print the help.")
+    @Parameter(names = { "-help", "-h", "-?"}, description = "Print the help.")
     private boolean help = false;
 
     @Parameter(names = { "-v"}, description = "Enable debug mode.")
@@ -57,6 +57,21 @@ public class SolrArgs {
 
     @Parameter(names = { "-encoding"}, description = "The encoding. Example: -encoding=UTF-8")
     private String enocding = null;
+
+
+    @Parameter(names = { "-type", "-t"}, description = "The type. Example: -type=properties")
+    private String type = null;
+
+
+    @Parameter(names = { "-solr-home"}, description = "The home directory of solr. Example: -solr-home=/data/solr/index")
+    private String solrHome = null;
+
+    @Parameter(names = { "-core-name"}, description = "The solr core name. Example: -core-name=my-solr-core")
+    private String coreName = null;
+
+
+    @Parameter(names = { "-template"}, description = "The template. Example: -template=my-template")
+    private String template = null;
 
 
     public String getInput() {
@@ -110,5 +125,21 @@ public class SolrArgs {
 
     public String getUrl() {
         return url;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public String getSolrHome() {
+        return solrHome;
+    }
+
+    public String getCoreName() {
+        return coreName;
+    }
+
+    public String getTemplate() {
+        return template;
     }
 }

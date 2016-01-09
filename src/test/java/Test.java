@@ -1,7 +1,5 @@
-import java.io.File;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import de.tblsoft.solr.bean.SolrConfiguration;
+import de.tblsoft.solr.http.SolrFile;
 
 /**
  * Created by tblsoft

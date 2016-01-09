@@ -5,6 +5,7 @@ import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import de.tblsoft.solr.http.Solr;
+import de.tblsoft.solr.http.SolrFile;
 import de.tblsoft.solr.logic.NounExtractor;
 import de.tblsoft.solr.logic.SolrFeeder;
 import de.tblsoft.solr.logic.SpecialCharacterExtractor;
@@ -45,8 +46,8 @@ public class Cmd {
             cmd.retrieveFromSolr(solrArgs);
         } else if ("deleteByQuery".equals(command)) {
             cmd.deleteByQuery(solrArgs);
-        } else if ("deleteAll".equals(command)) {
-            cmd.deleteAll(solrArgs);
+        } else if ("truncate".equals(command)) {
+            cmd.truncate(solrArgs);
         } else if ("xmllint".equals(command)) {
             cmd.xmllint(solrArgs);
         } else if ("extractNouns".equals(command)) {
@@ -61,15 +62,17 @@ public class Cmd {
             cmd.xPath(solrArgs);
         } else if ("urlencode".equals(command)) {
             cmd.urlencode(solrArgs);
-        }else if ("urldecode".equals(command)) {
+        } else if ("urldecode".equals(command)) {
             cmd.urldecode(solrArgs);
+        } else if ("createIndex".equals(command)) {
+            cmd.createIndex(solrArgs);
         } else {
             JCommander.getConsole().println("--comand=feedFileToSolr");
             JCommander.getConsole().println("--comand=indexFileToSolr");
             JCommander.getConsole().println("--comand=solrDump");
             JCommander.getConsole().println("--comand=retrieveFromSolr");
             JCommander.getConsole().println("--comand=deleteByQuery");
-            JCommander.getConsole().println("--comand=deleteAll");
+            JCommander.getConsole().println("--comand=truncate");
             JCommander.getConsole().println("--comand=xmllint");
             JCommander.getConsole().println("--comand=numFound");
             JCommander.getConsole().println("--comand=xPath");
@@ -78,6 +81,28 @@ public class Cmd {
             JCommander.getConsole().println("--comand=extractSpecialCharacters");
         }
 
+    }
+
+
+
+    public void createIndex(SolrArgs solrArgs) throws Exception {
+        String solrHome = solrArgs.getSolrHome();
+        String coreName = solrArgs.getCoreName();
+        String template = solrArgs.getTemplate();
+        String type = solrArgs.getType();
+
+        if(Strings.isNullOrEmpty(solrHome)) {
+            solrHome=System.getProperty("user.dir");
+            template=solrHome + "/" + template;
+        }
+
+        SolrFile solrFile = new SolrFile();
+        if("properties".equals(type)) {
+            solrFile.createIndexWithCoreProperties(solrHome, coreName, template);
+        }else
+        {
+            solrFile.createIndexWithSolrXml(solrHome, coreName, template);
+        }
     }
 
     public void urlencode(SolrArgs solrArgs) throws Exception {
@@ -327,13 +352,13 @@ public class Cmd {
         System.out.println(response);
     }
 
-    public void deleteAll(SolrArgs solrArgs) throws Exception {
+    public void truncate(SolrArgs solrArgs) throws Exception {
         Solr solr = new Solr(solrArgs.isShowHeaders());
         String input = solrArgs.getInput();
 
         verifiy(input, "-input");
 
-        String response = solr.deleteAll(input);
+        String response = solr.truncate(input);
         System.out.println(response);
     }
 

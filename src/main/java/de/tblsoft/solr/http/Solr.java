@@ -1,6 +1,8 @@
 package de.tblsoft.solr.http;
 
 import com.google.common.io.ByteStreams;
+import de.tblsoft.solr.bean.Core;
+import de.tblsoft.solr.bean.SolrConfiguration;
 import de.tblsoft.solr.util.IOUtils;
 import org.apache.http.Header;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -12,10 +14,10 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
+import java.io.*;
 import java.util.List;
 
 /**
@@ -121,7 +123,7 @@ public class Solr {
         return post(url,deleteQuery);
     }
 
-    public String deleteAll(String url) throws Exception {
+    public String truncate(String url) throws Exception {
         return deleteByQuery(url,"*:*");
     }
 }
