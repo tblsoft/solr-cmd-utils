@@ -27,6 +27,21 @@ To call the util function from every location, you have to add the following exp
 Download the solr data from the specified input and writes the data to the specified output.
 The input and output can be a url or a file.
 
+## solr-extract-nouns
+    solr-extract-nouns -in "http://localhost:8983/solr/source-core/select?q=*&rows=1000" \
+        -out "nouns.txt"
+        
+
+        
+Extract all nouns from the given input and list the nouns. The output is deduplicated and sortet. 
+Each noun is in one row. Example
+
+    noun1
+    noun2
+    ...
+
+The algorithm is specific for the german language.
+
 ## solr-numfound
     solr-numfound -in "http://localhost:8983/solr/solr-core/select?q=*"
 

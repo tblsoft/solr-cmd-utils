@@ -266,18 +266,32 @@ public class Cmd {
     }
 
     public void extractNouns(SolrArgs solrArgs) throws Exception {
-        String inputFileName = solrArgs.getInput();
+        String input = solrArgs.getInput();
+
+
 
         String outputFileName = solrArgs.getOutput();
         if (Strings.isNullOrEmpty(outputFileName)) {
             outputFileName = "stdout";
         }
-        verifiy(inputFileName, "--input");
+        verifiy(input, "--input");
 
         NounExtractor extractor = new NounExtractor();
-        extractor.setInputFileName(inputFileName);
-        extractor.setOutputFileName(outputFileName);
-        extractor.extractNouns();
+        Solr solr = new Solr(false);
+        if (input.startsWith("http")) {
+            String tempFile = File.createTempFile("solr_dump_", ".xml.gz").getAbsolutePath();
+            solr.retrieveFromSolr(input, tempFile);
+            extractor.setInputFileName(tempFile);
+            extractor.setOutputFileName(outputFileName);
+            extractor.extractNouns();
+            Files.delete(Paths.get(tempFile));
+        } else {
+            extractor.setInputFileName(input);
+            extractor.setOutputFileName(outputFileName);
+            extractor.extractNouns();
+        }
+
+
 
     }
 
