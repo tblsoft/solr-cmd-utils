@@ -39,7 +39,7 @@ Each noun is in one row. Example
 The algorithm is specific for the german language.
 
 ## solr-numfound
-    solr-numfound -in "http://localhost:8983/solr/solr-core/select?q=*"
+    solr-numfound "http://localhost:8983/solr/solr-core/select?q=*"
 
 Retrieve the data from the specified url and return the numFound of the resultset. This method can be uses for Monitoring.
 If you have a full feed every night, you can check the number of results that were processed yesterday. If numFound > 0 you might have a problem.
