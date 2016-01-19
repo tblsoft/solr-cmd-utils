@@ -13,6 +13,7 @@
             <outputDirectory>solr-cmd-utils/bin</outputDirectory>
             <includes>
                 <include>*.sh</include>
+                <include>request-counter</include>
                 <include>solr-*</include>
             </includes>
             <lineEnding>unix</lineEnding>

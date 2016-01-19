@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<solr persistent="true">
+    <cores defaultCoreName="collection1" adminPath="/admin/cores">
+        <core config="solrconfig.xml" name="vespa" loadOnStartup="true" instanceDir="vespa/" schema="schema.xml" transient="false" dataDir="data"/>
+        <core config="solrconfig.xml" name="ls4l" loadOnStartup="true" instanceDir="ls4l/" schema="schema.xml" transient="false" dataDir="data"/>
+        <core config="solrconfig.xml" name="marketing" loadOnStartup="true" instanceDir="marketing/" schema="schema.xml" transient="false" dataDir="data"/>
+        <core config="solrconfig.xml" name="qivicon" loadOnStartup="true" instanceDir="qivicon/" schema="schema.xml" transient="false" dataDir="data"/>
+    </cores>
+</solr>

@@ -6,6 +6,8 @@ import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import de.tblsoft.solr.http.Solr;
 import de.tblsoft.solr.http.SolrFile;
+import de.tblsoft.solr.log.parser.RequestCounter;
+import de.tblsoft.solr.log.parser.SolrRequestCounter;
 import de.tblsoft.solr.logic.NounExtractor;
 import de.tblsoft.solr.logic.SolrFeeder;
 import de.tblsoft.solr.logic.SpecialCharacterExtractor;
@@ -66,6 +68,10 @@ public class Cmd {
             cmd.urldecode(solrArgs);
         } else if ("createIndex".equals(command)) {
             cmd.createIndex(solrArgs);
+        } else if ("countSolrRequests".equals(command)) {
+            cmd.countSolrRequests(solrArgs);
+        } else if ("countRequests".equals(command)) {
+            cmd.countRequests(solrArgs);
         } else {
             JCommander.getConsole().println("--comand=feedFileToSolr");
             JCommander.getConsole().println("--comand=indexFileToSolr");
@@ -83,7 +89,45 @@ public class Cmd {
 
     }
 
+    public void countRequests(SolrArgs solrArgs) throws Exception {
+        String input = solrArgs.getInput();
+        String type = solrArgs.getType();
+        String pattern = solrArgs.getPattern();
+        String regex = solrArgs.getRegex();
+        String period = solrArgs.getPeriod();
+        String locale = solrArgs.getLocale();
+        verifiy(input, "-input");
 
+        RequestCounter requestCounter = new RequestCounter(input);
+        requestCounter.setAggregationOption(period);
+
+        if("haproxy".equals(type)) {
+            requestCounter.setDatePattern("dd/MMM/yyyy:kk:mm:ss.SSS");
+            requestCounter.setDateRegex(".*\\[(.*)\\].*");
+        } else {
+            requestCounter.setDatePattern(pattern);
+            requestCounter.setDateRegex(regex);
+        }
+
+
+        if(!Strings.isNullOrEmpty(locale)) {
+            requestCounter.setLocale(locale);
+        }
+
+        requestCounter.parse();
+        requestCounter.print();
+    }
+
+    public void countSolrRequests(SolrArgs solrArgs) throws Exception {
+        String input = solrArgs.getInput();
+        String period = solrArgs.getPeriod();
+        verifiy(input, "-input");
+
+        SolrRequestCounter solrRequestCounter = new SolrRequestCounter(input);
+        solrRequestCounter.setAggregationOption(period);
+        solrRequestCounter.parse();
+        solrRequestCounter.print();
+    }
 
     public void createIndex(SolrArgs solrArgs) throws Exception {
         String solrHome = solrArgs.getSolrHome();

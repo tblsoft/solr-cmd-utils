@@ -2,7 +2,6 @@ package de.tblsoft.solr.cmd;
 
 
 import com.beust.jcommander.Parameter;
-import com.beust.jcommander.Parameters;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,6 +57,9 @@ public class SolrArgs {
     @Parameter(names = { "-encoding"}, description = "The encoding. Example: -encoding=UTF-8")
     private String enocding = null;
 
+    @Parameter(names = { "-locale"}, description = "The locale. Example: -locale=US")
+    private String locale = null;
+
 
     @Parameter(names = { "-type", "-t"}, description = "The type. Example: -type=properties")
     private String type = null;
@@ -72,6 +74,16 @@ public class SolrArgs {
 
     @Parameter(names = { "-template"}, description = "The template. Example: -template=my-template")
     private String template = null;
+
+    @Parameter(names = { "-pattern"}, description = "The pattern. Example: -pattern=dd/MMM/yyyy:kk:mm:ss.SSS")
+    private String pattern = null;
+
+    @Parameter(names = { "-regex"}, description = "The regex. Example: -regex=.*\\[(.*)\\].*")
+    private String regex = null;
+
+    @Parameter(names = { "-period"}, description = "The period. Example: -period=minute")
+    private String period = null;
+
 
 
     public String getInput() {
@@ -141,5 +153,21 @@ public class SolrArgs {
 
     public String getTemplate() {
         return template;
+    }
+
+    public String getPattern() {
+        return pattern;
+    }
+
+    public String getRegex() {
+        return regex;
+    }
+
+    public String getPeriod() {
+        return period;
+    }
+
+    public String getLocale() {
+        return locale;
     }
 }

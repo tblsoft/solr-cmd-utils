@@ -9,6 +9,11 @@ To call the util function from every location, you have to add the following exp
 
     export SOLR_CMD_UTILS_HOME=~/dev/solr-cmd-utils
     export PATH=$SOLR_CMD_UTILS_HOME/bin:$PATH
+    
+### Prerequisites
+* Linux, OS X, or Unix
+* Java 7
+
 
 ## solr-dump
     solr-dump -in "http://localhost:8983/solr/source-core/select?q=*&rows=1000" \
