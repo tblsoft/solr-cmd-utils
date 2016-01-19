@@ -1,14 +1,14 @@
 package de.tblsoft.solr.logic;
 
+import de.tblsoft.solr.parser.SolrXmlParser;
+import org.apache.solr.client.solrj.SolrClient;
+import org.apache.solr.client.solrj.SolrServerException;
+import org.apache.solr.client.solrj.impl.HttpSolrClient;
+import org.apache.solr.common.SolrInputDocument;
+
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-
-import de.tblsoft.solr.parser.SolrXmlParser;
-import org.apache.solr.client.solrj.SolrServerException;
-import org.apache.solr.client.solrj.impl.HttpSolrServer;
-import org.apache.solr.common.SolrInputDocument;
 
 /**
  *
@@ -18,15 +18,15 @@ public class SolrFeeder extends SolrXmlParser {
 
     private List<String> ignoreFields = new ArrayList<String>();
 
-    private HttpSolrServer server;
+    private SolrClient server;
 
     private SolrInputDocument inputDoc = new SolrInputDocument();
 
 
 
     public SolrFeeder(String server) {
-        this.server = new HttpSolrServer(server);
-
+        //this.server = new ConcurrentUpdateSolrClient(server,1,1);
+        this.server = new HttpSolrClient(server);
     }
 
     public void doFeed() throws Exception {
