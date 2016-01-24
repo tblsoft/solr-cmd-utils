@@ -12,6 +12,7 @@ import de.tblsoft.solr.logic.NounExtractor;
 import de.tblsoft.solr.logic.SolrFeeder;
 import de.tblsoft.solr.logic.SpecialCharacterExtractor;
 import de.tblsoft.solr.logic.UsedFieldCounter;
+import de.tblsoft.solr.pipeline.PipelineExecuter;
 import de.tblsoft.solr.util.XPathUtils;
 import de.tblsoft.solr.xml.Formatter;
 
@@ -193,15 +194,31 @@ public class Cmd {
             printHelp(help);
             return;
         }
+        boolean bulk = solrArgs.isBulk();
+        int threads = solrArgs.getTreads();
+        int queueSize = solrArgs.getQueueSize();
+        if(bulk) {
+            threads = 10;
+            queueSize = 1000;
+        }
 
+        String pipeline = solrArgs.getPipeline();
         String input = solrArgs.getInput();
         String output = solrArgs.getOutput();
+
+        if(!Strings.isNullOrEmpty(pipeline)) {
+            PipelineExecuter executer = new PipelineExecuter(pipeline);
+            executer.execute();
+            return;
+
+        }
 
         verifiy(input, "--input");
         verifiy(output, "--output");
 
-
         SolrFeeder feeder = new SolrFeeder(output);
+        feeder.setQueueSize(queueSize);
+        feeder.setThreads(threads);
         String ignoreFields = solrArgs.getIgnoreFields();
         List<String> ignoreFieldsList = Lists.newArrayList(Splitter.on(",").split(ignoreFields));
         feeder.setIgnoreFields(ignoreFieldsList);
@@ -212,6 +229,7 @@ public class Cmd {
             solr.retrieveFromSolr(input, output);
         } else if (input.startsWith("http") && output.startsWith("http")) {
             String tempFile = File.createTempFile("solr_dump_", ".xml.gz").getAbsolutePath();
+            System.out.println(tempFile);
             solr.retrieveFromSolr(input, tempFile);
             feeder.setInputFileName(tempFile);
             feeder.doFeed();

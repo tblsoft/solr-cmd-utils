@@ -1,18 +1,15 @@
 package de.tblsoft.solr.logic;
 
-import java.io.File;
+import de.tblsoft.solr.parser.SolrXmlParser;
+import de.tblsoft.solr.util.IOUtils;
+import de.tblsoft.solr.util.OutputStreamStringBuilder;
+
 import java.io.OutputStream;
-import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-
-import com.google.common.io.Files;
-import de.tblsoft.solr.parser.SolrXmlParser;
-import de.tblsoft.solr.util.IOUtils;
-import de.tblsoft.solr.util.OutputStreamStringBuilder;
 
 /**
  * Unit test for simple App.

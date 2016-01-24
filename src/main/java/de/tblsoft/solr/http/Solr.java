@@ -1,8 +1,6 @@
 package de.tblsoft.solr.http;
 
 import com.google.common.io.ByteStreams;
-import de.tblsoft.solr.bean.Core;
-import de.tblsoft.solr.bean.SolrConfiguration;
 import de.tblsoft.solr.util.IOUtils;
 import org.apache.http.Header;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -14,11 +12,7 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
 import java.io.*;
-import java.util.List;
 
 /**
  * Created by tblsoft

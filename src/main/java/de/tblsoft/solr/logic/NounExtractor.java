@@ -1,23 +1,13 @@
 package de.tblsoft.solr.logic;
 
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.OutputStream;
-import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.StringTokenizer;
-
-
 import com.google.common.base.Strings;
-import com.google.common.io.Files;
 import de.tblsoft.solr.parser.SolrXmlParser;
 import de.tblsoft.solr.util.IOUtils;
 import de.tblsoft.solr.util.OutputStreamStringBuilder;
+
+import java.io.OutputStream;
+import java.util.*;
 
 
 public class NounExtractor extends SolrXmlParser {

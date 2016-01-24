@@ -3,13 +3,6 @@ package de.tblsoft.solr.parser;
 
 import de.tblsoft.solr.util.IOUtils;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Arrays;
-import java.util.List;
-import java.util.zip.GZIPInputStream;
-
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLInputFactory;
@@ -17,6 +10,8 @@ import javax.xml.stream.events.Characters;
 import javax.xml.stream.events.EndElement;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Solr XML Parser

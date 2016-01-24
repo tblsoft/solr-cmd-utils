@@ -1,6 +1,5 @@
 package de.tblsoft.solr.http;
 
-import de.tblsoft.solr.bean.Core;
 import de.tblsoft.solr.bean.SolrConfiguration;
 import org.apache.commons.io.FileUtils;
 
@@ -12,7 +11,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Properties;
 

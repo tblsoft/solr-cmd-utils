@@ -1,6 +1,6 @@
-package de.tblsoft.solr.logic;
+package de.tblsoft.solr.pipeline.filter;
 
-import de.tblsoft.solr.parser.SolrXmlParser;
+import de.tblsoft.solr.pipeline.AbstractFilter;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.ConcurrentUpdateSolrClient;
@@ -13,8 +13,7 @@ import java.util.List;
 /**
  *
  */
-@Deprecated
-public class SolrFeeder extends SolrXmlParser {
+public class SolrFeeder extends AbstractFilter {
 
 
     private List<String> ignoreFields = new ArrayList<String>();
@@ -29,19 +28,39 @@ public class SolrFeeder extends SolrXmlParser {
 
     private int threads = 1;
 
-    public SolrFeeder(String server) {
-        this.serverUrl = server;
+    @Override
+    public void init() {
+        queueSize = getPropertyAsInt("queueSize", 1);
+        threads = getPropertyAsInt("threads", 1);
+        serverUrl = getProperty("serverUrl", null);
+        ignoreFields = getPropertyAsList("ignoreFields", null);
+        if(serverUrl == null) {
+            throw new RuntimeException("You must configure a solr server url.");
+        }
+
+        this.server = new ConcurrentUpdateSolrClient(serverUrl, queueSize, threads);
+        try {
+            server.deleteByQuery("*:*");
+        } catch (SolrServerException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
 
     }
 
-    public void doFeed() throws Exception {
-        this.server = new ConcurrentUpdateSolrClient(serverUrl,queueSize,threads);
-        server.deleteByQuery("*:*");
-        parse();
-        server.commit();
-        server.optimize();
-        server.close();
+    @Override
+    public void end() {
+        try {
+            server.commit();
+            server.optimize();
+            server.close();
+        } catch (SolrServerException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
