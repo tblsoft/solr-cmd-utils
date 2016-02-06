@@ -2,6 +2,7 @@ package de.tblsoft.solr.pipeline.filter;
 
 import de.tblsoft.solr.pipeline.AbstractFilter;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -16,6 +17,8 @@ public class RegexSplitFilter extends AbstractFilter {
 
     private List<String> destFieldList;
 
+    private List<String> notMatchedDestFieldList;
+
 
     @Override
     public void init() {
@@ -29,6 +32,8 @@ public class RegexSplitFilter extends AbstractFilter {
 
         destFieldList = getPropertyAsList("destFieldList", null);
         verify(this.destFieldList, "For the RegexSplitFilter a destFieldList property must be defined as list.");
+
+        notMatchedDestFieldList = getPropertyAsList("destFieldList", new ArrayList<String>());
 
         super.init();
     }
@@ -49,6 +54,9 @@ public class RegexSplitFilter extends AbstractFilter {
             super.field(name,value);
         } else {
             super.field(name,value);
+            for(String fieldName : notMatchedDestFieldList) {
+                super.field(fieldName,value);
+            }
         }
     }
 }

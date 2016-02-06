@@ -1,38 +1,40 @@
-package de.tblsoft.solr.logic;
+package de.tblsoft.solr.pipeline.filter;
 
 
 import com.google.common.base.Strings;
-import de.tblsoft.solr.parser.SolrXmlParser;
-import de.tblsoft.solr.util.IOUtils;
-import de.tblsoft.solr.util.OutputStreamStringBuilder;
+import de.tblsoft.solr.pipeline.AbstractFilter;
 
-import java.io.OutputStream;
 import java.util.*;
 
-@Deprecated
-public class NounExtractor extends SolrXmlParser {
+
+public class NounExtractorFilter extends AbstractFilter {
 
     private Set<String> dictionary = new HashSet<String>();
-
-    private String outputFileName;
 
     private List<String> fieldWhiteList;
 
     private List<String> fieldBlackList;
 
+    @Override
+    public void end() {
 
-    public void extractNouns() throws Exception {
-        parse();
         List<String> dictionaryList = new ArrayList<String>(dictionary);
         Collections.sort(dictionaryList);
-        OutputStream out = IOUtils.getOutputStream(outputFileName);
-        OutputStreamStringBuilder dict = new OutputStreamStringBuilder(out);
         for (String value : dictionaryList) {
-            dict.append(value);
-            dict.append("\n");
+            super.field("noun", value);
         }
-        out.close();
+        super.end();
     }
+
+    @Override
+    public void init() {
+        fieldWhiteList = getPropertyAsList("fieldWhiteList", null);
+        fieldBlackList = getPropertyAsList("fieldBlackList", null);
+
+        super.init();
+    }
+
+
 
     @Override
     public void field(String name, String value) {
@@ -71,8 +73,9 @@ public class NounExtractor extends SolrXmlParser {
         if (value.length() < 3) {
             return false;
         }
-        char v = value.charAt(0);
-        return Character.isUpperCase(v);
+        char firstChar = value.charAt(0);
+        char secondChar = value.charAt(2);
+        return Character.isUpperCase(firstChar) && Character.isLowerCase(secondChar);
     }
 
     boolean containsOnlyGermanCharacters(String value) {
@@ -93,10 +96,6 @@ public class NounExtractor extends SolrXmlParser {
 
         return values;
 
-    }
-
-    public void setOutputFileName(String outputFileName) {
-        this.outputFileName = outputFileName;
     }
 }
 

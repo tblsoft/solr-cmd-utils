@@ -3,7 +3,6 @@ package de.tblsoft.solr.pipeline.filter;
 import de.tblsoft.solr.pipeline.AbstractFilter;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrServerException;
-import org.apache.solr.client.solrj.impl.ConcurrentUpdateSolrClient;
 import org.apache.solr.common.SolrInputDocument;
 
 import java.io.IOException;
@@ -28,17 +27,26 @@ public class SolrFeeder extends AbstractFilter {
 
     private int threads = 1;
 
+    private String user;
+
+    private String password;
+
     @Override
     public void init() {
         queueSize = getPropertyAsInt("queueSize", 1);
         threads = getPropertyAsInt("threads", 1);
         serverUrl = getProperty("serverUrl", null);
         ignoreFields = getPropertyAsList("ignoreFields", null);
+        user = getProperty("user", null);
+        password = getProperty("password", null);
+
         if(serverUrl == null) {
             throw new RuntimeException("You must configure a solr server url.");
         }
 
-        this.server = new ConcurrentUpdateSolrClient(serverUrl, queueSize, threads);
+        BasicAuthConcurrentUpdateSolrClient basicAuthserver = new BasicAuthConcurrentUpdateSolrClient(serverUrl, queueSize, threads);
+        basicAuthserver.setBasicAuthCredentials(user,password);
+        this.server = basicAuthserver;
         try {
             server.deleteByQuery("*:*");
         } catch (SolrServerException e) {

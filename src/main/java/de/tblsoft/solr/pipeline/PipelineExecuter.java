@@ -2,9 +2,7 @@ package de.tblsoft.solr.pipeline;
 
 import de.tblsoft.solr.pipeline.bean.Filter;
 import de.tblsoft.solr.pipeline.bean.Pipeline;
-import de.tblsoft.solr.pipeline.filter.RegexSplitFilter;
-import de.tblsoft.solr.pipeline.filter.SolrFeeder;
-import de.tblsoft.solr.pipeline.filter.SpyFilter;
+import de.tblsoft.solr.pipeline.filter.*;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 
@@ -36,6 +34,10 @@ public class PipelineExecuter {
         classRegestriy.put("solrcmdutils.SpyFilter", SpyFilter.class);
         classRegestriy.put("solrcmdutils.RegexSplitFilter", RegexSplitFilter.class);
         classRegestriy.put("solrcmdutils.SolrFeeder", SolrFeeder.class);
+        classRegestriy.put("solrcmdutils.SystemOutWriter", SystemOutWriter.class);
+        classRegestriy.put("solrcmdutils.SystemOutWriter", SystemOutWriter.class);
+        classRegestriy.put("solrcmdutils.NounExtractorFilter", NounExtractorFilter.class);
+        classRegestriy.put("solrcmdutils.FileLineWriter", FileLineWriter.class);
 
     }
 

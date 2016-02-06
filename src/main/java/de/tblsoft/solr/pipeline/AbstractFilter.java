@@ -53,6 +53,9 @@ public abstract class AbstractFilter implements FilterIF {
     }
 
     public List<String> getPropertyAsList(String name, List<String> defaultValue) {
+        if(filter.getProperty() == null) {
+            return defaultValue;
+        }
         List<String> value = (List<String>) filter.getProperty().get(name);
         if(value != null) {
             return value;

@@ -1,21 +1,22 @@
 package de.tblsoft.solr.pipeline.filter;
 
-import de.tblsoft.solr.pipeline.AbstractFilter;
+import de.tblsoft.solr.pipeline.AbstractWriter;
 
 /**
  * Created by tblsoft on 23.01.16.
  */
-public class SystemOutWriter extends AbstractFilter {
+public class SystemOutWriter extends AbstractWriter {
 
 
     private int fieldCounter =0;
 
     private int documentCounter =0;
+
     @Override
     public void field(String name, String value) {
         fieldCounter++;
         //System.out.println("name: " + name);
-        //System.out.println("value: " + value);
+        System.out.println("value: " + value);
     }
 
     @Override
