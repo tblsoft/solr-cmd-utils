@@ -31,10 +31,10 @@ public class PipelineExecuter {
     private static Map<String, Class> classRegestriy = new HashMap<String, Class>();
     static {
         classRegestriy.put("solrcmdutils.StandardReader", StandardReader.class);
+        classRegestriy.put("solrcmdutils.GrokReader", GrokReader.class);
         classRegestriy.put("solrcmdutils.SpyFilter", SpyFilter.class);
         classRegestriy.put("solrcmdutils.RegexSplitFilter", RegexSplitFilter.class);
         classRegestriy.put("solrcmdutils.SolrFeeder", SolrFeeder.class);
-        classRegestriy.put("solrcmdutils.SystemOutWriter", SystemOutWriter.class);
         classRegestriy.put("solrcmdutils.SystemOutWriter", SystemOutWriter.class);
         classRegestriy.put("solrcmdutils.NounExtractorFilter", NounExtractorFilter.class);
         classRegestriy.put("solrcmdutils.FileLineWriter", FileLineWriter.class);

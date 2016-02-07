@@ -8,9 +8,9 @@ import de.tblsoft.solr.pipeline.bean.Reader;
  */
 public class StandardReader extends SolrXmlParser implements ReaderIF {
 
-    PipelineExecuter executer;
+    private PipelineExecuter executer;
 
-    Reader reader;
+    private Reader reader;
 
     @Override
     public void field(String name, String value) {

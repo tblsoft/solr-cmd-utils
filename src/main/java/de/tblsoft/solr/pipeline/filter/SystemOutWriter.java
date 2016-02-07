@@ -15,8 +15,8 @@ public class SystemOutWriter extends AbstractWriter {
     @Override
     public void field(String name, String value) {
         fieldCounter++;
-        //System.out.println("name: " + name);
-        System.out.println("value: " + value);
+        System.out.print("name: " + name);
+        System.out.println(" -- value: " + value);
     }
 
     @Override
