@@ -106,3 +106,12 @@ COMMONAPACHELOG_DATATYPED %{IPORHOST:clientip} %{USER:ident;boolean} %{USER:auth
 
 # Log Levels
 LOGLEVEL ([A|a]lert|ALERT|[T|t]race|TRACE|[D|d]ebug|DEBUG|[N|n]otice|NOTICE|[I|i]nfo|INFO|[W|w]arn?(?:ing)?|WARN?(?:ING)?|[E|e]rr?(?:or)?|ERR?(?:OR)?|[C|c]rit?(?:ical)?|CRIT?(?:ICAL)?|[F|f]atal|FATAL|[S|s]evere|SEVERE|EMERG(?:ENCY)?|[Ee]merg(?:ency)?)
+
+# SOLR
+SOLR_TIMESTAMP %{MONTH} %{MONTHDAY}, %{YEAR} %{TIME} (PM|AM)
+SOLRLOG %{SOLR_TIMESTAMP:timestamp} %{JAVACLASS:java_class} %{WORD} %{LOGLEVEL}: \[%{NOTSPACE:core}\] webapp=%{NOTSPACE:webapp} path=%{NOTSPACE:path} params=\{%{NOTSPACE:params}\} hits=%{INT:hits} status=%{INT:status} QTime=%{INT:QTime}
+
+# JAVA
+JAVACLASS (?:[a-zA-Z0-9-]+\.)+[A-Za-z0-9$_]+
+JAVAFILE (?:[A-Za-z0-9_. -]+)
+JAVASTACKTRACEPART at %{JAVACLASS:class}\.%{WORD:method}\(%{JAVAFILE:file}:%{NUMBER:line}\)

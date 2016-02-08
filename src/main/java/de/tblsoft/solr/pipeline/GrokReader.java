@@ -1,5 +1,6 @@
 package de.tblsoft.solr.pipeline;
 
+import com.google.common.base.Strings;
 import de.tblsoft.solr.pipeline.bean.Reader;
 import de.tblsoft.solr.util.IOUtils;
 import oi.thekraken.grok.api.Grok;
@@ -19,6 +20,8 @@ public class GrokReader implements ReaderIF {
 
     private Reader reader;
 
+    private Grok grok;
+
     @Override
     public void read() {
         try {
@@ -30,7 +33,21 @@ public class GrokReader implements ReaderIF {
             // patterns/patterns
             String grokPatternPath = reader.getProperty().get("grokPatternPath");
 
-            Grok grok = Grok.create(grokPatternPath);
+
+            // https://www.elastic.co/guide/en/logstash/current/plugins-codecs-multiline.html
+            String multilinePattern = reader.getProperty().get("multilinePattern");
+            String multilineNegate = reader.getProperty().get("multilineNegate");
+            String multilineWhat = reader.getProperty().get("multilineWhat");
+
+            boolean isMultiline = false;
+            if(!Strings.isNullOrEmpty(multilinePattern)) {
+                isMultiline = true;
+            }
+
+
+
+
+            grok = Grok.create(grokPatternPath);
             grok.compile(grokPattern);
 
 
@@ -39,15 +56,24 @@ public class GrokReader implements ReaderIF {
             BufferedReader br = new BufferedReader(new InputStreamReader(in));
 
             String line;
+            StringBuilder multilineBuilder =  new StringBuilder();
             while ((line = br.readLine()) != null) {
-                Match gm = grok.match(line);
-                gm.captures();
-                Map<String, Object> m = gm.toMap();
-                for(Map.Entry<String,Object> entry: m.entrySet()) {
-                    Object value = entry.getValue();
-                    executer.field(entry.getKey(), String.valueOf(value));
+                if(isMultiline) {
+                    if(line.matches(multilinePattern)) {
+                        processLine(multilineBuilder.toString());
+                        multilineBuilder = new StringBuilder(line);
+                        continue;
+                    } else {
+                        multilineBuilder.append(" ").append(line);
+                        continue;
+                    }
+
+                } else {
+                    processLine(line);
                 }
-                executer.endDocument();
+
+
+
             }
             br.close();
             executer.end();
@@ -57,6 +83,19 @@ public class GrokReader implements ReaderIF {
             throw new RuntimeException(e);
         }
 
+
+    }
+
+    void processLine(String line) {
+        System.out.println(line);
+        Match gm = grok.match(line);
+        gm.captures();
+        Map<String, Object> m = gm.toMap();
+        for(Map.Entry<String,Object> entry: m.entrySet()) {
+            Object value = entry.getValue();
+            executer.field(entry.getKey(), String.valueOf(value));
+        }
+        executer.endDocument();
 
     }
 
