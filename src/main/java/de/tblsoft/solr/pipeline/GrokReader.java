@@ -14,30 +14,27 @@ import java.util.Map;
 /**
  * Created by tblsoft on 07.02.16.
  */
-public class GrokReader implements ReaderIF {
+public class GrokReader extends AbstractReader {
 
-    private PipelineExecuter executer;
-
-    private Reader reader;
 
     private Grok grok;
 
     @Override
     public void read() {
         try {
-            String filename = reader.getProperty().get("filename");
+            String filename = getProperty("filename", null);
 
             // %{COMBINEDAPACHELOG}
-            String grokPattern = reader.getProperty().get("grokPattern");
+            String grokPattern = getProperty("grokPattern", null);
 
             // patterns/patterns
-            String grokPatternPath = reader.getProperty().get("grokPatternPath");
+            String grokPatternPath = getProperty("grokPatternPath", null);
 
 
             // https://www.elastic.co/guide/en/logstash/current/plugins-codecs-multiline.html
-            String multilinePattern = reader.getProperty().get("multilinePattern");
-            String multilineNegate = reader.getProperty().get("multilineNegate");
-            String multilineWhat = reader.getProperty().get("multilineWhat");
+            String multilinePattern = getProperty("multilinePattern", null);
+            String multilineNegate = getProperty("multilineNegate", null);
+            String multilineWhat = getProperty("multilineWhat", null);
 
             boolean isMultiline = false;
             if(!Strings.isNullOrEmpty(multilinePattern)) {

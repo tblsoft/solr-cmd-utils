@@ -11,7 +11,7 @@ public class Reader {
 
     private String clazz;
 
-    private Map<String,String> property;
+    private Map<String,?> property;
 
     public String getName() {
         return name;
@@ -29,7 +29,7 @@ public class Reader {
         this.clazz = clazz;
     }
 
-    public Map<String, String> getProperty() {
+    public Map<String, ?> getProperty() {
         return property;
     }
 

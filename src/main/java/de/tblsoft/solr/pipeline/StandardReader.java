@@ -27,7 +27,7 @@ public class StandardReader extends SolrXmlParser implements ReaderIF {
     @Override
     public void read() {
         try {
-            String filename = reader.getProperty().get("filename");
+            String filename = (String) reader.getProperty().get("filename");
             setInputFileName(filename);
             parse();
         } catch (Exception e) {

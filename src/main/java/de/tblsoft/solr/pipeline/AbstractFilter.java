@@ -84,4 +84,12 @@ public abstract class AbstractFilter implements FilterIF {
         }
 
     }
+
+    public String[] getPropertyAsArray(String name, String[] defaultValue) {
+        List<String> list = getPropertyAsList(name, null);
+        if(list == null) {
+            return defaultValue;
+        }
+        return list.toArray(new String[list.size()]);
+    }
 }
