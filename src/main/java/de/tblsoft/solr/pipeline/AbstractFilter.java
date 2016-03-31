@@ -17,6 +17,7 @@ public abstract class AbstractFilter implements FilterIF {
     @Override
     public void init() {
         nextFilter.init();
+
     }
 
     @Override
@@ -45,11 +46,22 @@ public abstract class AbstractFilter implements FilterIF {
     }
 
     public String getProperty(String name, String defaultValue) {
+        if(filter.getProperty() == null) {
+            return defaultValue;
+        }
         String value = (String) filter.getProperty().get(name);
         if(value != null) {
             return value;
         }
         return defaultValue;
+    }
+
+    public Boolean getPropertyAsBoolean(String name, Boolean defaultValue) {
+        String value = getProperty(name,null);
+        if(value == null) {
+            return defaultValue;
+        }
+        return Boolean.valueOf(value);
     }
 
     public List<String> getPropertyAsList(String name, List<String> defaultValue) {

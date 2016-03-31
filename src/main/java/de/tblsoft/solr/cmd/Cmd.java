@@ -90,6 +90,17 @@ public class Cmd {
 
     }
 
+    public void removeInvalidCharacters(SolrArgs solrArgs) throws Exception {
+        String input = solrArgs.getInput();
+        String type = solrArgs.getType();
+        String output = solrArgs.getOutput();
+
+        verifiy(input, "-input");
+        verifiy(output, "-output");
+
+
+    }
+
     public void countRequests(SolrArgs solrArgs) throws Exception {
         String input = solrArgs.getInput();
         String type = solrArgs.getType();

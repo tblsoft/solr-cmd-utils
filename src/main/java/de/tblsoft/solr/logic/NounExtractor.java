@@ -9,6 +9,9 @@ import de.tblsoft.solr.util.OutputStreamStringBuilder;
 import java.io.OutputStream;
 import java.util.*;
 
+/**
+ * @deprecated use the NounExtractorFilter instead.
+ */
 @Deprecated
 public class NounExtractor extends SolrXmlParser {
 

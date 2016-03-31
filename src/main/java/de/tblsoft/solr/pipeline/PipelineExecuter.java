@@ -32,6 +32,11 @@ public class PipelineExecuter {
     static {
         classRegestriy.put("solrcmdutils.StandardReader", StandardReader.class);
         classRegestriy.put("solrcmdutils.GrokReader", GrokReader.class);
+        classRegestriy.put("solrcmdutils.DateFilter", DateFilter.class);
+        classRegestriy.put("solrcmdutils.UrlSplitter", UrlSplitter.class);
+        classRegestriy.put("solrcmdutils.GrepFilter", GrepFilter.class);
+        classRegestriy.put("solrcmdutils.FieldJoiner", FieldJoiner.class);
+        classRegestriy.put("solrcmdutils.JsonWriter", JsonWriter.class);
         classRegestriy.put("solrcmdutils.CSVReader", CSVReader.class);
         classRegestriy.put("solrcmdutils.SpyFilter", SpyFilter.class);
         classRegestriy.put("solrcmdutils.RegexSplitFilter", RegexSplitFilter.class);
@@ -69,7 +74,9 @@ public class PipelineExecuter {
                 }
                 lastFilter.setNextFilter(filterInstance);
                 filterList.add(lastFilter);
+                lastFilter = filterInstance;
             }
+            filterInstance.setNextFilter(new LastFilter());
             filterList.add(filterInstance);
         } catch (Exception e) {
             throw new RuntimeException(e);

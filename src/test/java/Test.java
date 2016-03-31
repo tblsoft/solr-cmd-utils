@@ -4,7 +4,10 @@ import org.apache.commons.io.input.Tailer;
 import org.apache.commons.io.input.TailerListener;
 import org.junit.Ignore;
 
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
 import java.io.File;
+import java.util.Enumeration;
 
 /**
  * Created by tblsoft
@@ -12,6 +15,37 @@ import java.io.File;
 public class Test {
 
     @org.junit.Test
+    @Ignore
+    public void test() throws Exception {
+        DefaultMutableTreeNode root = new DefaultMutableTreeNode("root");
+        root.setUserObject("root");
+
+        DefaultMutableTreeNode child = new DefaultMutableTreeNode("child");
+        child.setUserObject("child");
+
+
+        root.add(child);
+        Enumeration<DefaultMutableTreeNode> en = root.depthFirstEnumeration();
+        while (en.hasMoreElements()) {
+
+            // Unfortunately the enumeration isn't genericised so we need to downcast
+            // when calling nextElement():
+            DefaultMutableTreeNode node = en.nextElement();
+            System.out.println(node.getUserObject());
+        }
+        DefaultTreeModel model = new DefaultTreeModel(root);
+
+    }
+
+    void ja(String key, String value) {
+        //System.out.println("string");
+    }
+    void ja(String key, Integer value) {
+        //System.out.println("integer");
+    }
+
+    @org.junit.Test
+    @Ignore
     public void parseHAProxy() throws Exception {
 
         RequestCounter logParser = new RequestCounter("haproxy.log");

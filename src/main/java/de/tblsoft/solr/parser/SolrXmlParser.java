@@ -37,7 +37,9 @@ public class SolrXmlParser {
                 .createXMLEventReader(IOUtils.getInputStream(getInputFileName()));
 
         boolean isDoc = false;
+        boolean isFacet = false;
         boolean isArr = false;
+        int lstCounter = 0;
         String currentValue = "";
         String currentName = "";
         List<String> possibleStartElements = Arrays.asList("arr,str,bool,double,float,long,int".split(","));
@@ -46,15 +48,21 @@ public class SolrXmlParser {
             XMLEvent xmlEvent = xmlEventReader.nextEvent();
             if (xmlEvent.isStartElement()) {
                 StartElement startElement = xmlEvent.asStartElement();
+                if (startElement.getAttributeByName(new QName("name")) != null) {
+                    currentName = startElement.getAttributeByName(
+                            new QName("name")).getValue();
+
+                }
                 if (startElement.getName().getLocalPart().equals("doc")) {
                     isDoc = true;
-                } else if (isDoc
-                        && possibleStartElements.contains(startElement.getName().getLocalPart())) {
-                    if (startElement.getAttributeByName(new QName("name")) != null) {
-                        currentName = startElement.getAttributeByName(
-                                new QName("name")).getValue();
-
+                }
+                if (startElement.getName().getLocalPart().equals("lst")) {
+                    lstCounter ++;
+                    if(isFacet)
+                    if("facet_fields".equals(currentName)) {
+                        isFacet = true;
                     }
+
                 }
             } else if (xmlEvent.isEndElement()) {
                 EndElement endElement = xmlEvent.asEndElement();
@@ -68,6 +76,8 @@ public class SolrXmlParser {
                         field(currentName, currentValue);
                     }
                     currentValue = "";
+                } else if (endElement.getName().getLocalPart().equals("lst")) {
+                    lstCounter--;
                 } else {
                 }
             } else if (xmlEvent.isCharacters()) {
