@@ -1,6 +1,7 @@
 package de.tblsoft.solr.http;
 
 import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -34,4 +35,20 @@ public class HTTPHelper {
            throw new RuntimeException(e);
        }
     }
+    
+    public static String get(String url) {
+        try {
+            CloseableHttpClient httpclient = HttpClients.createDefault();
+            HttpGet httpPost = new HttpGet(url);
+
+            CloseableHttpResponse response = httpclient.execute(httpPost);
+            StringBuilder responseBuilder = new StringBuilder();
+
+            responseBuilder.append(EntityUtils.toString(response.getEntity()));
+            httpclient.close();
+            return responseBuilder.toString();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+     }
 }
