@@ -39,6 +39,7 @@ public class PipelineExecuter {
         classRegestriy.put("solrcmdutils.JsonWriter", JsonWriter.class);
         classRegestriy.put("solrcmdutils.CSVReader", CSVReader.class);
         classRegestriy.put("solrcmdutils.SpyFilter", SpyFilter.class);
+        classRegestriy.put("solrcmdutils.StatusFilter", StatusFilter.class);
         classRegestriy.put("solrcmdutils.RegexSplitFilter", RegexSplitFilter.class);
         classRegestriy.put("solrcmdutils.SolrFeeder", SolrFeeder.class);
         classRegestriy.put("solrcmdutils.SystemOutWriter", SystemOutWriter.class);
