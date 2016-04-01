@@ -3,9 +3,12 @@ package de.tblsoft.solr.pipeline.filter;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+
 import de.tblsoft.solr.http.HTTPHelper;
 import de.tblsoft.solr.pipeline.AbstractFilter;
+
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -67,7 +70,18 @@ public class JsonWriter extends AbstractFilter {
             document.put(name,values);
 
         } else {
-            document.put(name,value);
+        	if(NumberUtils.isNumber(value)) {
+        		try {
+        			Long intValue = Long.valueOf(value);
+            		document.put(name,intValue);
+        		} catch (NumberFormatException e) {
+        			document.put(name,value);
+        		}
+        		
+        	} else {
+        		document.put(name,value);
+        	}
+            
         }
 
 
