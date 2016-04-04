@@ -3,15 +3,15 @@ package de.tblsoft.solr.pipeline.filter;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-
+import de.tblsoft.solr.http.ElasticHelper;
 import de.tblsoft.solr.http.HTTPHelper;
 import de.tblsoft.solr.pipeline.AbstractFilter;
-
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -30,6 +30,7 @@ public class JsonWriter extends AbstractFilter {
     private String type;
 
     private String location;
+    private boolean delete;
 
 
 
@@ -40,6 +41,8 @@ public class JsonWriter extends AbstractFilter {
         Boolean pretty = getPropertyAsBoolean("pretty", false);
         location = getProperty("location", null);
         verify(location, "For the JsonWriter a location must be defined.");
+
+        delete = getPropertyAsBoolean("delete", Boolean.TRUE);
 
 
         GsonBuilder builder = new GsonBuilder();
@@ -99,7 +102,18 @@ public class JsonWriter extends AbstractFilter {
 
 
             if("elastic".equals(type)) {
+                if(delete) {
+                    try {
+                        String indexUrl = ElasticHelper.getIndexUrl(location);
+                        HTTPHelper.delete(indexUrl);
+                    } catch (URISyntaxException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+
                 HTTPHelper.post(location, json);
+
+
             } else if ("file".equals(type)) {
                 try {
                     FileUtils.writeStringToFile(new File("foo.txt"), json, true);
@@ -121,6 +135,8 @@ public class JsonWriter extends AbstractFilter {
     public void end() {
         super.end();
     }
+
+
 
 }
 
