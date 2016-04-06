@@ -50,7 +50,7 @@ public class CSVReader extends AbstractReader {
                 }
                 executer.endDocument();
             }
-            executer.end();
+            //executer.end();
             in.close();
         } catch (Exception e) {
             throw new RuntimeException(e);
