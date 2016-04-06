@@ -3,9 +3,11 @@ package de.tblsoft.solr.pipeline.filter;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+
 import de.tblsoft.solr.http.ElasticHelper;
 import de.tblsoft.solr.http.HTTPHelper;
 import de.tblsoft.solr.pipeline.AbstractFilter;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
@@ -22,10 +24,6 @@ public class JsonWriter extends AbstractFilter {
 
     private Map<String, Object> document = new HashMap<String, Object>();
     private Gson gson;
-
-
-    private String outputField;
-    private String output;
 
     private String type;
 
@@ -50,15 +48,26 @@ public class JsonWriter extends AbstractFilter {
             builder = builder.setPrettyPrinting();
         }
         gson = builder.create();
+        
+        
+        if("elastic".equals(type)) {
+            if(delete) {
+                try {
+                    String indexUrl = ElasticHelper.getIndexUrl(location);
+                    HTTPHelper.delete(indexUrl);
+                } catch (URISyntaxException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        } 
 
 
         super.init();
     }
 
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
     public void field(String name, String value) {
-
-
         Object docValue = document.get(name);
         if(docValue != null) {
             List<String> values;
@@ -102,18 +111,7 @@ public class JsonWriter extends AbstractFilter {
 
 
             if("elastic".equals(type)) {
-                if(delete) {
-                    try {
-                        String indexUrl = ElasticHelper.getIndexUrl(location);
-                        HTTPHelper.delete(indexUrl);
-                    } catch (URISyntaxException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-
                 HTTPHelper.post(location, json);
-
-
             } else if ("file".equals(type)) {
                 try {
                     FileUtils.writeStringToFile(new File("foo.txt"), json, true);
