@@ -32,6 +32,7 @@ public class PipelineExecuter {
     static {
         classRegestriy.put("solrcmdutils.StandardReader", StandardReader.class);
         classRegestriy.put("solrcmdutils.GrokReader", GrokReader.class);
+        classRegestriy.put("solrcmdutils.ThreadDumpReader", ThreadDumpReader.class);
         classRegestriy.put("solrcmdutils.DateFilter", DateFilter.class);
         classRegestriy.put("solrcmdutils.UrlSplitter", UrlSplitter.class);
         classRegestriy.put("solrcmdutils.GrepFilter", GrepFilter.class);
@@ -40,6 +41,7 @@ public class PipelineExecuter {
         classRegestriy.put("solrcmdutils.CSVReader", CSVReader.class);
         classRegestriy.put("solrcmdutils.SpyFilter", SpyFilter.class);
         classRegestriy.put("solrcmdutils.StatusFilter", StatusFilter.class);
+        classRegestriy.put("solrcmdutils.EncodingCorrectionFilter", EncodingCorrectionFilter.class);
         classRegestriy.put("solrcmdutils.RegexSplitFilter", RegexSplitFilter.class);
         classRegestriy.put("solrcmdutils.TokenCounterFilter", TokenCounterFilter.class);
         classRegestriy.put("solrcmdutils.SolrFeeder", SolrFeeder.class);

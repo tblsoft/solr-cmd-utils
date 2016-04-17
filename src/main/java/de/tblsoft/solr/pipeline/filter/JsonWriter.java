@@ -9,6 +9,7 @@ import de.tblsoft.solr.http.HTTPHelper;
 import de.tblsoft.solr.pipeline.AbstractFilter;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
 import java.io.File;
@@ -28,6 +29,9 @@ public class JsonWriter extends AbstractFilter {
     private String type;
 
     private String location;
+    
+    private String elasticMappingLocation;
+    
     private boolean delete;
 
 
@@ -41,6 +45,7 @@ public class JsonWriter extends AbstractFilter {
         verify(location, "For the JsonWriter a location must be defined.");
 
         delete = getPropertyAsBoolean("delete", Boolean.TRUE);
+        elasticMappingLocation = getProperty("elasticMappingLocation", null);
 
 
         GsonBuilder builder = new GsonBuilder();
@@ -59,6 +64,19 @@ public class JsonWriter extends AbstractFilter {
                     throw new RuntimeException(e);
                 }
             }
+        	if(elasticMappingLocation != null) {
+        		String mappingJson;
+				try {
+					String indexUrl = ElasticHelper.getIndexUrl(location);
+					mappingJson = FileUtils.readFileToString(new File(elasticMappingLocation));
+            		HTTPHelper.put(indexUrl, mappingJson);
+				} catch (IOException e) {
+					throw new RuntimeException(e);
+				} catch (URISyntaxException e) {
+                    throw new RuntimeException(e);
+                }
+
+        	}
         } 
 
 

@@ -20,6 +20,13 @@ public class ElasticHelper {
         uri = uri.resolve("/" + path);
         return uri.toString();
     }
+    
+    public static String getMappingUrl(String url) throws URISyntaxException {
+    	if(!url.endsWith("/")) {
+    		url = url + "/";
+    	}
+    	return url + "_mapping";
+    }
 
 
 
