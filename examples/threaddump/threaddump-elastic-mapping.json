@@ -1,0 +1,14 @@
+{
+    "mappings": {
+        "threaddump" : {
+            "properties" : {
+                "state" : {"type" : "string", "index" : "not_analyzed"},
+                "fileName" : {"type" : "string", "index" : "not_analyzed"},
+                "runId" : {"type" : "string", "index" : "not_analyzed"},
+                "traceName" : {"type" : "string", "index" : "not_analyzed"},
+                "traceNameHash" : {"type" : "string", "index" : "not_analyzed"},
+                "traceHash" : {"type" : "string", "index" : "not_analyzed"}
+            }
+        }
+    }
+}

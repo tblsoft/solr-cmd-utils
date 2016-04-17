@@ -1,0 +1,15 @@
+name: "Thread dump example pipeline"
+reader:
+  name: "ThreadDumpReader"
+  clazz: "solrcmdutils.ThreadDumpReader"
+  property:
+    filename: "example/threaddump/eclipse-threaddump.txt"
+
+filter:
+  - name: "Elastic Writer"
+    clazz: "solrcmdutils.JsonWriter"
+    property:
+      type: "elastic"
+      location: "http://localhost:9200/threaddump/threaddump"
+      elasticMappingLocation: "examples/threaddump/threaddump-elastic-mapping.json"
+
