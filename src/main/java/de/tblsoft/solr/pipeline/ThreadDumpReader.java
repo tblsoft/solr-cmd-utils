@@ -222,6 +222,10 @@ public class ThreadDumpReader extends AbstractReader {
                 Object value = entry.getValue();
                 executer.field(entry.getKey(), String.valueOf(value));
             }
+            String nid = (String) m.get("nid");
+            nid = nid.replaceFirst("0x", "");
+            Integer outputDecimal = Integer.parseInt(nid, 16);
+            executer.field("threadIdDecimal", String.valueOf(outputDecimal));
 
         } catch (GrokException e) {
             throw new RuntimeException(e);
