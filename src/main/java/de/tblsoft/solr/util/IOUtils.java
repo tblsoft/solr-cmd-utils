@@ -14,6 +14,13 @@ import java.util.zip.GZIPOutputStream;
 public class IOUtils {
 
 
+    public static String getDirectoryForFile(String file) {
+        File f = new File(file);
+        File currentPath = new File(f.getParent());
+
+        return currentPath.getName();
+    }
+
     public static List<String> getFiles(String path) {
         List<String> fileList = new ArrayList<String>();
 
@@ -32,7 +39,7 @@ public class IOUtils {
             return fileList;
         }
 
-        return fileList;
+        throw new RuntimeException("The file or path does not exists: " + path);
     }
 
 

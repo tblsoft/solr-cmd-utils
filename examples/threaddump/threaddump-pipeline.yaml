@@ -3,7 +3,7 @@ reader:
   name: "ThreadDumpReader"
   clazz: "solrcmdutils.ThreadDumpReader"
   property:
-    filename: "example/threaddump/eclipse-threaddump.txt"
+    filename: "examples/threaddump/eclipse-threaddump.txt"
 
 filter:
   - name: "Elastic Writer"
