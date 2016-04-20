@@ -1,0 +1,6 @@
+instance.superField(name, value);
+if("column1".equals(name)) {
+    instance.superField("eigenmarke", "true");
+} else {
+    instance.superField("eigenmarke", "false");
+}

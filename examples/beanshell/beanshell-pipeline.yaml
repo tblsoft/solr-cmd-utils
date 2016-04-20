@@ -1,0 +1,16 @@
+name: "bean shell example pipeline"
+reader:
+  name: "CsvReader"
+  clazz: "solrcmdutils.CSVReader"
+  property:
+    filename: "examples/beanshell/example.csv"
+
+filter:
+  - name: "Spy Filter"
+    clazz: "solrcmdutils.SpyFilter"
+  - name: "Bean Shell Filter"
+    clazz: "solrcmdutils.BeanShellFilter"
+    property:
+      filename: "examples/beanshell/beanshell.bsh"
+  - name: "Spy Filter"
+    clazz: "solrcmdutils.SpyFilter"
