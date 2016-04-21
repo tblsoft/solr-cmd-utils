@@ -1,0 +1,3 @@
+import com.google.common.base.Splitter;
+List markenList = Splitter.on(",").splitToList("foo,bar");
+init.put("markenList", markenList);
