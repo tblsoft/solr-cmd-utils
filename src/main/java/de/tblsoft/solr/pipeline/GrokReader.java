@@ -117,10 +117,6 @@ public class GrokReader extends AbstractReader {
 
     }
 
-    @Override
-    public void setSource(String source) {
-
-    }
 
     @Override
     public void setPipelineExecuter(PipelineExecuter executer) {

@@ -1,11 +1,11 @@
 package de.tblsoft.solr.pipeline.filter;
 
-import de.tblsoft.solr.pipeline.AbstractWriter;
+import de.tblsoft.solr.pipeline.AbstractFilter;
 
 /**
  * Created by tblsoft on 23.01.16.
  */
-public class SystemOutWriter extends AbstractWriter {
+public class SystemOutWriter extends AbstractFilter {
 
 
     private int fieldCounter =0;

@@ -1,6 +1,7 @@
 package de.tblsoft.solr.pipeline.filter;
 
-import de.tblsoft.solr.pipeline.AbstractWriter;
+import de.tblsoft.solr.pipeline.AbstractFilter;
+import de.tblsoft.solr.util.IOUtils;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 
@@ -12,7 +13,7 @@ import java.util.List;
 /**
  * Created by tblsoft on 21.02.16.
  */
-public class CSVWriter extends AbstractWriter {
+public class CSVWriter extends AbstractFilter {
 
     private CSVPrinter printer;
 
@@ -23,6 +24,8 @@ public class CSVWriter extends AbstractWriter {
 
         try {
             String filename = getProperty("filename", null);
+            String absoluteFilename = IOUtils.getAbsoluteFile(getBaseDir(), filename);
+
             String delimiter = getProperty("delimiter", ",");
             String[] headers = getPropertyAsArray("headers", null);
 
@@ -35,7 +38,7 @@ public class CSVWriter extends AbstractWriter {
                 format = format.withHeader(headers);
             }
 
-            PrintWriter out = new PrintWriter(filename);
+            PrintWriter out = new PrintWriter(absoluteFilename);
             printer = format.withDelimiter(delimiter.charAt(0)).print(out);
         } catch (Exception e) {
 

@@ -9,9 +9,9 @@ import java.io.OutputStream;
 /**
  * Created by tblsoft on 23.01.16.
  */
-public class FileLineWriter extends AbstractWriter {
+public class FileLineWriter extends AbstractFilter {
 
-    private String outputFileName;
+    private String filename;
 
     private OutputStreamStringBuilder outputStreamStringBuilder;
 
@@ -20,11 +20,13 @@ public class FileLineWriter extends AbstractWriter {
     @Override
     public void init(){
 
-        outputFileName = getProperty("outputFileName", null);
-        verify(outputFileName, "For the FileLineWriter a output filname must be defined.");
+        String relativeFilename = getProperty("filename", null);
+        filename = IOUtils.getAbsoluteFile(getBaseDir(), relativeFilename);
+
+        verify(filename, "For the FileLineWriter a filname must be defined.");
 
         try {
-            outputStream = IOUtils.getOutputStream(outputFileName);
+            outputStream = IOUtils.getOutputStream(filename);
             outputStreamStringBuilder = new OutputStreamStringBuilder(outputStream);
         } catch (IOException e) {
             throw new RuntimeException(e);

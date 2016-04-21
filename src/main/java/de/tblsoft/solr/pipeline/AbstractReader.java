@@ -16,12 +16,6 @@ public abstract class AbstractReader implements ReaderIF {
     protected String baseDir;
 
 
-
-    @Override
-    public void setSource(String source) {
-
-    }
-
     @Override
     public void setPipelineExecuter(PipelineExecuter executer) {
         this.executer = executer;

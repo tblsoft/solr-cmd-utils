@@ -51,7 +51,9 @@ public class ThreadDumpReader extends AbstractReader {
 	public void read() {
 		this.runId = UUID.randomUUID().toString();
 
-		filename = getProperty("filename", null);
+		String relativeFilename = getProperty("filename", null);
+
+        filename = IOUtils.getAbsoluteFile(getBaseDir(),relativeFilename);
 
 		List<String> fileList = IOUtils.getFiles(filename);
 

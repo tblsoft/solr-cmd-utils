@@ -3,13 +3,11 @@ package de.tblsoft.solr.pipeline.filter;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-
 import de.tblsoft.solr.http.ElasticHelper;
 import de.tblsoft.solr.http.HTTPHelper;
 import de.tblsoft.solr.pipeline.AbstractFilter;
-
+import de.tblsoft.solr.util.IOUtils;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
 import java.io.File;
@@ -68,7 +66,9 @@ public class JsonWriter extends AbstractFilter {
         		String mappingJson;
 				try {
 					String indexUrl = ElasticHelper.getIndexUrl(location);
-					mappingJson = FileUtils.readFileToString(new File(elasticMappingLocation));
+                    File elasticMappingFile = new File(IOUtils.getAbsoluteFile(getBaseDir(),elasticMappingLocation));
+
+					mappingJson = FileUtils.readFileToString(elasticMappingFile);
             		HTTPHelper.put(indexUrl, mappingJson);
 				} catch (IOException e) {
 					throw new RuntimeException(e);

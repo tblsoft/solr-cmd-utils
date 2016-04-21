@@ -2,6 +2,7 @@ package de.tblsoft.solr.pipeline;
 
 import de.tblsoft.solr.parser.SolrXmlParser;
 import de.tblsoft.solr.pipeline.bean.Reader;
+import de.tblsoft.solr.util.IOUtils;
 
 /**
  * Created by tblsoft on 23.01.16.
@@ -30,14 +31,14 @@ public class StandardReader extends SolrXmlParser implements ReaderIF {
     public void read() {
         try {
             String filename = (String) reader.getProperty().get("filename");
-            setInputFileName(filename);
+            String absoluteFilename = IOUtils.getAbsoluteFile(baseDir, filename);
+            setInputFileName(absoluteFilename);
             parse();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
-    @Override
     public void setSource(String source) {
         setInputFileName(source);
     }

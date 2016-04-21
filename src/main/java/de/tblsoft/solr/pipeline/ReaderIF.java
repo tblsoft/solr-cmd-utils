@@ -9,7 +9,6 @@ public interface ReaderIF {
 
     public void read();
 
-    public void setSource(String source);
     public void setPipelineExecuter(PipelineExecuter executer);
 
     public void end();
