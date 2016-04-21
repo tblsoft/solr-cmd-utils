@@ -13,6 +13,14 @@ import java.util.zip.GZIPOutputStream;
  */
 public class IOUtils {
 
+    public static String getAbsoluteFile(String directory, String fileName) {
+        if(fileName.startsWith("/")) {
+            return fileName;
+        } else {
+            return directory + "/" + fileName;
+        }
+    }
+
 
     public static String getDirectoryForFile(String file) {
         File f = new File(file);

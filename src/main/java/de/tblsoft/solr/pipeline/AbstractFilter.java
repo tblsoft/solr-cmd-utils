@@ -14,6 +14,8 @@ public abstract class AbstractFilter implements FilterIF {
 
     private Filter filter;
 
+    private String baseDir;
+
     @Override
     public void init() {
         nextFilter.init();
@@ -103,5 +105,13 @@ public abstract class AbstractFilter implements FilterIF {
             return defaultValue;
         }
         return list.toArray(new String[list.size()]);
+    }
+
+    public String getBaseDir() {
+        return baseDir;
+    }
+
+    public void setBaseDir(String baseDir) {
+        this.baseDir = baseDir;
     }
 }

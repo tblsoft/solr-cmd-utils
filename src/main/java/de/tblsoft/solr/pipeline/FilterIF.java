@@ -17,4 +17,6 @@ public interface FilterIF {
     public void setFilterConfig(Filter filter);
 
     public void setNextFilter(FilterIF filter);
+
+    public void setBaseDir(String baseDir);
 }

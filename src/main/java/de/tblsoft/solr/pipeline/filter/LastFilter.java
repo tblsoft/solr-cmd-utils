@@ -38,4 +38,9 @@ public class LastFilter implements FilterIF {
     public void setNextFilter(FilterIF filter){
 
     }
+
+    @Override
+    public void setBaseDir(String baseDir) {
+
+    }
 }

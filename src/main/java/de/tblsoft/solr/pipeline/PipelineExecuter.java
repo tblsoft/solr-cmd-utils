@@ -57,6 +57,12 @@ public class PipelineExecuter {
         this.yamlFileName = yamlFileName;
     }
 
+    private String getBaseDirFromYamlFile() {
+        File f = new File(yamlFileName);
+        return f.getParentFile().getAbsoluteFile().toString();
+
+    }
+
     public void init() {
         try {
             pipeline = readPipelineFromYamlFile(yamlFileName);
@@ -68,11 +74,12 @@ public class PipelineExecuter {
 
             FilterIF lastFilter = null;
             FilterIF filterInstance = null;
-            for(Filter filter :pipeline.getFilter()) {
+            for(Filter filter : pipeline.getFilter()) {
                 if(filter.getDisabled() != null && filter.getDisabled()) {
                     continue;
                 }
                 filterInstance = createFilterInstance(filter);
+                filterInstance.setBaseDir(getBaseDirFromYamlFile());
                 if(lastFilter == null) {
                     lastFilter = filterInstance;
                     continue;
