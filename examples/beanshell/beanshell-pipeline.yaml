@@ -11,6 +11,7 @@ filter:
   - name: "Bean Shell Filter"
     clazz: "solrcmdutils.BeanShellFilter"
     property:
-      filename: "examples/beanshell/beanshell.bsh"
+      filename: "beanshell.bsh"
+      initFilename: "init.bsh"
   - name: "Spy Filter"
     clazz: "solrcmdutils.SpyFilter"

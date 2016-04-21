@@ -1,6 +1,8 @@
 instance.superField(name, value);
-if("column1".equals(name)) {
-    instance.superField("eigenmarke", "true");
+
+List markenList = init.get("markenList");
+if("column1".equals(name) && markenList.contains(value)) {
+    instance.superField("myFlag", "true");
 } else {
-    instance.superField("eigenmarke", "false");
+    instance.superField("myFlag", "false");
 }
