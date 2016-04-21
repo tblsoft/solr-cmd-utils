@@ -1,16 +1,15 @@
 package de.tblsoft.solr.pipeline;
 
+import de.tblsoft.solr.util.IOUtils;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVRecord;
+
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.Iterator;
 import java.util.Map;
-
-import org.apache.commons.csv.CSVFormat;
-import org.apache.commons.csv.CSVParser;
-import org.apache.commons.csv.CSVRecord;
-
-import de.tblsoft.solr.util.IOUtils;
 
 /**
  * Created by tblsoft on 11.02.16.
@@ -23,9 +22,11 @@ public class CSVReader extends AbstractReader {
         	
         	String charset = getProperty("charset", StandardCharsets.UTF_8.name());
             String filename = getProperty("filename", null);
+            String absoluteFilename = IOUtils.getAbsoluteFile(getBaseDir(),filename);
+
             String delimiter = getProperty("delimiter", ",");
             String[] headers = getPropertyAsArray("headers", null);
-            InputStream in = IOUtils.getInputStream(filename);
+            InputStream in = IOUtils.getInputStream(absoluteFilename);
             java.io.Reader reader = new InputStreamReader(in,charset);
 
             CSVFormat format = CSVFormat.RFC4180;

@@ -13,6 +13,7 @@ public abstract class AbstractReader implements ReaderIF {
 
     protected Reader reader;
 
+    protected String baseDir;
 
 
 
@@ -72,5 +73,13 @@ public abstract class AbstractReader implements ReaderIF {
 
         return Boolean.valueOf(value);
 
+    }
+
+    public String getBaseDir() {
+        return baseDir;
+    }
+
+    public void setBaseDir(String baseDir) {
+        this.baseDir = baseDir;
     }
 }

@@ -69,6 +69,7 @@ public class PipelineExecuter {
             reader = (ReaderIF) getInstance(pipeline.getReader().getClazz());
             reader.setPipelineExecuter(this);
             reader.setReader(pipeline.getReader());
+            reader.setBaseDir(getBaseDirFromYamlFile());
 
             filterList = new ArrayList<FilterIF>();
 

@@ -12,6 +12,8 @@ public class StandardReader extends SolrXmlParser implements ReaderIF {
 
     private Reader reader;
 
+    private String baseDir;
+
     @Override
     public void field(String name, String value) {
         executer.field(name,value);
@@ -52,5 +54,10 @@ public class StandardReader extends SolrXmlParser implements ReaderIF {
 
     public void setReader(Reader reader) {
         this.reader = reader;
+    }
+
+    @Override
+    public void setBaseDir(String baseDir) {
+        this.baseDir = baseDir;
     }
 }

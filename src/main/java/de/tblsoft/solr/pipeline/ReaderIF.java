@@ -15,4 +15,6 @@ public interface ReaderIF {
     public void end();
 
     public void setReader(Reader reader);
+
+    public void setBaseDir(String baseDir);
 }

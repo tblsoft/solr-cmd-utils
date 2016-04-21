@@ -3,7 +3,7 @@ reader:
   name: "CsvReader"
   clazz: "solrcmdutils.CSVReader"
   property:
-    filename: "examples/beanshell/example.csv"
+    filename: "example.csv"
 
 filter:
   - name: "Spy Filter"
