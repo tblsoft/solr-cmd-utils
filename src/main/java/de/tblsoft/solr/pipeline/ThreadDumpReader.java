@@ -212,7 +212,7 @@ public class ThreadDumpReader extends AbstractReader {
         try {
             grok = Grok.create(grokPatternPath);
             //"RMI TCP Connection(3)-192.168.2.103" daemon prio=5 tid=0x000000011d070000 nid=0xa40f runnable [0x00000001255d4000]
-            String grokPattern = "%{QUOTEDSTRING:threadname}( %{WORD:deamon})? prio=%{NUMBER:prio} tid=%{NOTSPACE:tid} nid=%{NOTSPACE:nid} %{NOTSPACE:nid}";
+            String grokPattern = "%{QUOTEDSTRING:threadname}( %{WORD:deamon})? prio=%{NUMBER:prio} tid=%{NOTSPACE:tid} nid=%{NOTSPACE:nid}";
             grok.compile(grokPattern);
 
             Match gm = grok.match(thread);
