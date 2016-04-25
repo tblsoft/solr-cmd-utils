@@ -4,13 +4,12 @@ import bsh.EvalError;
 import bsh.Interpreter;
 import com.google.common.base.Strings;
 import de.tblsoft.solr.pipeline.AbstractFilter;
+import de.tblsoft.solr.pipeline.bean.Document;
 import de.tblsoft.solr.util.IOUtils;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -23,8 +22,6 @@ public class BeanShellFilter extends AbstractFilter {
     private String filename;
 
     private Map<String, Object> init = new HashMap<String, Object>();
-
-    List<String> foooo = new ArrayList<String>();
 
     @Override
     public void init() {
@@ -54,18 +51,15 @@ public class BeanShellFilter extends AbstractFilter {
 
     }
 
-    public void superField(String name, String value) {
-        super.field(name,value);
+    public void superDocument(Document document) {
+        super.document(document);
 
     }
 
     @Override
-    public void field(String name, String value) {
-
-
+    public void document(Document document) {
         try {
-            interpreter.set("name", name);
-            interpreter.set("value", value);
+            interpreter.set("document", document);
             interpreter.source(filename);
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -73,5 +67,7 @@ public class BeanShellFilter extends AbstractFilter {
             throw new RuntimeException(evalError);
         }
     }
+
+
 
 }

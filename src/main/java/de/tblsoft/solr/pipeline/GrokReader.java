@@ -1,6 +1,7 @@
 package de.tblsoft.solr.pipeline;
 
 import com.google.common.base.Strings;
+import de.tblsoft.solr.pipeline.bean.Document;
 import de.tblsoft.solr.pipeline.bean.Reader;
 import de.tblsoft.solr.util.IOUtils;
 import oi.thekraken.grok.api.Grok;
@@ -102,19 +103,19 @@ public class GrokReader extends AbstractReader {
         Match gm = grok.match(line);
         gm.captures();
         Map<String, Object> m = gm.toMap();
+        Document document = new Document();
         for (Map.Entry<String, Object> entry : m.entrySet()) {
             Object value = entry.getValue();
-            executer.field(entry.getKey(), String.valueOf(value));
+            document.addField(entry.getKey(),String.valueOf(value));
         }
+
         if (!m.isEmpty()) {
-            executer.field("filename", currentFileName);
+            document.addField("filename", currentFileName);
             if (keepRaw) {
-                executer.field("raw", line);
+                document.addField("raw", line);
             }
-            executer.endDocument();
         }
-
-
+        executer.document(document);
     }
 
 

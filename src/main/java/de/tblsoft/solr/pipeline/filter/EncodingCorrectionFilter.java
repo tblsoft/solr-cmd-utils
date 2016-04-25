@@ -1,8 +1,8 @@
 package de.tblsoft.solr.pipeline.filter;
 
-import java.util.List;
-
 import de.tblsoft.solr.pipeline.AbstractFilter;
+
+import java.util.List;
 
 /**
  * Created by tblsoft on 03.04.16.
@@ -20,16 +20,4 @@ public class EncodingCorrectionFilter extends AbstractFilter {
         super.init();
     }
 
-
-    @Override
-    public void field(String name, String value) {
-        if(!fieldName.contains(name)) {
-        	super.field(name,value);
-        	return;
-        }
-        byte[] bytes = value.getBytes();
-        String hexString = Integer.toHexString(bytes[1]);
-        System.out.println(hexString);
-    
-    }
 }

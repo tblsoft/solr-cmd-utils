@@ -2,6 +2,7 @@ package de.tblsoft.solr.pipeline.filter;
 
 
 import de.tblsoft.solr.pipeline.AbstractFilter;
+import de.tblsoft.solr.pipeline.bean.Document;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URLEncodedUtils;
 
@@ -22,20 +23,19 @@ public class UrlSplitter extends AbstractFilter {
         super.init();
     }
 
+
     @Override
-    public void field(String name, String value) {
-        super.field(name,value);
-        if(!name.matches(this.urlField)) {
-            return;
-        }
+    public void document(Document document) {
+        String value = document.getFieldValue(urlField, "");
 
         List<NameValuePair> urlParams = URLEncodedUtils.parse(value,
                 Charset.forName("UTF-8"));
+
         for(NameValuePair urlParam: urlParams) {
-            super.field(fieldPrefix + urlParam.getName(),urlParam.getValue());
+            document.addField(fieldPrefix + urlParam.getName(),urlParam.getValue());
         }
-
-
+        super.document(document);
     }
+
 }
 

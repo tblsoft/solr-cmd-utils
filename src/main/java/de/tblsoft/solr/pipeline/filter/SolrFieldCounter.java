@@ -2,6 +2,8 @@ package de.tblsoft.solr.pipeline.filter;
 
 import com.google.common.util.concurrent.AtomicLongMap;
 import de.tblsoft.solr.pipeline.AbstractFilter;
+import de.tblsoft.solr.pipeline.bean.Document;
+import de.tblsoft.solr.pipeline.bean.Field;
 
 import java.util.Map;
 
@@ -23,16 +25,21 @@ public class SolrFieldCounter extends AbstractFilter {
     }
 
     @Override
-    public void field(String name, String value) {
-        solrFields.incrementAndGet(name);
+    public void document(Document document) {
+        for(Field field: document.getFields()) {
+            solrFields.incrementAndGet(field.getName());
+        }
+        super.document(document);
     }
 
     @Override
     public void end() {
+        Document document = new Document();
         Map<String,Long> fieldMap = solrFields.asMap();
         for(Map.Entry<String, Long> field: fieldMap.entrySet()) {
-            super.field(field.getKey(),String.valueOf(field.getValue()));
+            document.addField(field.getKey(), String.valueOf(field.getValue()));
         }
+        super.document(document);
         super.end();
     }
 }

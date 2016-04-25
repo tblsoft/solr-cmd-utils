@@ -1,5 +1,6 @@
 package de.tblsoft.solr.pipeline;
 
+import de.tblsoft.solr.pipeline.bean.Document;
 import de.tblsoft.solr.util.IOUtils;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
@@ -44,12 +45,13 @@ public class CSVReader extends AbstractReader {
             while(csvIterator.hasNext()) {
                 CSVRecord record = csvIterator.next();
                 Map<String, Integer> header = parser.getHeaderMap();
+                Document document = new Document();
                 for(Map.Entry<String,Integer> entry : header.entrySet()) {
                     String key = entry.getKey();
                     String value = record.get(key);
-                    executer.field(key, value);
+                    document.addField(key, value);
                 }
-                executer.endDocument();
+                executer.document(document);
             }
             //executer.end();
             in.close();

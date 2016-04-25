@@ -6,6 +6,8 @@ import com.google.gson.GsonBuilder;
 import de.tblsoft.solr.http.ElasticHelper;
 import de.tblsoft.solr.http.HTTPHelper;
 import de.tblsoft.solr.pipeline.AbstractFilter;
+import de.tblsoft.solr.pipeline.bean.Document;
+import de.tblsoft.solr.pipeline.bean.Field;
 import de.tblsoft.solr.util.IOUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -21,7 +23,7 @@ import java.util.Map;
 
 public class JsonWriter extends AbstractFilter {
 
-    private Map<String, Object> document = new HashMap<String, Object>();
+
     private Gson gson;
 
     private String type;
@@ -83,46 +85,40 @@ public class JsonWriter extends AbstractFilter {
         super.init();
     }
 
-    @SuppressWarnings("unchecked")
-	@Override
-    public void field(String name, String value) {
-        Object docValue = document.get(name);
-        if(docValue != null) {
-            List<String> values;
-            if(docValue instanceof String) {
-                values = new ArrayList<String>();
-                values.add((String) docValue);
 
+    Object transformDatatype(List<String> values) {
+        List<Long> longList = new ArrayList<Long>();
+        for(String value: values) {
+            Object transformedValue = transformDatatype(value);
+            if(transformedValue instanceof Long) {
+                longList.add((Long) transformedValue);
             } else {
-                values = (List<String>) docValue;
+                return values;
             }
-            values.add(value);
-            document.put(name,values);
-
-        } else {
-        	if(NumberUtils.isNumber(value)) {
-        		try {
-        			Long intValue = Long.valueOf(value);
-            		document.put(name,intValue);
-        		} catch (NumberFormatException e) {
-        			document.put(name,value);
-        		}
-        		
-        	} else {
-        		document.put(name,value);
-        	}
-            
         }
-
-
-        super.field(name,value);
-
+        return longList;
     }
 
-    @Override
-    public void endDocument() {
+    Object transformDatatype(String value) {
+        if(NumberUtils.isNumber(value)) {
+            try {
+                Long intValue = Long.valueOf(value);
+                return intValue;
+            } catch (NumberFormatException e) {
+                return value;
+            }
+        }
+        return value;
+    }
 
-        if(!document.isEmpty()) {
+
+
+    @Override
+    public void document(Document document) {
+
+        Map<String, Object> jsonDocument = mapToJson(document);
+
+        if(!jsonDocument.isEmpty()) {
 
             String json = gson.toJson(document);
 
@@ -143,9 +139,33 @@ public class JsonWriter extends AbstractFilter {
 
 
         }
-        document = new HashMap<String, Object>();
-        super.endDocument();
+
+        super.document(document);
     }
+
+
+    Map<String, Object> mapToJson(Document document) {
+        Map<String, Object> jsonDocument = new HashMap<String, Object>();
+        for(Field field: document.getFields()) {
+            List<String> values = field.getValues();
+            if(values == null || values.isEmpty()) {
+                continue;
+            }
+            if(values.size() == 1){
+                jsonDocument.put(field.getName(), transformDatatype(field.getValue()));
+            } else {
+                jsonDocument.put(field.getName(), field.getValues());
+            }
+
+        }
+
+
+
+        return jsonDocument;
+
+    }
+
+
 
     @Override
     public void end() {

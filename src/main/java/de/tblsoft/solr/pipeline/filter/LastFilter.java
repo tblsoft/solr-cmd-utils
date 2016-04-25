@@ -1,6 +1,7 @@
 package de.tblsoft.solr.pipeline.filter;
 
 import de.tblsoft.solr.pipeline.FilterIF;
+import de.tblsoft.solr.pipeline.bean.Document;
 import de.tblsoft.solr.pipeline.bean.Filter;
 
 /**
@@ -17,7 +18,8 @@ public class LastFilter implements FilterIF {
 
 
     @Override
-    public void field(String name, String value) {
+    public void document(Document document) {
+
     }
 
     @Override

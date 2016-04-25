@@ -1,6 +1,7 @@
 package de.tblsoft.solr.pipeline;
 
 import de.tblsoft.solr.parser.SolrXmlParser;
+import de.tblsoft.solr.pipeline.bean.Document;
 import de.tblsoft.solr.pipeline.bean.Reader;
 import de.tblsoft.solr.util.IOUtils;
 
@@ -15,16 +16,19 @@ public class StandardReader extends SolrXmlParser implements ReaderIF {
 
     private String baseDir;
 
+    private Document document = new Document();
+
     @Override
     public void field(String name, String value) {
-        executer.field(name,value);
+        document.addField(name, value);
 
     }
 
 
     @Override
     public void endDocument() {
-        executer.endDocument();
+        executer.document(document);
+        document = new Document();
     }
 
     @Override

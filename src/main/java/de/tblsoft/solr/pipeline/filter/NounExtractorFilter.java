@@ -3,6 +3,8 @@ package de.tblsoft.solr.pipeline.filter;
 
 import com.google.common.base.Strings;
 import de.tblsoft.solr.pipeline.AbstractFilter;
+import de.tblsoft.solr.pipeline.bean.Document;
+import de.tblsoft.solr.pipeline.bean.Field;
 
 import java.util.*;
 
@@ -20,9 +22,12 @@ public class NounExtractorFilter extends AbstractFilter {
 
         List<String> dictionaryList = new ArrayList<String>(dictionary);
         Collections.sort(dictionaryList);
+        Document document = new Document();
         for (String value : dictionaryList) {
-            super.field("noun", value);
+            document.addField("noun", value);
         }
+        super.document(document);
+
         super.end();
     }
 
@@ -35,9 +40,16 @@ public class NounExtractorFilter extends AbstractFilter {
     }
 
 
-
     @Override
-    public void field(String name, String value) {
+    public void document(Document document) {
+        for(Field field : document.getFields()) {
+            for(String value : field.getValues()) {
+                field(field.getName(), value);
+            }
+        }
+    }
+
+    private void field(String name, String value) {
         if(isFieldIncluded(name)) {
             dictionary.addAll(tokenize(value));
         }

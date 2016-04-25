@@ -1,5 +1,6 @@
 package de.tblsoft.solr.pipeline;
 
+import de.tblsoft.solr.pipeline.bean.Document;
 import de.tblsoft.solr.pipeline.bean.Filter;
 import de.tblsoft.solr.pipeline.bean.Pipeline;
 import de.tblsoft.solr.pipeline.filter.*;
@@ -119,15 +120,14 @@ public class PipelineExecuter {
     }
 
 
-    public void field(String name, String value) {
-        filterList.get(0).field(name, value);
+    //public void field(String name, String value) {
+    //    filterList.get(0).field(name, value);
+    //}
+
+    public void document(Document document) {
+        filterList.get(0).document(document);
     }
 
-
-    public void endDocument() {
-        filterList.get(0).endDocument();
-
-    }
 
     public void end() {
         reader.end();
@@ -148,4 +148,7 @@ public class PipelineExecuter {
         }
     }
 
+    public List<FilterIF> getFilterList() {
+        return filterList;
+    }
 }

@@ -1,5 +1,6 @@
 package de.tblsoft.solr.pipeline;
 
+import de.tblsoft.solr.pipeline.bean.Document;
 import de.tblsoft.solr.pipeline.bean.Filter;
 
 /**
@@ -8,9 +9,10 @@ import de.tblsoft.solr.pipeline.bean.Filter;
 public interface FilterIF {
 
     public void init();
-     public void field(String name, String value);
 
-     public void endDocument();
+    public void document(Document document);
+
+    public void endDocument();
 
     public void end();
 

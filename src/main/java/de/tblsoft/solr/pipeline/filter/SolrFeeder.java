@@ -1,6 +1,8 @@
 package de.tblsoft.solr.pipeline.filter;
 
 import de.tblsoft.solr.pipeline.AbstractFilter;
+import de.tblsoft.solr.pipeline.bean.Document;
+import de.tblsoft.solr.pipeline.bean.Field;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.common.SolrInputDocument;
@@ -18,8 +20,6 @@ public class SolrFeeder extends AbstractFilter {
     private List<String> ignoreFields = new ArrayList<String>();
 
     private SolrClient server;
-
-    private SolrInputDocument inputDoc = new SolrInputDocument();
 
     private String serverUrl;
 
@@ -72,12 +72,24 @@ public class SolrFeeder extends AbstractFilter {
     }
 
     @Override
-    public void field(String name, String value) {
-
-        if (!isFieldIgnored(name)) {
-            inputDoc.addField(name, value);
+    public void document(Document document) {
+        SolrInputDocument inputDoc = new SolrInputDocument();
+        for(Field field: document.getFields()) {
+            if (!isFieldIgnored(field.getName())) {
+                inputDoc.addField(field.getName(), field.getValues());
+            }
         }
+
+        try {
+            server.add(inputDoc);
+        } catch (SolrServerException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        super.document(document);
     }
+
 
     private boolean isFieldIgnored(String name) {
         for (String pattern : ignoreFields) {
@@ -86,19 +98,6 @@ public class SolrFeeder extends AbstractFilter {
             }
         }
         return false;
-    }
-
-    @Override
-    public void endDocument() {
-        try {
-            server.add(inputDoc);
-        } catch (SolrServerException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        inputDoc = new SolrInputDocument();
-
     }
 
     public void setIgnoreFields(List<String> ignoreFields) {

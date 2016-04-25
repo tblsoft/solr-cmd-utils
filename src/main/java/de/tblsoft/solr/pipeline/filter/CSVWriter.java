@@ -1,6 +1,9 @@
 package de.tblsoft.solr.pipeline.filter;
 
+import com.google.common.base.Joiner;
 import de.tblsoft.solr.pipeline.AbstractFilter;
+import de.tblsoft.solr.pipeline.bean.Document;
+import de.tblsoft.solr.pipeline.bean.Field;
 import de.tblsoft.solr.util.IOUtils;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
@@ -17,7 +20,7 @@ public class CSVWriter extends AbstractFilter {
 
     private CSVPrinter printer;
 
-    private List<String> currentList = new ArrayList<String>();
+    private String multiValueSeperator;
 
     @Override
     public void init() {
@@ -28,6 +31,8 @@ public class CSVWriter extends AbstractFilter {
 
             String delimiter = getProperty("delimiter", ",");
             String[] headers = getPropertyAsArray("headers", null);
+
+            multiValueSeperator = getProperty("multiValueSeperator", ";");
 
 
 
@@ -41,31 +46,27 @@ public class CSVWriter extends AbstractFilter {
             PrintWriter out = new PrintWriter(absoluteFilename);
             printer = format.withDelimiter(delimiter.charAt(0)).print(out);
         } catch (Exception e) {
+            throw new RuntimeException(e);
 
         }
         super.init();
     }
 
     @Override
-    public void field(String name, String value) {
-        currentList.add(value);
-    }
-
-    @Override
-    public void endDocument() {
-
+    public void document(Document document) {
         try {
-            List<List<String>> myList = new ArrayList<List<String>>();
-            myList.add(currentList);
-
-            printer.printRecords(myList);
+            List<String> csvList = new ArrayList<String>();
+            for(Field field: document.getFields()) {
+                String value = Joiner.on(multiValueSeperator).join(field.getValues());
+                csvList.add(value);
+            }
+            printer.printRecords(csvList);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
-        currentList = new ArrayList<String>();
-
     }
+
+
 
     @Override
     public void end() {

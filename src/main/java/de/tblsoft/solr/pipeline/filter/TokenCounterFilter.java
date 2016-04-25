@@ -1,7 +1,10 @@
 package de.tblsoft.solr.pipeline.filter;
 
 import de.tblsoft.solr.pipeline.AbstractFilter;
+import de.tblsoft.solr.pipeline.bean.Document;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.StringTokenizer;
 
 /**
@@ -25,13 +28,17 @@ public class TokenCounterFilter extends AbstractFilter {
 
 
     @Override
-    public void field(String name, String value) {
-        super.field(name,value);
-        if(!name.matches(fieldName)) {
-            return;
+    public void document(Document document) {
+        List<String> values = document.getFieldValues(fieldName, new ArrayList<String>());
+        int tokenCount = 0;
+        for(String value: values) {
+            StringTokenizer tokenizer = new StringTokenizer(value);
+            tokenCount = tokenCount + tokenizer.countTokens();
         }
-        StringTokenizer tokenizer = new StringTokenizer(value);
-        int tokenCount = tokenizer.countTokens();
-        super.field(tokenCountFieldName, String.valueOf(tokenCount));
+        document.setField(tokenCountFieldName, String.valueOf(tokenCount));
+
+
+        super.document(document);
     }
+
 }

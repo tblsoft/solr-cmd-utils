@@ -1,6 +1,8 @@
 package de.tblsoft.solr.pipeline.filter;
 
+import com.google.common.base.Joiner;
 import de.tblsoft.solr.pipeline.AbstractFilter;
+import de.tblsoft.solr.pipeline.bean.Document;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,11 +20,15 @@ public class SpyFilter extends AbstractFilter {
         super.init();
     }
 
+
     @Override
-    public void field(String name, String value) {
-        if(fields.isEmpty() || fields.contains(name)) {
-            System.out.println(name + ": " + value);
+    public void document(Document document) {
+        for(String fieldName: fields) {
+            List<String> values = document.getFieldValues(fieldName, new ArrayList<String>());
+            String value = Joiner.on("; ").join(values);
+            System.out.println(fieldName + ": " + value);
         }
-        super.field(name,value);
+
+        super.document(document);
     }
 }

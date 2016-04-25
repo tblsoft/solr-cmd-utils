@@ -1,6 +1,7 @@
 package de.tblsoft.solr.pipeline.filter;
 
 import de.tblsoft.solr.pipeline.AbstractFilter;
+import de.tblsoft.solr.pipeline.bean.Document;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,25 +39,23 @@ public class RegexSplitFilter extends AbstractFilter {
         super.init();
     }
 
+
     @Override
-    public void field(String name, String value) {
-        if(!name.matches(sourceField)) {
-            super.field(name,value);
-            return;
-        }
+    public void document(Document document) {
+        String value = document.getFieldValue(sourceField, "");
         Matcher m = regex.matcher(value);
         if (m.matches()) {
             for (int i = 0; i < m.groupCount(); i++) {
                 String extractedValue = m.group(i+1);
                 String fieldName = destFieldList.get(i);
-                super.field(fieldName, extractedValue);
+                document.addField(fieldName,extractedValue);
             }
-            super.field(name,value);
         } else {
-            super.field(name,value);
             for(String fieldName : notMatchedDestFieldList) {
-                super.field(fieldName,value);
+                document.addField(fieldName,value);
             }
         }
+
+        super.document(document);
     }
 }

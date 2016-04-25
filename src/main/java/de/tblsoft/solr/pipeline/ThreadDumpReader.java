@@ -1,5 +1,6 @@
 package de.tblsoft.solr.pipeline;
 
+import de.tblsoft.solr.pipeline.bean.Document;
 import de.tblsoft.solr.util.IOUtils;
 import oi.thekraken.grok.api.Grok;
 import oi.thekraken.grok.api.Match;
@@ -44,7 +45,8 @@ public class ThreadDumpReader extends AbstractReader {
     private boolean firstThread = true;
 
     private int position = 0;
-	
+
+    Document currentDocument = new Document();
 
 
 
@@ -161,7 +163,7 @@ public class ThreadDumpReader extends AbstractReader {
 
 	void state(String state) {
 		state = state.trim().replace("java.lang.Thread.State:", "");
-		executer.field("state", state);
+		field("state", state);
 	}
 
 	void trace(String trace) {
@@ -178,14 +180,19 @@ public class ThreadDumpReader extends AbstractReader {
 		String traceHash = DigestUtils.md5Hex(trace);
 		
 		
-		executer.field("traceHash", traceHash);
-		executer.field("traceNameHash", firstTraceLine + "_" + traceHash);
-		executer.field("traceName", firstTraceLine);
-		executer.field("trace", trace);
+		field("traceHash", traceHash);
+		field("traceNameHash", firstTraceLine + "_" + traceHash);
+		field("traceName", firstTraceLine);
+		field("trace", trace);
 
 
 		traceBuilder = new StringBuilder();
 	}
+
+    private void field(String name, String value) {
+        currentDocument.addField(name, value);
+
+    }
 
 	void emptyLine(String date) {
 		if (isTrace) {
@@ -222,31 +229,34 @@ public class ThreadDumpReader extends AbstractReader {
             Map<String, Object> m = gm.toMap();
             for (Map.Entry<String, Object> entry : m.entrySet()) {
                 Object value = entry.getValue();
-                executer.field(entry.getKey(), String.valueOf(value));
+                field(entry.getKey(), String.valueOf(value));
             }
             String nid = (String) m.get("nid");
             nid = nid.replaceFirst("0x", "");
             Integer outputDecimal = Integer.parseInt(nid, 16);
-            executer.field("threadIdDecimal", String.valueOf(outputDecimal));
+            field("threadIdDecimal", String.valueOf(outputDecimal));
 
         } catch (GrokException e) {
             throw new RuntimeException(e);
         }
 
 
-		executer.field("thread", thread);
+		field("thread", thread);
 	}
 
     void endDocument() {
-        executer.field("runId", runId);
-        executer.field("description", currentDescription);
-        executer.field("date", currentDate);
-        executer.field("fileName", currentFileName);
-        executer.field("directory", currentDirectory);
+        field("runId", runId);
+        field("description", currentDescription);
+        field("date", currentDate);
+        field("fileName", currentFileName);
+        field("directory", currentDirectory);
 
-        executer.field("position", String.valueOf(position));
+        field("position", String.valueOf(position));
         position++;
-        executer.endDocument();
+
+
+        executer.document(currentDocument);
+        currentDocument = new Document();
     }
 	
 	

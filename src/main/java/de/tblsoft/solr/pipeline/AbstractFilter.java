@@ -1,6 +1,7 @@
 package de.tblsoft.solr.pipeline;
 
 import com.google.common.base.Strings;
+import de.tblsoft.solr.pipeline.bean.Document;
 import de.tblsoft.solr.pipeline.bean.Filter;
 
 import java.util.List;
@@ -28,8 +29,8 @@ public abstract class AbstractFilter implements FilterIF {
     }
 
     @Override
-    public void field(String name, String value) {
-        nextFilter.field(name, value);
+    public void document(Document document) {
+        nextFilter.document(document);
     }
 
     @Override

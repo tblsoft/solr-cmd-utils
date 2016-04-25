@@ -1,5 +1,7 @@
 package de.tblsoft.solr.pipeline;
 
+import de.tblsoft.solr.pipeline.bean.Document;
+import de.tblsoft.solr.pipeline.bean.Field;
 import de.tblsoft.solr.util.IOUtils;
 import de.tblsoft.solr.util.OutputStreamStringBuilder;
 
@@ -36,7 +38,15 @@ public class FileLineWriter extends AbstractFilter {
 
     }
 
+
     @Override
+    public void document(Document document) {
+        for(Field field: document.getFields()) {
+            field(field.getName(),field.getValue());
+        }
+        super.document(document);
+    }
+
     public void field(String name, String value) {
         outputStreamStringBuilder.append(value);
         outputStreamStringBuilder.append("\n");
