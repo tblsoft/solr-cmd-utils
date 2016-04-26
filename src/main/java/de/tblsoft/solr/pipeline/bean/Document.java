@@ -70,4 +70,11 @@ public class Document {
         this.fields.add(field);
     }
 
+
+    @Override
+    public String toString() {
+        return "Document{" +
+                "fields=" + fields +
+                '}';
+    }
 }

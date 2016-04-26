@@ -34,7 +34,7 @@ public class RegexSplitFilter extends AbstractFilter {
         destFieldList = getPropertyAsList("destFieldList", null);
         verify(this.destFieldList, "For the RegexSplitFilter a destFieldList property must be defined as list.");
 
-        notMatchedDestFieldList = getPropertyAsList("destFieldList", new ArrayList<String>());
+        notMatchedDestFieldList = getPropertyAsList("notMatchedDestFieldList", new ArrayList<String>());
 
         super.init();
     }

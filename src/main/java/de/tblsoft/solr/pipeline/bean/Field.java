@@ -40,4 +40,12 @@ public class Field {
         }
         return null;
     }
+
+    @Override
+    public String toString() {
+        return "Field{" +
+                "name='" + name + '\'' +
+                ", values=" + values +
+                '}';
+    }
 }

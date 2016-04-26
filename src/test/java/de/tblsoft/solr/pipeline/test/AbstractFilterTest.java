@@ -51,17 +51,14 @@ public abstract class AbstractFilterTest {
 
     @Test
     public void testEmptyDocument() {
-        configure();
         runTest();
         assertNumberOfDocuments(1);
         assertNumberOfFields(0);
-
     }
 
 
     @Test
     public void testPassthrough() {
-        configure();
         createField("foo", "bar");
         runTest();
         assertFiled("foo","bar");
@@ -73,6 +70,15 @@ public abstract class AbstractFilterTest {
 
     public void putProperty(String key, String value) {
         filterConfig.putProperty(key, value);
+    }
+
+    public void addProperty(String key, String value) {
+        List<String> propertyList = (List<String>) filterConfig.getProperty().get(key);
+        if(propertyList == null) {
+            propertyList = new ArrayList<String>();
+        }
+        propertyList.add(value);
+        filterConfig.putPropertyList(key, propertyList);
     }
 
     public void setClazz(Class clazz) {

@@ -1,6 +1,7 @@
 package de.tblsoft.solr.pipeline.bean;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -58,6 +59,11 @@ public class Filter {
     }
 
     public void putProperty(String key, String value) {
+        Map<String, Object> properties = (Map<String, Object>) getProperty();
+        properties.put(key, value);
+    }
+
+    public void putPropertyList(String key, List<String> value) {
         Map<String, Object> properties = (Map<String, Object>) getProperty();
         properties.put(key, value);
     }

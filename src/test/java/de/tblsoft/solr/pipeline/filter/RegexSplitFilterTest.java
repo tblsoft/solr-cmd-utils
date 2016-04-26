@@ -6,13 +6,17 @@ import org.junit.Test;
 /**
  * Created by tblsoft on 26.04.16.
  */
-public class FieldJoinerTest extends AbstractFilterTest {
+public class RegexSplitFilterTest extends AbstractFilterTest {
 
     @Override
     public void configure() {
-        putProperty("outputField","name");
-        putProperty("output", "${firstname} ${lastname}");
-        setClazz(FieldJoiner.class);
+        putProperty("regex","(.*) (.*)");
+        putProperty("sourceField", "name");
+        addProperty("destFieldList", "firstname");
+        addProperty("destFieldList", "lastname");
+        addProperty("notMatchedDestFieldList", "firstname");
+        addProperty("notMatchedDestFieldList", "lastname");
+        setClazz(RegexSplitFilter.class);
     }
 
     @Test
@@ -21,7 +25,7 @@ public class FieldJoinerTest extends AbstractFilterTest {
         runTest();
         assertFiled("foo","bar");
         assertNumberOfDocuments(1);
-        assertNumberOfFields(2);
+        assertNumberOfFields(3);
         assertInitWasDelegated();
         assertEndWasDelegated();
     }
@@ -30,15 +34,15 @@ public class FieldJoinerTest extends AbstractFilterTest {
     public void testEmptyDocument() {
         runTest();
         assertNumberOfDocuments(1);
-        assertNumberOfFields(1);
+        assertNumberOfFields(2);
     }
 
-    @org.junit.Test
+    @Test
     public void testJoinerFilter() {
-        createField("firstname", "John");
-        createField("lastname", "Doe");
+        createField("name", "John Doe");
         runTest();
-        assertFiled("name", "John Doe");
+        assertFiled("firstname", "John");
+        assertFiled("lastname", "Doe");
 
     }
 }
