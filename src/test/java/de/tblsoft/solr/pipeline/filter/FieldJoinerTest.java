@@ -17,6 +17,7 @@ public class FieldJoinerTest extends AbstractFilterTest {
 
     @Test
     public void testPassthrough() {
+        configure();
         createField("foo", "bar");
         runTest();
         assertFiled("foo","bar");
@@ -28,6 +29,7 @@ public class FieldJoinerTest extends AbstractFilterTest {
 
     @Test
     public void testEmptyDocument() {
+        configure();
         runTest();
         assertNumberOfDocuments(1);
         assertNumberOfFields(1);
@@ -35,6 +37,7 @@ public class FieldJoinerTest extends AbstractFilterTest {
 
     @org.junit.Test
     public void testJoinerFilter() {
+        configure();
         createField("firstname", "John");
         createField("lastname", "Doe");
         runTest();

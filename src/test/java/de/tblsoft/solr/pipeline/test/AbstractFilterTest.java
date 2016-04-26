@@ -40,7 +40,6 @@ public abstract class AbstractFilterTest {
     }
 
     public void runTest() {
-        configure();
         document(inputDocument);
     }
 
@@ -51,6 +50,7 @@ public abstract class AbstractFilterTest {
 
     @Test
     public void testEmptyDocument() {
+        configure();
         runTest();
         assertNumberOfDocuments(1);
         assertNumberOfFields(0);
@@ -59,6 +59,7 @@ public abstract class AbstractFilterTest {
 
     @Test
     public void testPassthrough() {
+        configure();
         createField("foo", "bar");
         runTest();
         assertFiled("foo","bar");

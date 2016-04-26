@@ -21,6 +21,7 @@ public class RegexSplitFilterTest extends AbstractFilterTest {
 
     @Test
     public void testPassthrough() {
+        configure();
         createField("foo", "bar");
         runTest();
         assertFiled("foo","bar");
@@ -32,6 +33,7 @@ public class RegexSplitFilterTest extends AbstractFilterTest {
 
     @Test
     public void testEmptyDocument() {
+        configure();
         runTest();
         assertNumberOfDocuments(1);
         assertNumberOfFields(2);
@@ -39,6 +41,7 @@ public class RegexSplitFilterTest extends AbstractFilterTest {
 
     @Test
     public void testJoinerFilter() {
+        configure();
         createField("name", "John Doe");
         runTest();
         assertFiled("firstname", "John");

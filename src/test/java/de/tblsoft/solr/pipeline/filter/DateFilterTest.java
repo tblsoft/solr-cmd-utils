@@ -17,6 +17,7 @@ public class DateFilterTest extends AbstractFilterTest {
 
     @org.junit.Test
     public void testDateFilter() {
+        configure();
         createField("date", "2016.04.26");
         runTest();
         assertFiled("date", "2016-04-26");

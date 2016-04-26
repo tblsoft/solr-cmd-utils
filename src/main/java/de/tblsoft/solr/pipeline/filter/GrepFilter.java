@@ -42,12 +42,14 @@ public class GrepFilter extends AbstractFilter {
         for(String value: values) {
             Matcher m = pattern.matcher(value);
             if(shouldMatch && !m.matches()) {
-                document.deleteField(fieldName);
+                //document.deleteField(fieldName);
             } else if (!shouldMatch && m.matches()) {
-                document.deleteField(fieldName);
+                //document.deleteField(fieldName);
+            } else {
+                super.document(document);
             }
         }
-        super.document(document);
+
     }
 
 }
