@@ -99,7 +99,7 @@ public class JsonWriter extends AbstractFilter {
         return longList;
     }
 
-    Object transformDatatype(String value) {
+    static Object transformDatatype(String value) {
         if(NumberUtils.isNumber(value)) {
             try {
                 Long intValue = Long.valueOf(value);
@@ -144,7 +144,18 @@ public class JsonWriter extends AbstractFilter {
     }
 
 
-    Map<String, Object> mapToJson(Document document) {
+    public static String mapToJsonString(List<Document> documentList) {
+        List<Map<String,Object>> documentMap = new ArrayList<Map<String, Object>>();
+        for(Document document: documentList) {
+            documentMap.add(mapToJson(document));
+        }
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        String json = gson.toJson(documentMap);
+        return json;
+
+    }
+
+    static Map<String, Object> mapToJson(Document document) {
         Map<String, Object> jsonDocument = new HashMap<String, Object>();
         for(Field field: document.getFields()) {
             List<String> values = field.getValues();
@@ -158,8 +169,6 @@ public class JsonWriter extends AbstractFilter {
             }
 
         }
-
-
 
         return jsonDocument;
 

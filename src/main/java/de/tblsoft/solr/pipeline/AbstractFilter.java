@@ -11,7 +11,7 @@ import java.util.List;
  */
 public abstract class AbstractFilter implements FilterIF {
 
-    private FilterIF nextFilter;
+    protected FilterIF nextFilter;
 
     private Filter filter;
 

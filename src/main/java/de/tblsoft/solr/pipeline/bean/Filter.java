@@ -1,5 +1,6 @@
 package de.tblsoft.solr.pipeline.bean;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -12,7 +13,7 @@ public class Filter {
 
     private Boolean disabled;
 
-    private Map<String,?> property;
+    private Map<String,?> property = new HashMap<String, Object>();
 
     private String id;
 
@@ -54,6 +55,11 @@ public class Filter {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public void putProperty(String key, String value) {
+        Map<String, Object> properties = (Map<String, Object>) getProperty();
+        properties.put(key, value);
     }
 
     @Override

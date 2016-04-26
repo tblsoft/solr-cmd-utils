@@ -1,5 +1,6 @@
 package de.tblsoft.solr.pipeline.filter;
 
+import com.google.common.base.Strings;
 import de.tblsoft.solr.pipeline.AbstractFilter;
 import de.tblsoft.solr.pipeline.bean.Document;
 
@@ -39,12 +40,17 @@ public class DateFilter extends AbstractFilter {
     @Override
     public void document(Document document) {
         String value = document.getFieldValue(this.dateField);
-        try {
-            Date inputDate = inputDateFormat.parse(value);
-            String newValue = outputDateFormat.format(inputDate);
-        } catch (ParseException e) {
-            throw new RuntimeException(e);
+
+        if(!Strings.isNullOrEmpty(value)) {
+            try {
+                Date inputDate = inputDateFormat.parse(value);
+                String newValue = outputDateFormat.format(inputDate);
+                document.setField(this.dateField, newValue);
+            } catch (ParseException e) {
+                throw new RuntimeException(e);
+            }
         }
 
+        super.document(document);
     }
 }

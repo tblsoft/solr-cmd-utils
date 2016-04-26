@@ -106,11 +106,16 @@ public class PipelineExecuter {
         return Class.forName(clazz).newInstance();
     }
 
-    public static FilterIF createFilterInstance(Filter filter) throws Exception {
-        String filterClazz = filter.getClazz();
-        FilterIF filterInstance = (FilterIF) getInstance(filterClazz);
-        filterInstance.setFilterConfig(filter);
-        return filterInstance;
+    public static FilterIF createFilterInstance(Filter filter) {
+        try {
+            String filterClazz = filter.getClazz();
+            FilterIF filterInstance = (FilterIF) getInstance(filterClazz);
+            filterInstance.setFilterConfig(filter);
+            return filterInstance;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
     public void execute() {
