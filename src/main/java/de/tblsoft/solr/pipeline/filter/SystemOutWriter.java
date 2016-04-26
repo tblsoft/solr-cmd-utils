@@ -20,6 +20,7 @@ public class SystemOutWriter extends AbstractFilter {
 
     @Override
     public void document(Document document) {
+        documentCounter++;
         List<Field> values = document.getFields();
         if(values != null) {
             for(Field f :values) {
@@ -32,12 +33,6 @@ public class SystemOutWriter extends AbstractFilter {
         }
 
         super.document(document);
-    }
-
-    @Override
-    public void endDocument() {
-        documentCounter++;
-        //System.out.println("endDocument");
     }
 
     @Override

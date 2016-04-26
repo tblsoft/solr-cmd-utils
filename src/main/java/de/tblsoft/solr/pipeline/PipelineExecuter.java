@@ -51,6 +51,7 @@ public class PipelineExecuter {
         classRegestriy.put("solrcmdutils.NounExtractorFilter", NounExtractorFilter.class);
         classRegestriy.put("solrcmdutils.FileLineWriter", FileLineWriter.class);
         classRegestriy.put("solrcmdutils.CSVWriter", CSVWriter.class);
+        classRegestriy.put("solrcmdutils.TestingFilter", TestingFilter.class);
 
     }
 
@@ -97,7 +98,7 @@ public class PipelineExecuter {
         }
     }
 
-    Object getInstance(String clazz) throws ClassNotFoundException, IllegalAccessException, InstantiationException {
+    public static Object getInstance(String clazz) throws ClassNotFoundException, IllegalAccessException, InstantiationException {
         Class clazzClass = classRegestriy.get(clazz);
         if(clazzClass != null) {
             return Class.forName(clazzClass.getName()).newInstance();
@@ -105,7 +106,7 @@ public class PipelineExecuter {
         return Class.forName(clazz).newInstance();
     }
 
-    private FilterIF createFilterInstance(Filter filter) throws Exception {
+    public static FilterIF createFilterInstance(Filter filter) throws Exception {
         String filterClazz = filter.getClazz();
         FilterIF filterInstance = (FilterIF) getInstance(filterClazz);
         filterInstance.setFilterConfig(filter);
@@ -150,5 +151,14 @@ public class PipelineExecuter {
 
     public List<FilterIF> getFilterList() {
         return filterList;
+    }
+
+    public FilterIF getFilterById(String filterId) {
+        for(FilterIF filter : getFilterList()) {
+            if(filterId.equals(filter.getId())) {
+                return filter;
+            }
+        }
+        throw new IllegalArgumentException("The filter with the id: " + filterId + " does not exists.");
     }
 }

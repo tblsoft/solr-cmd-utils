@@ -8,7 +8,7 @@ import java.util.List;
  */
 public class Document {
 
-    private List<Field> fields;
+    private List<Field> fields = new ArrayList<Field>();
 
 
     public List<Field> getFields() {

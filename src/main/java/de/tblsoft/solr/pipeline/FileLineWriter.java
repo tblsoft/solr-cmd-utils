@@ -54,11 +54,6 @@ public class FileLineWriter extends AbstractFilter {
     }
 
     @Override
-    public void endDocument() {
-
-    }
-
-    @Override
     public void end() {
         try {
             outputStream.close();

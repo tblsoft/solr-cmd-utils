@@ -14,6 +14,8 @@ public class Filter {
 
     private Map<String,?> property;
 
+    private String id;
+
     public String getName() {
         return name;
     }
@@ -44,6 +46,14 @@ public class Filter {
 
     public void setDisabled(Boolean disabled) {
         this.disabled = disabled;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     @Override

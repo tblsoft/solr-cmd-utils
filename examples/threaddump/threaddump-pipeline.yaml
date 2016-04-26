@@ -3,7 +3,7 @@ reader:
   name: "ThreadDumpReader"
   clazz: "solrcmdutils.ThreadDumpReader"
   property:
-    filename: "examples/threaddump/eclipse-threaddump.txt"
+    filename: "eclipse-threaddump.txt"
 
 filter:
   - name: "Elastic Writer"
@@ -11,5 +11,5 @@ filter:
     property:
       type: "elastic"
       location: "http://localhost:9200/threaddump/threaddump"
-      elasticMappingLocation: "examples/threaddump/threaddump-elastic-mapping.json"
+      elasticMappingLocation: "threaddump-elastic-mapping.json"
 

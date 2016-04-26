@@ -34,11 +34,6 @@ public abstract class AbstractFilter implements FilterIF {
     }
 
     @Override
-    public void endDocument() {
-        nextFilter.endDocument();
-    }
-
-    @Override
     public void end() {
         nextFilter.end();
     }
@@ -114,5 +109,9 @@ public abstract class AbstractFilter implements FilterIF {
 
     public void setBaseDir(String baseDir) {
         this.baseDir = baseDir;
+    }
+
+    public String getId() {
+        return this.filter.getId();
     }
 }

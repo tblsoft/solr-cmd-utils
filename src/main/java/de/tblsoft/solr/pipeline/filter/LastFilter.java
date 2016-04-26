@@ -23,11 +23,6 @@ public class LastFilter implements FilterIF {
     }
 
     @Override
-    public void endDocument() {
-
-    }
-
-    @Override
     public void end() {
     }
 
@@ -44,5 +39,10 @@ public class LastFilter implements FilterIF {
     @Override
     public void setBaseDir(String baseDir) {
 
+    }
+
+    @Override
+    public String getId() {
+        return null;
     }
 }

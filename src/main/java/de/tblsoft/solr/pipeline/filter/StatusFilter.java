@@ -1,6 +1,7 @@
 package de.tblsoft.solr.pipeline.filter;
 
 import de.tblsoft.solr.pipeline.AbstractFilter;
+import de.tblsoft.solr.pipeline.bean.Document;
 
 /**
  * Created by tblsoft on 02.04.16.
@@ -25,17 +26,16 @@ public class StatusFilter extends AbstractFilter {
     }
 
     @Override
-    public void endDocument() {
-    	documentCounter++;
-    	if(documentCounter % statusCount == 0) {
-    		long duration = System.currentTimeMillis() - start;
-    		long lapDuration = System.currentTimeMillis() - lapStart;
+    public void document(Document document) {
+        documentCounter++;
+        if(documentCounter % statusCount == 0) {
+            long duration = System.currentTimeMillis() - start;
+            long lapDuration = System.currentTimeMillis() - lapStart;
 
-    		System.out.println("processed all " + documentCounter + " in " + getFormattedDuration(duration) + ". - processed the last " + statusCount + " documents in " + getFormattedDuration(lapDuration) + ".");
-    		lapStart = System.currentTimeMillis();
-    	}
-    	
-    	super.endDocument();
+            System.out.println("processed all " + documentCounter + " in " + getFormattedDuration(duration) + ". - processed the last " + statusCount + " documents in " + getFormattedDuration(lapDuration) + ".");
+            lapStart = System.currentTimeMillis();
+        }
+        super.document(document);
     }
     
     @Override

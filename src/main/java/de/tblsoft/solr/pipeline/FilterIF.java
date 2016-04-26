@@ -12,8 +12,6 @@ public interface FilterIF {
 
     public void document(Document document);
 
-    public void endDocument();
-
     public void end();
 
     public void setFilterConfig(Filter filter);
@@ -21,4 +19,6 @@ public interface FilterIF {
     public void setNextFilter(FilterIF filter);
 
     public void setBaseDir(String baseDir);
+
+    public String getId();
 }
