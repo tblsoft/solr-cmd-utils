@@ -7,6 +7,8 @@ import de.tblsoft.solr.pipeline.bean.Filter;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.ArrayList;
+
 /**
  * Created by tblsoft on 29.04.16.
  */
@@ -25,6 +27,7 @@ public class BeanTest {
     @Test
     public void testFieldBeanWithNoValue() {
         Field f = new Field("foo", null);
+        f.setValues(new ArrayList<String>());
         Assert.assertNull(f.getValue());
     }
 
