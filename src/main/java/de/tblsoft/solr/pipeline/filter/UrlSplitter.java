@@ -1,12 +1,13 @@
 package de.tblsoft.solr.pipeline.filter;
 
 
+import com.google.common.base.Strings;
+import de.tblsoft.solr.http.UrlUtil;
 import de.tblsoft.solr.pipeline.AbstractFilter;
 import de.tblsoft.solr.pipeline.bean.Document;
 import org.apache.http.NameValuePair;
-import org.apache.http.client.utils.URLEncodedUtils;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
-import java.nio.charset.Charset;
 import java.util.List;
 
 
@@ -28,13 +29,36 @@ public class UrlSplitter extends AbstractFilter {
     public void document(Document document) {
         String value = document.getFieldValue(urlField, "");
 
-        List<NameValuePair> urlParams = URLEncodedUtils.parse(value,
-                Charset.forName("UTF-8"));
+        if(value.startsWith("http")){
+            List<NameValuePair> urlParams = UrlUtil.getUrlParams(value);
+            for(NameValuePair urlParam: urlParams) {
+                document.addField(fieldPrefix + urlParam.getName(),urlParam.getValue());
+            }
 
-        for(NameValuePair urlParam: urlParams) {
-            document.addField(fieldPrefix + urlParam.getName(),urlParam.getValue());
+            String path = UrlUtil.getPath(value);
+            document.addField(fieldPrefix + "_path", path);
+
+
+            String host = UrlUtil.getHost(value);
+            document.addField(fieldPrefix + "_host",host);
+
+
+        } else if(value.contains("?")) {
+            //we have query parameters and a optional path
+            // we have no absolute url
+
+            throw new NotImplementedException();
+        } else if (Strings.isNullOrEmpty(value)) {
+            // do nothing
+
+        } else {
+            // we only have a path
+            throw new NotImplementedException();
         }
+
         super.document(document);
+
+
     }
 
 }

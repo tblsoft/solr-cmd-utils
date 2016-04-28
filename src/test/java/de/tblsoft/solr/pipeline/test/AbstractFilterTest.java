@@ -8,6 +8,7 @@ import de.tblsoft.solr.pipeline.bean.Filter;
 import de.tblsoft.solr.pipeline.filter.JsonWriter;
 import de.tblsoft.solr.pipeline.filter.LastFilter;
 import de.tblsoft.solr.pipeline.filter.TestingFilter;
+import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -112,6 +113,15 @@ public abstract class AbstractFilterTest {
         Document document = outputDocumentList.get(0);
         String actual = document.getFieldValue(name);
         Assert.assertEquals(expected, actual);
+
+        CoreMatchers.hasItems("foo","bar");
+    }
+
+
+    public void assertFiledList(String name, String... expected) {
+        Document document = outputDocumentList.get(0);
+        List<String> actual = document.getFieldValues(name);
+        Assert.assertThat(actual, CoreMatchers.hasItems(expected));
     }
 
     public void assertNumberOfDocuments(int expected) {

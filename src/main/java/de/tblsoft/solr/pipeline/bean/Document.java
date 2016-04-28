@@ -65,9 +65,25 @@ public class Document {
         this.fields.add(field);
     }
 
+    public Field getField(String name) {
+        for(Field field:fields) {
+            if(name.equals(field.getName())) {
+                return field;
+            }
+        }
+        return null;
+    }
+
     public void addField(String name, String value) {
-        Field field = new Field(name,value);
-        this.fields.add(field);
+        Field existingField = getField(name);
+        if(existingField == null) {
+            Field field = new Field(name,value);
+            this.fields.add(field);
+        } else {
+            existingField.getValues().add(value);
+        }
+
+
     }
 
 
