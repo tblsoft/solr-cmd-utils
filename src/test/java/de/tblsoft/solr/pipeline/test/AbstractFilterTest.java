@@ -5,11 +5,8 @@ import de.tblsoft.solr.pipeline.PipelineExecuter;
 import de.tblsoft.solr.pipeline.bean.Document;
 import de.tblsoft.solr.pipeline.bean.DocumentBuilder;
 import de.tblsoft.solr.pipeline.bean.Filter;
-import de.tblsoft.solr.pipeline.filter.JsonWriter;
 import de.tblsoft.solr.pipeline.filter.LastFilter;
 import de.tblsoft.solr.pipeline.filter.TestingFilter;
-import org.hamcrest.CoreMatchers;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -19,17 +16,13 @@ import java.util.List;
 /**
  * Created by tblsoft on 26.04.16.
  */
-public abstract class AbstractFilterTest {
+public abstract class AbstractFilterTest extends AbstractBaseTest {
 
 
 
     private Filter filterConfig = new Filter();
 
-    protected List<Document> outputDocumentList = new ArrayList<Document>();
-
     private Document inputDocument = new Document();
-
-    private TestingFilter testingFilter = null;
 
 
     @Before
@@ -113,47 +106,5 @@ public abstract class AbstractFilterTest {
         filter.init();
         return filter;
 
-    }
-
-    public void print(List<Document> documentList) {
-        String json = JsonWriter.mapToJsonString(documentList);
-        System.out.println(json);
-    }
-
-    public void print() {
-        print(outputDocumentList);
-    }
-
-    public void assertFiled(String name, String expected) {
-        Document document = outputDocumentList.get(0);
-        String actual = document.getFieldValue(name);
-        Assert.assertEquals(expected, actual);
-
-        CoreMatchers.hasItems("foo","bar");
-    }
-
-
-    public void assertFiledList(String name, String... expected) {
-        Document document = outputDocumentList.get(0);
-        List<String> actual = document.getFieldValues(name);
-        Assert.assertThat(actual, CoreMatchers.hasItems(expected));
-    }
-
-    public void assertNumberOfDocuments(int expected) {
-        int actual = outputDocumentList.size();
-        Assert.assertEquals(expected, actual);
-    }
-
-    public void assertNumberOfFields(int expected) {
-        int actual = outputDocumentList.get(0).getFields().size();
-        Assert.assertEquals(expected, actual);
-    }
-
-    public void assertInitWasDelegated() {
-        Assert.assertTrue(this.testingFilter.isInitWasDelegated());
-    }
-
-    public void assertEndWasDelegated() {
-        Assert.assertTrue(this.testingFilter.isEndWasDelegated());
     }
 }
