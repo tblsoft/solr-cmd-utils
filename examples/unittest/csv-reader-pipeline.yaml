@@ -8,6 +8,7 @@ reader:
 filter:
   - name: "Disabled Filter"
     id: "disabledFilter"
+    disabled: "true"
     clazz: "solrcmdutils.NoopFilter"
   - name: "Disabled Filter"
     id: "disabledFilter"
