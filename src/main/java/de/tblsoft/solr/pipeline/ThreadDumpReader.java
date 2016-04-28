@@ -254,7 +254,7 @@ public class ThreadDumpReader extends AbstractReader {
         field("position", String.valueOf(position));
         position++;
 
-
+        test broken code
         executer.document(currentDocument);
         currentDocument = new Document();
     }
