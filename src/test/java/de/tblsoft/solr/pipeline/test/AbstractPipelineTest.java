@@ -8,8 +8,10 @@ import de.tblsoft.solr.pipeline.filter.TestingFilter;
  */
 public class AbstractPipelineTest extends AbstractBaseTest {
 
+    protected PipelineExecuter pipelineExecuter;
+
     public void runPipeline(String pipeline) {
-        PipelineExecuter pipelineExecuter = new PipelineExecuter(pipeline);
+        pipelineExecuter = new PipelineExecuter(pipeline);
         pipelineExecuter.execute();
         testingFilter = (TestingFilter) pipelineExecuter.getFilterById("testingFilter");
         outputDocumentList = testingFilter.getDocumentList();

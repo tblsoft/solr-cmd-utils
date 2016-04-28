@@ -6,6 +6,12 @@ reader:
     filename: "example.csv"
 
 filter:
+  - name: "Disabled Filter"
+    id: "disabledFilter"
+    clazz: "solrcmdutils.NoopFilter"
+  - name: "Disabled Filter"
+    id: "disabledFilter"
+    clazz: "solrcmdutils.NoopFilter"
   - name: "Testing Filter"
     id: "testingFilter"
     clazz: "solrcmdutils.TestingFilter"

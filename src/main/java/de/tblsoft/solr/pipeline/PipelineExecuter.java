@@ -52,6 +52,7 @@ public class PipelineExecuter {
         classRegestriy.put("solrcmdutils.FileLineWriter", FileLineWriter.class);
         classRegestriy.put("solrcmdutils.CSVWriter", CSVWriter.class);
         classRegestriy.put("solrcmdutils.TestingFilter", TestingFilter.class);
+        classRegestriy.put("solrcmdutils.NoopFilter", NoopFilter.class);
 
     }
 
