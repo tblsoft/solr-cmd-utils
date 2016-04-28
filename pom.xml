@@ -127,6 +127,9 @@
                         <ignores>
                             <ignore>de.tblsoft.solr.log.parser.*</ignore>
                         </ignores>
+                        <excludes>
+                            <exclude>de/tblsoft/solr/log/**/*.class</exclude>
+                        </excludes>
                     </instrumentation>
                 </configuration>
             </plugin>
