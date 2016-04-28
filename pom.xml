@@ -126,6 +126,9 @@
                         <ignoreTrivial>true</ignoreTrivial>
                         <ignores>
                             <ignore>de.tblsoft.solr.log.parser.*</ignore>
+                            <ignore>de.tblsoft.solr.bean.*</ignore>
+                            <ignore>de.tblsoft.solr.cmd.*</ignore>
+                            <ignore>de.tblsoft.solr.logic.*</ignore>
                         </ignores>
                     </instrumentation>
                 </configuration>
