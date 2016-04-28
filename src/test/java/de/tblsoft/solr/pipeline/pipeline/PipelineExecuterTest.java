@@ -16,6 +16,11 @@ public class PipelineExecuterTest extends AbstractPipelineTest {
     }
 
     @Test(expected = RuntimeException.class)
+    public void notExistingFilterTest() {
+        runPipeline("examples/unittest/filter-not-exists-pipeline.yaml");
+    }
+
+    @Test(expected = RuntimeException.class)
     public void readPipelineFromYamlFileFileNotExists() {
         runPipeline("file-not-exists.yaml");
     }
