@@ -2,6 +2,7 @@ package de.tblsoft.solr.pipeline.test;
 
 import de.tblsoft.solr.pipeline.bean.Document;
 import de.tblsoft.solr.pipeline.bean.DocumentBuilder;
+import de.tblsoft.solr.pipeline.bean.Field;
 import de.tblsoft.solr.pipeline.bean.Filter;
 import org.junit.Assert;
 import org.junit.Test;
@@ -15,6 +16,18 @@ public class BeanTest {
     public void testFilterBean() {
         testBean(new Filter());
     }
+
+    @Test
+    public void testFieldBean() {
+        testBean(new Field("foo", "bar"));
+    }
+
+    @Test
+    public void testFieldBeanWithNoValue() {
+        Field f = new Field("foo", null);
+        Assert.assertNull(f.getValue());
+    }
+
 
     @Test
     public void testDocumentBean() {
