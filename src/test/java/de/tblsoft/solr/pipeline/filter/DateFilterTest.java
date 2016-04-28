@@ -23,4 +23,13 @@ public class DateFilterTest extends AbstractFilterTest {
         assertFiled("date", "2016-04-26");
 
     }
+
+    @org.junit.Test(expected=RuntimeException.class)
+    public void testDateFilterException() {
+        configure();
+        createField("date", "problem2016.04.26");
+        runTest();
+        assertFiled("date", "2016-04-26");
+
+    }
 }
