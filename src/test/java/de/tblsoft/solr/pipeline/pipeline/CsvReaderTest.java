@@ -20,4 +20,19 @@ public class CsvReaderTest extends AbstractPipelineTest {
         assertInitWasDelegated();
         assertEndWasDelegated();
     }
+
+    @Test
+    public void testCsvReaderWithoutHeader() {
+        runPipeline("examples/unittest/csv-reader-without-header-pipeline.yaml");
+        assertFiled("column1", "foo");
+        assertFiled("column2", "bar");
+
+        assertNumberOfDocuments(2);
+        assertNumberOfFields(2);
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void testFileNotExists() {
+        runPipeline("examples/unittest/csv-file-not-exists-pipeline.yaml");
+    }
 }
