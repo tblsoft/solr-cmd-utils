@@ -130,6 +130,12 @@
                             <ignore>de.tblsoft.solr.cmd.*</ignore>
                             <ignore>de.tblsoft.solr.logic.*</ignore>
                         </ignores>
+                        <excludes>
+                            <exclude>de/tblsoft/solr/log/parser/**/*.class</exclude>
+                            <exclude>de/tblsoft/solr/bean/**/*.class</exclude>
+                            <exclude>de/tblsoft/solr/cmd/**/*.class</exclude>
+                            <exclude>de/tblsoft/solr/logic/**/*.class</exclude>
+                        </excludes>
                     </instrumentation>
                 </configuration>
             </plugin>
