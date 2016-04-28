@@ -124,6 +124,9 @@
                     <aggregate>true</aggregate>
                     <instrumentation>
                         <ignoreTrivial>true</ignoreTrivial>
+                        <ignores>
+                            <ignore>de.tblsoft.solr.log.parser.*</ignore>
+                        </ignores>
                     </instrumentation>
                 </configuration>
             </plugin>
