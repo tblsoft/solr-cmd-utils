@@ -20,16 +20,10 @@ public class SolrFieldCounter extends AbstractFilter {
 
 
     @Override
-    public void init() {
-
-    }
-
-    @Override
     public void document(Document document) {
         for(Field field: document.getFields()) {
             solrFields.incrementAndGet(field.getName());
         }
-        super.document(document);
     }
 
     @Override

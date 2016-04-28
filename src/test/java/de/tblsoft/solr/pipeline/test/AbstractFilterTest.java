@@ -88,16 +88,31 @@ public abstract class AbstractFilterTest {
     }
 
     protected List<Document> document(Document document) {
+        FilterIF filter = initFilter();
+        filter.document(document);
+        filter.end();
+        outputDocumentList = testingFilter.getDocumentList();
+        return outputDocumentList;
+    }
+
+    protected List<Document> document(Document... document) {
+        FilterIF filter = initFilter();
+        for(Document d: document) {
+            filter.document(d);
+        }
+        filter.end();
+        outputDocumentList = testingFilter.getDocumentList();
+        return outputDocumentList;
+    }
+
+    FilterIF initFilter() {
         FilterIF filter = PipelineExecuter.createFilterInstance(filterConfig);
-        TestingFilter testingFilter = new TestingFilter();
+        this.testingFilter = new TestingFilter();
         testingFilter.setNextFilter(new LastFilter());
         filter.setNextFilter(testingFilter);
         filter.init();
-        filter.document(document);
-        filter.end();
-        this.testingFilter = testingFilter;
-        outputDocumentList = testingFilter.getDocumentList();
-        return outputDocumentList;
+        return filter;
+
     }
 
     public void print(List<Document> documentList) {
