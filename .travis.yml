@@ -7,3 +7,4 @@ sudo: false
 script: mvn clean package
 after_success:
   - mvn clean test cobertura:cobertura coveralls:report
+  - bash <(curl -s https://codecov.io/bash)
