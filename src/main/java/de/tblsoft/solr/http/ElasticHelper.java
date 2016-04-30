@@ -11,6 +11,9 @@ public class ElasticHelper {
 
 
     public static String getIndexUrl(String url) throws URISyntaxException {
+        if(url==null) {
+            throw new URISyntaxException("", "The url is null.");
+        }
         URI uri = new URI(url);
         String[] parts = uri.getPath().split(Pattern.quote("/"));
         if(parts.length < 2) {
