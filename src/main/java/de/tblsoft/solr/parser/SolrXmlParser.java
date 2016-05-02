@@ -42,7 +42,7 @@ public class SolrXmlParser {
         int lstCounter = 0;
         String currentValue = "";
         String currentName = "";
-        List<String> possibleStartElements = Arrays.asList("arr,str,bool,double,float,long,int".split(","));
+        List<String> possibleStartElements = Arrays.asList("date,arr,str,bool,double,float,long,int".split(","));
 
         while (xmlEventReader.hasNext()) {
             XMLEvent xmlEvent = xmlEventReader.nextEvent();
