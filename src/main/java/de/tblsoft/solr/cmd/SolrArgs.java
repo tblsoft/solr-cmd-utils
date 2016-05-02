@@ -90,6 +90,9 @@ public class SolrArgs {
     @Parameter(names = { "-bulk"}, description = "Enable bulk processing.")
     private boolean bulk = false;
 
+    @Parameter(names = { "-delete"}, description = "Delete. Default is false.")
+    private boolean delete = false;
+
     @Parameter(names = { "-queue-size"}, description = "The size of the queue. Example: -queue-size 1000")
     private int queueSize = 1;
 
@@ -297,5 +300,13 @@ public class SolrArgs {
 
     public void setPipeline(String pipeline) {
         this.pipeline = pipeline;
+    }
+
+    public boolean isDelete() {
+        return delete;
+    }
+
+    public void setDelete(boolean delete) {
+        this.delete = delete;
     }
 }

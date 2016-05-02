@@ -230,6 +230,7 @@ public class Cmd {
         SolrFeeder feeder = new SolrFeeder(output);
         feeder.setQueueSize(queueSize);
         feeder.setThreads(threads);
+        feeder.setDeleteIndex(solrArgs.isDelete());
         String ignoreFields = solrArgs.getIgnoreFields();
         List<String> ignoreFieldsList = Lists.newArrayList(Splitter.on(",").split(ignoreFields));
         feeder.setIgnoreFields(ignoreFieldsList);

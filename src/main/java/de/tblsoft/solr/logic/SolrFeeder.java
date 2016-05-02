@@ -3,7 +3,7 @@ package de.tblsoft.solr.logic;
 import de.tblsoft.solr.parser.SolrXmlParser;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrServerException;
-import org.apache.solr.client.solrj.impl.ConcurrentUpdateSolrClient;
+import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.apache.solr.common.SolrInputDocument;
 
 import java.io.IOException;
@@ -29,6 +29,8 @@ public class SolrFeeder extends SolrXmlParser {
 
     private int threads = 1;
 
+    private boolean deleteIndex = false;
+
     public SolrFeeder(String server) {
         this.serverUrl = server;
 
@@ -36,8 +38,14 @@ public class SolrFeeder extends SolrXmlParser {
     }
 
     public void doFeed() throws Exception {
-        this.server = new ConcurrentUpdateSolrClient(serverUrl,queueSize,threads);
-        server.deleteByQuery("*:*");
+        //this.server = new ConcurrentUpdateSolrClient(serverUrl,queueSize,threads);
+
+        this.server = new HttpSolrClient(serverUrl);
+        if(deleteIndex) {
+            System.out.println("Delete the index.");
+            server.deleteByQuery("*:*");
+        }
+
         parse();
         server.commit();
         server.optimize();
@@ -84,5 +92,9 @@ public class SolrFeeder extends SolrXmlParser {
 
     public void setThreads(int threads) {
         this.threads = threads;
+    }
+
+    public void setDeleteIndex(boolean deleteIndex) {
+        this.deleteIndex = deleteIndex;
     }
 }

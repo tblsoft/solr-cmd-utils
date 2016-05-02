@@ -31,12 +31,15 @@ public class SolrFeeder extends AbstractFilter {
 
     private String password;
 
+    boolean deleteIndex = false;
+
     @Override
     public void init() {
         queueSize = getPropertyAsInt("queueSize", 1);
         threads = getPropertyAsInt("threads", 1);
         serverUrl = getProperty("serverUrl", null);
         ignoreFields = getPropertyAsList("ignoreFields", null);
+        deleteIndex = getPropertyAsBoolean("deleteIndex", false);
         user = getProperty("user", null);
         password = getProperty("password", null);
 
@@ -48,7 +51,10 @@ public class SolrFeeder extends AbstractFilter {
         basicAuthserver.setBasicAuthCredentials(user,password);
         this.server = basicAuthserver;
         try {
-            server.deleteByQuery("*:*");
+            if(deleteIndex) {
+                System.out.println("Delete the index.");
+                server.deleteByQuery("*:*");
+            }
         } catch (SolrServerException e) {
             throw new RuntimeException(e);
         } catch (IOException e) {
@@ -110,5 +116,9 @@ public class SolrFeeder extends AbstractFilter {
 
     public void setThreads(int threads) {
         this.threads = threads;
+    }
+
+    public void setDeleteIndex(boolean deleteIndex) {
+        this.deleteIndex = deleteIndex;
     }
 }
