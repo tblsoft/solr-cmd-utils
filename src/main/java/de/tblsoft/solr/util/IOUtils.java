@@ -1,6 +1,10 @@
 package de.tblsoft.solr.util;
 
 import com.google.common.io.Files;
+import org.apache.commons.compress.compressors.CompressorException;
+import org.apache.commons.compress.compressors.CompressorInputStream;
+import org.apache.commons.compress.compressors.CompressorStreamFactory;
+import org.apache.commons.compress.compressors.bzip2.BZip2CompressorInputStream;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -55,6 +59,9 @@ public class IOUtils {
         InputStream fileStream = new FileInputStream(inputFileName);
         if (inputFileName.endsWith(".gz")) {
             return new GZIPInputStream(fileStream);
+        }
+        if(inputFileName.endsWith(".bz2")) {
+            return new BZip2CompressorInputStream(fileStream);;
         }
         return fileStream;
     }

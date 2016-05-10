@@ -1,0 +1,11 @@
+name: "csv unit testing pipeline"
+reader:
+  name: "CsvReader"
+  clazz: "solrcmdutils.CSVReader"
+  property:
+    filename: "example.csv.bz2"
+
+filter:
+  - name: "Testing Filter"
+    id: "testingFilter"
+    clazz: "solrcmdutils.TestingFilter"
