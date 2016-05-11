@@ -42,6 +42,7 @@ public class PipelineExecuter {
         classRegestriy.put("solrcmdutils.CSVReader", CSVReader.class);
         classRegestriy.put("solrcmdutils.SpyFilter", SpyFilter.class);
         classRegestriy.put("solrcmdutils.StatusFilter", StatusFilter.class);
+        classRegestriy.put("solrcmdutils.MappingFilter", MappingFilter.class);
         classRegestriy.put("solrcmdutils.EncodingCorrectionFilter", EncodingCorrectionFilter.class);
         classRegestriy.put("solrcmdutils.RegexSplitFilter", RegexSplitFilter.class);
         classRegestriy.put("solrcmdutils.BeanShellFilter", BeanShellFilter.class);

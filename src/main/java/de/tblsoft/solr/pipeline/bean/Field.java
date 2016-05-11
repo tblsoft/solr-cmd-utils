@@ -14,6 +14,11 @@ public class Field {
         this.values.add(value);
     }
 
+    public Field(String name, List<String> values) {
+        this.name = name;
+        this.values = values;
+    }
+
     private String name;
 
     private List<String> values;

@@ -1,6 +1,7 @@
 package de.tblsoft.solr.pipeline.test;
 
 import de.tblsoft.solr.pipeline.bean.Document;
+import de.tblsoft.solr.pipeline.bean.Field;
 import de.tblsoft.solr.pipeline.filter.JsonWriter;
 import de.tblsoft.solr.pipeline.filter.TestingFilter;
 import org.hamcrest.CoreMatchers;
@@ -28,11 +29,21 @@ public abstract class AbstractBaseTest {
     }
 
     public void assertFiled(String name, String expected) {
+        if(outputDocumentList.size() == 0) {
+            Assert.fail("There is no output document.");
+        }
         Document document = outputDocumentList.get(0);
         String actual = document.getFieldValue(name);
         Assert.assertEquals(expected, actual);
     }
-
+    public void assertFiledNotExists(String name) {
+        if(outputDocumentList.size() == 0) {
+            Assert.fail("There is no output document.");
+        }
+        Document document = outputDocumentList.get(0);
+        Field f = document.getField(name);
+        Assert.assertNull(f);
+    }
 
     public void assertFiledList(String name, String... expected) {
         Document document = outputDocumentList.get(0);

@@ -59,6 +59,13 @@ public class Document {
         this.fields = newFields;
     }
 
+
+    public void setField(String name, List<String> value) {
+        Field field = new Field(name,value);
+        deleteField(name);
+        this.fields.add(field);
+    }
+
     public void setField(String name, String value) {
         Field field = new Field(name,value);
         deleteField(name);
