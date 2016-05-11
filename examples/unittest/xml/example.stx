@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<stx:transform xmlns:stx="http://stx.sourceforge.net/2002/ns"
+               version="1.0">
+
+
+    <stx:template match="/">
+        <documents>
+            <stx:process-children />
+        </documents>
+    </stx:template>
+    <stx:template match="doc">
+        <document>
+            <stx:process-children />
+        </document>
+    </stx:template>
+
+    <stx:template match="title">
+        <field name="title">
+            <stx:value-of select="."></stx:value-of>
+        </field>
+    </stx:template>
+    <stx:template match="description">
+        <field name="description">
+            <stx:value-of select="."></stx:value-of>
+        </field>
+    </stx:template>
+
+</stx:transform>

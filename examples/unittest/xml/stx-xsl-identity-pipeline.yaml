@@ -1,0 +1,14 @@
+name: "xml unit testing pipeline"
+reader:
+  name: "XmlReader"
+  clazz: "solrcmdutils.XmlReader"
+  property:
+    filename: "identity.xml"
+    transformations:
+      - identity.stx
+      - identity.xsl
+
+filter:
+  - name: "Testing Filter"
+    id: "testingFilter"
+    clazz: "solrcmdutils.TestingFilter"

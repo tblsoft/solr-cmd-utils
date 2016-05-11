@@ -1,0 +1,10 @@
+<documents>
+    <document>
+        <field name="title">title 1</field>
+        <field name="description">description 1</field>
+    </document>
+    <document>
+        <field name="title">title 2</field>
+        <field name="description">description 2</field>
+    </document>
+</documents>
