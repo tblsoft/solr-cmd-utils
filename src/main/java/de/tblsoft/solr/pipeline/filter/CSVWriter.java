@@ -22,29 +22,31 @@ public class CSVWriter extends AbstractFilter {
 
     private String multiValueSeperator;
 
+    private boolean firstDocument = true;
+
+    private String delimiter;
+
+    private String[] headers;
+
+    private String absoluteFilename;
+
     @Override
     public void init() {
 
         try {
             String filename = getProperty("filename", null);
-            String absoluteFilename = IOUtils.getAbsoluteFile(getBaseDir(), filename);
+            absoluteFilename = IOUtils.getAbsoluteFile(getBaseDir(), filename);
 
-            String delimiter = getProperty("delimiter", ",");
-            String[] headers = getPropertyAsArray("headers", null);
+            delimiter = getProperty("delimiter", ",");
+            headers = getPropertyAsArray("headers", null);
 
             multiValueSeperator = getProperty("multiValueSeperator", ";");
 
 
 
-            CSVFormat format = CSVFormat.RFC4180;
-            if(headers == null) {
-                format = format.withHeader();
-            } else {
-                format = format.withHeader(headers);
-            }
 
-            PrintWriter out = new PrintWriter(absoluteFilename);
-            printer = format.withDelimiter(delimiter.charAt(0)).print(out);
+
+
         } catch (Exception e) {
             throw new RuntimeException(e);
 
@@ -52,15 +54,36 @@ public class CSVWriter extends AbstractFilter {
         super.init();
     }
 
+    String[] getFieldNames(Document document) {
+        List<String> headersFromDocument = new ArrayList<String>();
+        for(Field field : document.getFields()) {
+            headersFromDocument.add(field.getName());
+        }
+        return headersFromDocument.toArray(new String[headersFromDocument.size()]);
+    }
+
     @Override
     public void document(Document document) {
+        if(firstDocument) {
+            try {
+                String[] headersFromDocument = getFieldNames(document);
+                PrintWriter out = new PrintWriter(absoluteFilename);
+                CSVFormat format = CSVFormat.RFC4180;
+                printer = format.withDelimiter(delimiter.charAt(0)).withHeader(headersFromDocument).print(out);
+                firstDocument = false;
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
         try {
+            List<List<String>> csvRows = new ArrayList<List<String>>();
             List<String> csvList = new ArrayList<String>();
             for(Field field: document.getFields()) {
                 String value = Joiner.on(multiValueSeperator).join(field.getValues());
                 csvList.add(value);
             }
-            printer.printRecords(csvList);
+            csvRows.add(csvList);
+            printer.printRecords(csvRows);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
