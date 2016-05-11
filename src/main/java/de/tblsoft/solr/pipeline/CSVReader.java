@@ -25,6 +25,7 @@ public class CSVReader extends AbstractReader {
             String filename = getProperty("filename", null);
             String absoluteFilename = IOUtils.getAbsoluteFile(getBaseDir(),filename);
 
+            Long maxRows = getPropertyAsInteger("maxRows", Long.MAX_VALUE);
             String delimiter = getProperty("delimiter", ",");
             String[] headers = getPropertyAsArray("headers", null);
             InputStream in = IOUtils.getInputStream(absoluteFilename);
@@ -41,15 +42,23 @@ public class CSVReader extends AbstractReader {
 
             CSVParser parser = format.parse(reader);
             Iterator<CSVRecord> csvIterator = parser.iterator();
-
+            long rowCounter = 0;
             while(csvIterator.hasNext()) {
+                if(rowCounter >= maxRows) {
+                    break;
+                }
+                rowCounter++;
                 CSVRecord record = csvIterator.next();
                 Map<String, Integer> header = parser.getHeaderMap();
                 Document document = new Document();
                 for(Map.Entry<String,Integer> entry : header.entrySet()) {
                     String key = entry.getKey();
-                    String value = record.get(key);
-                    document.addField(key, value);
+                    try {
+                        String value = record.get(key);
+                        document.addField(key, value);
+                    } catch (IllegalArgumentException e) {
+
+                    }
                 }
                 executer.document(document);
             }
