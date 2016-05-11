@@ -79,6 +79,12 @@
             <version>1.10</version>
         </dependency>
 
+        <dependency>
+            <groupId>net.sf.joost</groupId>
+            <artifactId>joost</artifactId>
+            <version>0.9.1</version>
+        </dependency>
+
 
 
     </dependencies>
