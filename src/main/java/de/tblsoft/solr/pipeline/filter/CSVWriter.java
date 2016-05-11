@@ -94,7 +94,9 @@ public class CSVWriter extends AbstractFilter {
     @Override
     public void end() {
         try {
-            printer.close();
+            if(printer != null) {
+                printer.close();
+            }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
