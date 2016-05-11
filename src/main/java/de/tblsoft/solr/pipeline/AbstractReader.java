@@ -58,6 +58,15 @@ public abstract class AbstractReader implements ReaderIF {
         return defaultValue;
     }
 
+    public Long getPropertyAsInteger(String name, Long defaultValue) {
+        String value = getProperty(name, null);
+        if(value == null) {
+            return defaultValue;
+        }
+
+        return Long.valueOf(value);
+
+    }
 
     public Boolean getPropertyAsBoolean(String name, Boolean defaultValue) {
         String value = getProperty(name, null);
