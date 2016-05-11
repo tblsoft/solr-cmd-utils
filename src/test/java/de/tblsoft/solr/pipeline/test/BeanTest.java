@@ -26,7 +26,8 @@ public class BeanTest {
 
     @Test
     public void testFieldBeanWithNoValue() {
-        Field f = new Field("foo", null);
+        String value = null;
+        Field f = new Field("foo", value);
         f.setValues(new ArrayList<String>());
         Assert.assertNull(f.getValue());
     }
