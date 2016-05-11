@@ -21,6 +21,10 @@ public class CsvWriterTest extends AbstractPipelineTest {
         String actual = FileUtils.readFileToString(new File("examples/unittest/output.csv"));
         String expected = FileUtils.readFileToString(new File("examples/unittest/expected.csv"));
 
+        System.out.println(actual);
+        System.out.println("---------------");
+        System.out.println(expected);
+
         Assert.assertEquals(expected, actual);
 
         FileUtils.deleteQuietly(new File("examples/unittest/output.csv"));
