@@ -2,6 +2,7 @@ package de.tblsoft.solr.pipeline.pipeline;
 
 import de.tblsoft.solr.pipeline.PipelineExecuter;
 import de.tblsoft.solr.pipeline.test.AbstractPipelineTest;
+import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.io.FileUtils;
 import org.junit.Assert;
 import org.junit.Test;
@@ -21,13 +22,22 @@ public class CsvWriterTest extends AbstractPipelineTest {
         String actual = FileUtils.readFileToString(new File("examples/unittest/output.csv"));
         String expected = FileUtils.readFileToString(new File("examples/unittest/expected.csv"));
 
-        System.out.println(actual);
+
+
+        System.out.println(getHex(actual));
         System.out.println("---------------");
-        System.out.println(expected);
+        System.out.println(getHex(expected));
 
         Assert.assertEquals(expected, actual);
 
         FileUtils.deleteQuietly(new File("examples/unittest/output.csv"));
+
+    }
+
+    String getHex(String value ) throws Exception {
+        String hexString = Hex.encodeHexString(value.getBytes("UTF-8"));
+        return hexString;
+
 
     }
 }
