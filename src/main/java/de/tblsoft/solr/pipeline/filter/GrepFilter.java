@@ -18,7 +18,6 @@ public class GrepFilter extends AbstractFilter {
 
     private boolean shouldMatch = true;
 
-
     @Override
     public void init() {
         fieldName = getProperty("fieldName", null);
@@ -38,8 +37,10 @@ public class GrepFilter extends AbstractFilter {
 
     @Override
     public void document(Document document) {
+
         List<String> values = document.getFieldValues(fieldName, new ArrayList<String>());
         for(String value: values) {
+            value = value.replaceAll("\\r\\n|\\r|\\n", " ");
             Matcher m = pattern.matcher(value);
             if(shouldMatch && !m.matches()) {
                 //document.deleteField(fieldName);
