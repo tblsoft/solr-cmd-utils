@@ -2,12 +2,12 @@ package de.tblsoft.solr.pipeline.pipeline;
 
 import de.tblsoft.solr.pipeline.PipelineExecuter;
 import de.tblsoft.solr.pipeline.test.AbstractPipelineTest;
-import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.io.FileUtils;
 import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.File;
+import java.util.List;
 
 /**
  * Created by tblsoft on 11.05.16.
@@ -19,25 +19,12 @@ public class CsvWriterTest extends AbstractPipelineTest {
         PipelineExecuter executer = new PipelineExecuter("examples/unittest/csv-writer-pipeline.yaml");
         executer.execute();
 
-        String actual = FileUtils.readFileToString(new File("examples/unittest/output.csv"));
-        String expected = FileUtils.readFileToString(new File("examples/unittest/expected.csv"));
-
-
-
-        System.out.println(getHex(actual));
-        System.out.println("---------------");
-        System.out.println(getHex(expected));
+        List<String> actual = FileUtils.readLines(new File("examples/unittest/output.csv"));
+        List<String> expected = FileUtils.readLines(new File("examples/unittest/expected.csv"));
 
         Assert.assertEquals(expected, actual);
 
         FileUtils.deleteQuietly(new File("examples/unittest/output.csv"));
-
-    }
-
-    String getHex(String value ) throws Exception {
-        String hexString = Hex.encodeHexString(value.getBytes("UTF-8"));
-        return hexString;
-
 
     }
 }
