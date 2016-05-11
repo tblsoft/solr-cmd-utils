@@ -22,6 +22,19 @@ public class CsvReaderTest extends AbstractPipelineTest {
     }
 
     @Test
+    public void testCsvReaderWithBz2() {
+        runPipeline("examples/unittest/csv-reader-bz2-pipeline.yaml");
+        assertFiled("column1", "foo");
+        assertFiled("column2", "bar");
+
+        assertNumberOfDocuments(2);
+        assertNumberOfFields(2);
+
+        assertInitWasDelegated();
+        assertEndWasDelegated();
+    }
+
+    @Test
     public void testCsvReaderWithGzip() {
         runPipeline("examples/unittest/csv-reader-gzip-pipeline.yaml");
         assertFiled("column1", "foo");
