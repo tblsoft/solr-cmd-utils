@@ -15,7 +15,9 @@ import java.util.zip.GZIPOutputStream;
 public class IOUtils {
 
     public static String getAbsoluteFile(String directory, String fileName) {
-        if(fileName.startsWith("/")) {
+    	if(fileName.toLowerCase().startsWith("c:\\")) {
+    		return fileName;
+    	} else if(fileName.startsWith("/")) {
             return fileName;
         } else {
             return directory + "/" + fileName;
