@@ -22,11 +22,13 @@ public class NounExtractorFilter extends AbstractFilter {
 
         List<String> dictionaryList = new ArrayList<String>(dictionary);
         Collections.sort(dictionaryList);
-        Document document = new Document();
+        
         for (String value : dictionaryList) {
+        	Document document = new Document();
             document.addField("noun", value);
+            super.document(document);
         }
-        super.document(document);
+
 
         super.end();
     }
