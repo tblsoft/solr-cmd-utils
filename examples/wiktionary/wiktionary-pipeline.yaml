@@ -1,0 +1,26 @@
+name: "xml unit testing pipeline"
+reader:
+  name: "XmlReader"
+  clazz: "solrcmdutils.XmlReader"
+  property:
+    filename: "/Users/oelbaer/Downloads/dewiktionary-20160501-pages-meta-current.xml"
+    transformations:
+      - wiktionary.stx
+
+filter:
+  - name: "Grep Filter"
+    clazz: "solrcmdutils.GrepFilter"
+    disabled: "false"
+    property:
+        fieldName: "text"
+        pattern: ".*"
+        #pattern: ".*Wortart\\|Substantiv\\|Deutsch.*"
+  - name: "Mapping Filter"
+    clazz: "solrcmdutils.MappingFilter"
+    property:
+        mapping:
+          - "title->bar"
+  - name: "CSV Writer"
+    clazz: "solrcmdutils.CSVWriter"
+    property:
+        filename: "/Users/oelbaer/Downloads/dewiktionary-20160501-pages-meta-current.csv"

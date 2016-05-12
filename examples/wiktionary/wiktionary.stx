@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<stx:transform xmlns:stx="http://stx.sourceforge.net/2002/ns" xmlns:wiki="http://www.mediawiki.org/xml/export-0.10/"
+               version="1.0">
+
+
+    <stx:template match="/">
+        <documents>
+            <stx:process-children />
+        </documents>
+    </stx:template>
+    <stx:template match="wiki:page">
+        <document>
+            <stx:process-children />
+        </document>
+    </stx:template>
+
+    <stx:template match="wiki:title">
+        <field name="title">
+            <stx:value-of select="."></stx:value-of>
+        </field>
+    </stx:template>
+    <stx:template match="wiki:text">
+        <field name="text">
+            <stx:value-of select="."></stx:value-of>
+        </field>
+    </stx:template>
+
+</stx:transform>
