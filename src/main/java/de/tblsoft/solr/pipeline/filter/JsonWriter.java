@@ -33,6 +33,8 @@ public class JsonWriter extends AbstractFilter {
     private String elasticMappingLocation;
     
     private boolean delete;
+    
+    private String idField;
 
 
 
@@ -47,6 +49,7 @@ public class JsonWriter extends AbstractFilter {
         delete = getPropertyAsBoolean("delete", Boolean.TRUE);
         elasticMappingLocation = getProperty("elasticMappingLocation", null);
 
+        idField = getProperty("idField", null);
 
         GsonBuilder builder = new GsonBuilder();
         if(pretty) {
@@ -125,7 +128,13 @@ public class JsonWriter extends AbstractFilter {
 
 
             if("elastic".equals(type)) {
-                HTTPHelper.post(location, json);
+            	String elasticLocation = location;
+            	if(idField != null) {
+            		String id = document.getFieldValue(idField);
+            		elasticLocation = ElasticHelper.getIndexUrlWithId(location, id);
+            	}
+            	
+                HTTPHelper.post(elasticLocation, json);
             } else if ("file".equals(type)) {
                 try {
                     FileUtils.writeStringToFile(new File("foo.txt"), json, true);

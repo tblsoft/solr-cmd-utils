@@ -4,12 +4,24 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang3.StringUtils;
+
 /**
  * Created by tblsoft on 18.03.16.
  */
 public class ElasticHelper {
 
-
+	
+	public static String getIndexUrlWithId(String url, String id) {
+		if(StringUtils.isEmpty(id)) {
+			return url;
+		}
+		if(StringUtils.endsWith(url, "/")) {
+			return url + id;
+		}
+		return url + "/" + id;
+		
+	}
     public static String getIndexUrl(String url) throws URISyntaxException {
         if(url==null) {
             throw new URISyntaxException("", "The url is null.");
