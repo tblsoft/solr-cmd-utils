@@ -20,8 +20,13 @@ public class ElasticHelper {
 			return url + id;
 		}
 		return url + "/" + id;
-		
 	}
+	
+	public static String getUpdateUrl(String url, String id) {
+		String updateUrl = getIndexUrlWithId(url, id) + "/_update";
+		return updateUrl;
+	}
+	
     public static String getIndexUrl(String url) throws URISyntaxException {
         if(url==null) {
             throw new URISyntaxException("", "The url is null.");

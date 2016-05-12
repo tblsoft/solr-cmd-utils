@@ -3,12 +3,15 @@ package de.tblsoft.solr.pipeline.filter;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
+
 import de.tblsoft.solr.http.ElasticHelper;
 import de.tblsoft.solr.http.HTTPHelper;
 import de.tblsoft.solr.pipeline.AbstractFilter;
 import de.tblsoft.solr.pipeline.bean.Document;
 import de.tblsoft.solr.pipeline.bean.Field;
 import de.tblsoft.solr.util.IOUtils;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
@@ -59,7 +62,7 @@ public class JsonWriter extends AbstractFilter {
         
         
         if("elastic".equals(type)) {
-            if(delete) {
+            if(delete && !"elasticupdate".equals(type)) {
                 try {
                     String indexUrl = ElasticHelper.getIndexUrl(location);
                     HTTPHelper.delete(indexUrl);
@@ -135,7 +138,28 @@ public class JsonWriter extends AbstractFilter {
             	}
             	
                 HTTPHelper.post(elasticLocation, json);
-            } else if ("file".equals(type)) {
+            } else if ("elasticupdate".equals(type)) {
+            	if(idField == null) {
+            		throw new RuntimeException("For a document update a id field is required.");
+            	}
+            	String id = document.getFieldValue(idField);
+        		String elasticUpdateLocation = ElasticHelper.getUpdateUrl(location, id);
+        		
+        		String updateJson = "{ \"doc\" : " + json + "}";
+        		
+        		String response = HTTPHelper.post(elasticUpdateLocation, updateJson);
+        		JsonElement jsonResponse = gson.fromJson(response, JsonElement.class);
+        		if(jsonResponse.getAsJsonObject().get("status") != null ) {
+        			int status = jsonResponse.getAsJsonObject().get("status").getAsInt();
+	        		if(status == 404) {
+	        			String elasticLocation = ElasticHelper.getIndexUrlWithId(location, id);
+	        			HTTPHelper.post(elasticLocation, json);
+	        		}
+	        	}
+        		
+        		
+            }
+            else if ("file".equals(type)) {
                 try {
                     FileUtils.writeStringToFile(new File("foo.txt"), json, true);
                 } catch (IOException e) {
