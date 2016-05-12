@@ -87,6 +87,7 @@ public class CSVWriter extends AbstractFilter {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        super.document(document);
     }
 
 
