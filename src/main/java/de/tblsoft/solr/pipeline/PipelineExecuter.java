@@ -63,7 +63,7 @@ public class PipelineExecuter {
     }
 
     private String getBaseDirFromYamlFile() {
-        File f = new File(yamlFileName);
+        File f = new File(yamlFileName).getAbsoluteFile();
         return f.getParentFile().getAbsoluteFile().toString();
 
     }
