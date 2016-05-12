@@ -120,7 +120,7 @@ public class JsonWriter extends AbstractFilter {
 
         if(!jsonDocument.isEmpty()) {
 
-            String json = gson.toJson(document);
+            String json = gson.toJson(jsonDocument);
 
 
 
