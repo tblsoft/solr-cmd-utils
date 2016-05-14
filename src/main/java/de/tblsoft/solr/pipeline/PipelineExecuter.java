@@ -33,6 +33,7 @@ public class PipelineExecuter {
     static {
         classRegestriy.put("solrcmdutils.StandardReader", StandardReader.class);
         classRegestriy.put("solrcmdutils.GrokReader", GrokReader.class);
+        classRegestriy.put("solrcmdutils.ElasticReader", ElasticReader.class);
         classRegestriy.put("solrcmdutils.XmlReader", XmlReader.class);
         classRegestriy.put("solrcmdutils.ThreadDumpReader", ThreadDumpReader.class);
         classRegestriy.put("solrcmdutils.DateFilter", DateFilter.class);
