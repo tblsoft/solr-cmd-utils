@@ -1,20 +1,18 @@
 package de.tblsoft.solr.pipeline.filter;
 
+import com.google.common.base.Strings;
+import de.tblsoft.solr.pipeline.AbstractFilter;
+import de.tblsoft.solr.pipeline.bean.Document;
+import de.tblsoft.solr.pipeline.bean.Field;
+import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.text.StrSubstitutor;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
-
-import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.text.StrSubstitutor;
-
-import com.google.common.base.Strings;
-
-import de.tblsoft.solr.pipeline.AbstractFilter;
-import de.tblsoft.solr.pipeline.bean.Document;
-import de.tblsoft.solr.pipeline.bean.Field;
 
 public class MappingFilter extends AbstractFilter {
 
@@ -30,7 +28,7 @@ public class MappingFilter extends AbstractFilter {
 		for (String v : tempMapping) {
 			if (v.startsWith("join:")) {
 				v = v.replace("join:", "");
-				String[] s = v.split("=");
+				String[] s = v.split("=",2);
 				joins.put(s[0], s[1]);
 			} else {
 				String[] s = v.split("->");
@@ -54,14 +52,15 @@ public class MappingFilter extends AbstractFilter {
 	}
 
 	public String executeFunction(String function, String value) {
-		switch (function) {
-		case "md5":
-			return DigestUtils.md5Hex(value);
-		case "lowercase":
-			return StringUtils.lowerCase(value);
-		case "trim":
-			return StringUtils.trim(value);
-		}
+
+        if("md5".equals(function)) {
+            return DigestUtils.md5Hex(value);
+        } else if ("lowercase".equals(function)) {
+            return StringUtils.lowerCase(value);
+        } else if ("trim".equals(function)) {
+            return StringUtils.trim(value);
+        }
+
 		throw new IllegalArgumentException("The function: " + function
 				+ " is not implemented.");
 	}
