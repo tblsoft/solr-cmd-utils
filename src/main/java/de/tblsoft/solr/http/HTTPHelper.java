@@ -88,4 +88,16 @@ public class HTTPHelper {
 			throw new RuntimeException(e);
 		}
 	}
+
+    public static int getStatusCode(String url) {
+        try {
+            CloseableHttpClient httpclient = HttpClients.createDefault();
+            HttpGet httpGet = new HttpGet(url);
+            CloseableHttpResponse response = httpclient.execute(httpGet);
+            httpclient.close();
+            return response.getStatusLine().getStatusCode();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
