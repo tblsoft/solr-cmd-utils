@@ -35,8 +35,11 @@ public class CompoundWordFilter extends AbstractFilter {
         for(String noun: nounList) {
             List<String> compoundList = new ArrayList<String>();
             for(String compound: nounList) {
-                if(noun.contains(compound) && !noun.equals(compound)) {
-                    compoundList.add(compound);
+            	if(noun.contains(compound) && !noun.equals(compound)) {
+            		int diff = Math.abs(compound.length() - noun.length());
+            		if(diff > 3) {
+            			compoundList.add(compound);
+            		}
                 }
             }
             if(!compoundList.isEmpty()) {
