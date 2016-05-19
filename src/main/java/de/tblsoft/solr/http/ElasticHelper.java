@@ -27,6 +27,16 @@ public class ElasticHelper {
 		return updateUrl;
 	}
 	
+    public static String getScrollUrl(String url) throws URISyntaxException {
+        if(url==null) {
+            throw new URISyntaxException("", "The url is null.");
+        }
+        URI uri = new URI(url);
+        String path = "/_search/scroll";
+        uri = uri.resolve(path);
+        return uri.toString();
+    }
+	
     public static String getIndexUrl(String url) throws URISyntaxException {
         if(url==null) {
             throw new URISyntaxException("", "The url is null.");

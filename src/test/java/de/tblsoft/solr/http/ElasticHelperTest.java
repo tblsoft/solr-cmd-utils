@@ -10,6 +10,25 @@ import java.net.URISyntaxException;
  */
 public class ElasticHelperTest {
 
+	
+    @Test
+    public void getScrollUrlTest() throws URISyntaxException {
+        String expected = "http://localhost/_search/scroll";
+        String actual = ElasticHelper.getScrollUrl("http://localhost/foo");
+        Assert.assertEquals(expected, actual);
+
+        actual = ElasticHelper.getScrollUrl("http://localhost/foo/");
+        Assert.assertEquals(expected, actual);
+
+        actual = ElasticHelper.getScrollUrl("http://localhost/foo/bar");
+        Assert.assertEquals(expected, actual);
+
+        actual = ElasticHelper.getScrollUrl("http://localhost/foo/bar/");
+        Assert.assertEquals(expected, actual);
+
+        actual = ElasticHelper.getScrollUrl("http://localhost/foo/bar/?");
+        Assert.assertEquals(expected, actual);
+    }
 
     @Test
     public void getIndexUrlTest() throws URISyntaxException {
