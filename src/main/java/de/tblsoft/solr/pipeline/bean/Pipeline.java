@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by oelbaer on 22.01.16.
+ * Created by tblsoft on 22.01.16.
  */
 public class Pipeline {
     private String name;

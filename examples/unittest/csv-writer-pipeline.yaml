@@ -1,4 +1,6 @@
 name: "csv unit testing pipeline"
+variables:
+  filename: "output.csv"
 reader:
   name: "CsvReader"
   clazz: "solrcmdutils.CSVReader"
@@ -9,4 +11,4 @@ filter:
   - name: "CSV Writer"
     clazz: "solrcmdutils.CSVWriter"
     property:
-        filename: "output.csv"
+        filename: "${variables.filename}"

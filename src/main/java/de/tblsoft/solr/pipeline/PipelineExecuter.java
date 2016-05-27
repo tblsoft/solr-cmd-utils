@@ -90,6 +90,7 @@ public class PipelineExecuter {
                 }
                 filterInstance = createFilterInstance(filter);
                 filterInstance.setBaseDir(getBaseDirFromYamlFile());
+                filterInstance.setVariables(pipeline.getVariables());
                 if(lastFilter == null) {
                     lastFilter = filterInstance;
                     continue;

@@ -3,8 +3,11 @@ package de.tblsoft.solr.pipeline;
 import com.google.common.base.Strings;
 import de.tblsoft.solr.pipeline.bean.Document;
 import de.tblsoft.solr.pipeline.bean.Filter;
+import org.apache.commons.lang3.text.StrSubstitutor;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by tblsoft on 23.01.16.
@@ -16,6 +19,18 @@ public abstract class AbstractFilter implements FilterIF {
     private Filter filter;
 
     private String baseDir;
+
+    protected Map<String,String> variables = new HashMap<String, String>();
+
+    @Override
+    public void setVariables(Map<String,String> variables) {
+        if(variables == null) {
+            return;
+        }
+        for(Map.Entry<String,String> entry: variables.entrySet()) {
+            this.variables.put("variables." + entry.getKey(), entry.getValue());
+        }
+    }
 
     @Override
     public void init() {
@@ -49,6 +64,8 @@ public abstract class AbstractFilter implements FilterIF {
         }
         String value = (String) filter.getProperty().get(name);
         if(value != null) {
+            StrSubstitutor strSubstitutor = new StrSubstitutor(variables);
+            value = strSubstitutor.replace(value);
             return value;
         }
         return defaultValue;
