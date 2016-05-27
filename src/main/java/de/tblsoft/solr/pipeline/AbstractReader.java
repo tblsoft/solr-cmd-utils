@@ -1,8 +1,11 @@
 package de.tblsoft.solr.pipeline;
 
 import de.tblsoft.solr.pipeline.bean.Reader;
+import org.apache.commons.lang3.text.StrSubstitutor;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by tblsoft on 11.02.16.
@@ -15,6 +18,18 @@ public abstract class AbstractReader implements ReaderIF {
 
     protected String baseDir;
 
+    protected Map<String,String> variables = new HashMap<String, String>();
+
+
+    @Override
+    public void setVariables(Map<String,String> variables) {
+        if(variables == null) {
+            return;
+        }
+        for(Map.Entry<String,String> entry: variables.entrySet()) {
+            this.variables.put("variables." + entry.getKey(), entry.getValue());
+        }
+    }
 
     @Override
     public void setPipelineExecuter(PipelineExecuter executer) {
@@ -53,6 +68,8 @@ public abstract class AbstractReader implements ReaderIF {
     public String getProperty(String name, String defaultValue) {
         String value = (String) reader.getProperty().get(name);
         if(value != null) {
+            StrSubstitutor strSubstitutor = new StrSubstitutor(variables);
+            value = strSubstitutor.replace(value);
             return value;
         }
         return defaultValue;

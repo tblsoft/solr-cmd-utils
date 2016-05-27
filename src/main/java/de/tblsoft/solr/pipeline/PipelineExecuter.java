@@ -78,6 +78,7 @@ public class PipelineExecuter {
             reader.setPipelineExecuter(this);
             reader.setReader(pipeline.getReader());
             reader.setBaseDir(getBaseDirFromYamlFile());
+            reader.setVariables(pipeline.getVariables());
 
             filterList = new ArrayList<FilterIF>();
 
@@ -153,6 +154,7 @@ public class PipelineExecuter {
                     fileName));
             Yaml yaml = new Yaml(new Constructor(Pipeline.class));
             Pipeline pipeline = (Pipeline) yaml.load(input);
+
             input.close();
             return pipeline;
         } catch (Exception e) {

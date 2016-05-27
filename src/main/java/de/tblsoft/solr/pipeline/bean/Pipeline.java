@@ -9,7 +9,7 @@ import java.util.Map;
 public class Pipeline {
     private String name;
 
-    private Map<String,?> variables;
+    private Map<String,String> variables;
 
     private Reader reader;
     private List<Filter> filter;
@@ -38,12 +38,11 @@ public class Pipeline {
         this.filter = filter;
     }
 
-
-    public Map<String, ?> getVariables() {
+    public Map<String, String> getVariables() {
         return variables;
     }
 
-    public void setVariables(Map<String, ?> variables) {
+    public void setVariables(Map<String, String> variables) {
         this.variables = variables;
     }
 

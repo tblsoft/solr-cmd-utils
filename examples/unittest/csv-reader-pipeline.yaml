@@ -1,9 +1,12 @@
 name: "csv unit testing pipeline"
+variables:
+  filename: "example.csv"
+
 reader:
   name: "CsvReader"
   clazz: "solrcmdutils.CSVReader"
   property:
-    filename: "example.csv"
+    filename: "${variables.filename}"
 
 filter:
   - name: "Disabled Filter"

@@ -5,6 +5,8 @@ import de.tblsoft.solr.pipeline.bean.Document;
 import de.tblsoft.solr.pipeline.bean.Reader;
 import de.tblsoft.solr.util.IOUtils;
 
+import java.util.Map;
+
 /**
  * Created by tblsoft on 23.01.16.
  */
@@ -64,5 +66,10 @@ public class StandardReader extends SolrXmlParser implements ReaderIF {
     @Override
     public void setBaseDir(String baseDir) {
         this.baseDir = baseDir;
+    }
+
+    @Override
+    public void setVariables(Map<String, String> variables) {
+
     }
 }
