@@ -30,7 +30,8 @@ public class GrokReader extends AbstractReader {
     @Override
     public void read() {
         try {
-            filename = getProperty("filename", null);
+            String conffilename = getProperty("filename", null);
+            filename = IOUtils.getAbsoluteFile(getBaseDir(),conffilename);
 
             keepRaw = getPropertyAsBoolean("keepRaw", false);
 

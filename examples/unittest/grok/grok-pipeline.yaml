@@ -1,0 +1,13 @@
+name: "grok unit testing pipeline"
+reader:
+  name: "GrokReader"
+  clazz: "solrcmdutils.GrokReader"
+  property:
+    filename: "access.log"
+    grokPatternPath: "src/main/grok/patterns/patterns"
+    grokPattern: "%{WORD:foo} %{WORD:bar}"
+
+filter:
+  - name: "Testing Filter"
+    id: "testingFilter"
+    clazz: "solrcmdutils.TestingFilter"
