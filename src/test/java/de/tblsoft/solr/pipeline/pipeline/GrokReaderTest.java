@@ -13,11 +13,19 @@ public class GrokReaderTest extends AbstractPipelineTest {
         runPipeline("examples/unittest/grok/grok-pipeline.yaml");
         assertFiled("foo", "foo");
         assertFiled("bar", "bar");
+        assertFiled("raw", "foo bar");
 
         assertNumberOfDocuments(2);
-        assertNumberOfFields(3);
+        assertNumberOfFields(4);
 
         assertInitWasDelegated();
         assertEndWasDelegated();
     }
+
+    @Test(expected = RuntimeException.class)
+    public void testGrokReaderException() {
+        runPipeline("examples/unittest/grok/grok-pipeline-with-exception.yaml");
+    }
+
+
 }

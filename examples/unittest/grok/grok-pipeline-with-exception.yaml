@@ -5,7 +5,7 @@ reader:
   property:
     filename: "access.log"
     grokPatternPath: "src/main/grok/patterns/patterns"
-    grokPattern: "%{WORD:foo} %{WORD:bar}"
+    #grokPattern: "%{WORD:foo} %{WORD:bar}"
     keepRaw: "true"
 
 filter:
