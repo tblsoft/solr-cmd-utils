@@ -114,8 +114,9 @@ public class GrokReader extends AbstractReader {
             if (keepRaw) {
                 document.addField("raw", line);
             }
+            executer.document(document);
         }
-        executer.document(document);
+
     }
 
 
