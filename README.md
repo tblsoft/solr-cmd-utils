@@ -60,3 +60,6 @@ The Amazon Api Tools are a good example to build a java command line tool.
         
         ~/dev/ec2-api-tools/bin>less ec2-cmd
         
+## License
+[MIT](https://github.com/tblsoft/solr-cmd-utils/blob/master/LICENSE)
+        
