@@ -93,7 +93,7 @@ public class CompoundWordFilter extends AbstractFilter {
         super.end();
     }
     
-    List<String> tokenize(String noun, List<String> compoundList) {
+    String tokenize(String noun, List<String> compoundList) {
     	if("blumenzwiebel".equals(noun)) {
     		System.out.println("test");
     	}
