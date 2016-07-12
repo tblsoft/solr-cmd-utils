@@ -1,16 +1,16 @@
 package de.tblsoft.solr.pipeline.filter;
 
-import de.tblsoft.solr.pipeline.AbstractFilter;
-import de.tblsoft.solr.pipeline.bean.Document;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
+import de.tblsoft.solr.pipeline.AbstractFilter;
+import de.tblsoft.solr.pipeline.bean.Document;
+
 /**
- * Created by tblsoft on 03.04.16.
+ * Created by tblsoft on 30.06.16.
  * 
- * Count the tokens for a specific field.
+ * Count the characters for a specific field.
  */
 public class TokenCounterFilter extends AbstractFilter {
 	
@@ -40,5 +40,5 @@ public class TokenCounterFilter extends AbstractFilter {
 
         super.document(document);
     }
-
+    
 }
