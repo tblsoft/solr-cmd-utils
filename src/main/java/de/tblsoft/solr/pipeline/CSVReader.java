@@ -19,12 +19,15 @@ public class CSVReader extends AbstractReader {
 
     @Override
     public void read() {
+    	String absoluteFilename;
+    	boolean addMeta = false;
         try {
         	
         	String charset = getProperty("charset", StandardCharsets.UTF_8.name());
             String filename = getProperty("filename", null);
-            String absoluteFilename = IOUtils.getAbsoluteFile(getBaseDir(),filename);
+            absoluteFilename = IOUtils.getAbsoluteFile(getBaseDir(),filename);
 
+            addMeta = getPropertyAsBoolean("addMeta", false);
             Long maxRows = getPropertyAsInteger("maxRows", Long.MAX_VALUE);
             String delimiter = getProperty("delimiter", ",");
             String[] headers = getPropertyAsArray("headers", null);
@@ -42,12 +45,12 @@ public class CSVReader extends AbstractReader {
 
             CSVParser parser = format.parse(reader);
             Iterator<CSVRecord> csvIterator = parser.iterator();
-            long rowCounter = 0;
+            long rowNumber = 0;
             while(csvIterator.hasNext()) {
-                if(rowCounter >= maxRows) {
+                if(rowNumber >= maxRows) {
                     break;
                 }
-                rowCounter++;
+                rowNumber++;
                 CSVRecord record = csvIterator.next();
                 Map<String, Integer> header = parser.getHeaderMap();
                 Document document = new Document();
@@ -59,6 +62,10 @@ public class CSVReader extends AbstractReader {
                     } catch (IllegalArgumentException e) {
 
                     }
+                }
+                if(addMeta) {
+                	document.addField("rowNumber", String.valueOf(rowNumber));
+                	document.addField("fileName", absoluteFilename);
                 }
                 executer.document(document);
             }
