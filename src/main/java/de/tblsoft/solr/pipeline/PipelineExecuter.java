@@ -1,12 +1,5 @@
 package de.tblsoft.solr.pipeline;
 
-import de.tblsoft.solr.pipeline.bean.Document;
-import de.tblsoft.solr.pipeline.bean.Filter;
-import de.tblsoft.solr.pipeline.bean.Pipeline;
-import de.tblsoft.solr.pipeline.filter.*;
-import org.yaml.snakeyaml.Yaml;
-import org.yaml.snakeyaml.constructor.Constructor;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -14,6 +7,37 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.yaml.snakeyaml.Yaml;
+import org.yaml.snakeyaml.constructor.Constructor;
+
+import de.tblsoft.solr.pipeline.bean.Document;
+import de.tblsoft.solr.pipeline.bean.Filter;
+import de.tblsoft.solr.pipeline.bean.Pipeline;
+import de.tblsoft.solr.pipeline.filter.BeanShellFilter;
+import de.tblsoft.solr.pipeline.filter.CSVWriter;
+import de.tblsoft.solr.pipeline.filter.CharCounterFilter;
+import de.tblsoft.solr.pipeline.filter.CompoundWordFilter;
+import de.tblsoft.solr.pipeline.filter.DateFilter;
+import de.tblsoft.solr.pipeline.filter.ElasticWriter;
+import de.tblsoft.solr.pipeline.filter.EncodingCorrectionFilter;
+import de.tblsoft.solr.pipeline.filter.FieldJoiner;
+import de.tblsoft.solr.pipeline.filter.GrepFilter;
+import de.tblsoft.solr.pipeline.filter.IgnoreDocumentFilter;
+import de.tblsoft.solr.pipeline.filter.JsonWriter;
+import de.tblsoft.solr.pipeline.filter.LastFilter;
+import de.tblsoft.solr.pipeline.filter.LinkCheckerFilter;
+import de.tblsoft.solr.pipeline.filter.MappingFilter;
+import de.tblsoft.solr.pipeline.filter.NoopFilter;
+import de.tblsoft.solr.pipeline.filter.NounExtractorFilter;
+import de.tblsoft.solr.pipeline.filter.RegexSplitFilter;
+import de.tblsoft.solr.pipeline.filter.SolrFeeder;
+import de.tblsoft.solr.pipeline.filter.SpyFilter;
+import de.tblsoft.solr.pipeline.filter.StatusFilter;
+import de.tblsoft.solr.pipeline.filter.SystemOutWriter;
+import de.tblsoft.solr.pipeline.filter.TestingFilter;
+import de.tblsoft.solr.pipeline.filter.TokenCounterFilter;
+import de.tblsoft.solr.pipeline.filter.UrlSplitter;
 
 /**
  * Created by tblsoft on 23.01.16.
@@ -41,14 +65,18 @@ public class PipelineExecuter {
         classRegestriy.put("solrcmdutils.GrepFilter", GrepFilter.class);
         classRegestriy.put("solrcmdutils.FieldJoiner", FieldJoiner.class);
         classRegestriy.put("solrcmdutils.JsonWriter", JsonWriter.class);
+        classRegestriy.put("solrcmdutils.ElasticWriter", ElasticWriter.class);
         classRegestriy.put("solrcmdutils.CSVReader", CSVReader.class);
+        classRegestriy.put("solrcmdutils.SolrQueryLogReader", SolrQueryLogReader.class);
         classRegestriy.put("solrcmdutils.SpyFilter", SpyFilter.class);
         classRegestriy.put("solrcmdutils.StatusFilter", StatusFilter.class);
         classRegestriy.put("solrcmdutils.MappingFilter", MappingFilter.class);
         classRegestriy.put("solrcmdutils.EncodingCorrectionFilter", EncodingCorrectionFilter.class);
         classRegestriy.put("solrcmdutils.RegexSplitFilter", RegexSplitFilter.class);
+        classRegestriy.put("solrcmdutils.IgnoreDocumentFilter", IgnoreDocumentFilter.class);
         classRegestriy.put("solrcmdutils.BeanShellFilter", BeanShellFilter.class);
         classRegestriy.put("solrcmdutils.TokenCounterFilter", TokenCounterFilter.class);
+        classRegestriy.put("solrcmdutils.CharCounterFilter", CharCounterFilter.class);
         classRegestriy.put("solrcmdutils.CompoundWordFilter", CompoundWordFilter.class);
         classRegestriy.put("solrcmdutils.LinkCheckerFilter", LinkCheckerFilter.class);
         classRegestriy.put("solrcmdutils.SolrFeeder", SolrFeeder.class);
