@@ -139,6 +139,12 @@ public class JsonWriter extends AbstractFilter {
             	
                 HTTPHelper.post(elasticLocation, json);
             } else if ("elasticupdate".equals(type)) {
+            	try {
+					Thread.sleep(1);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
             	if(idField == null) {
             		throw new RuntimeException("For a document update a id field is required.");
             	}
