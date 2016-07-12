@@ -2,6 +2,8 @@ package de.tblsoft.solr.pipeline.filter;
 
 
 import com.google.common.base.Strings;
+
+import de.hornbach.solr.helper.LinguisticHelper;
 import de.tblsoft.solr.pipeline.AbstractFilter;
 import de.tblsoft.solr.pipeline.bean.Document;
 import de.tblsoft.solr.pipeline.bean.Field;
@@ -92,9 +94,6 @@ public class NounExtractorFilter extends AbstractFilter {
         return Character.isUpperCase(firstChar) && Character.isLowerCase(secondChar);
     }
 
-    boolean containsOnlyGermanCharacters(String value) {
-        return value.matches("[A-Za-zÖÄÜöäüß]*");
-    }
 
 
     Set<String> tokenize(String value) {
@@ -103,7 +102,7 @@ public class NounExtractorFilter extends AbstractFilter {
         while (tokenizer.hasMoreTokens()) {
             String token = tokenizer.nextToken().trim();
 
-            if (isFirstCharUpperCase(token) && containsOnlyGermanCharacters(token)) {
+            if (isFirstCharUpperCase(token) && LinguisticHelper.containsOnlyGermanCharacters(token)) {
                 values.add(token.toLowerCase());
             }
         }
