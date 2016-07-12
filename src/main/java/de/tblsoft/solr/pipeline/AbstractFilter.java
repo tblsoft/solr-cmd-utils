@@ -1,10 +1,14 @@
 package de.tblsoft.solr.pipeline;
 
 import com.google.common.base.Strings;
+
 import de.tblsoft.solr.pipeline.bean.Document;
 import de.tblsoft.solr.pipeline.bean.Filter;
+import de.tblsoft.solr.util.DateUtils;
+
 import org.apache.commons.lang3.text.StrSubstitutor;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -94,6 +98,14 @@ public abstract class AbstractFilter implements FilterIF {
         String value = getProperty(name,null);
         if(value != null) {
             return Integer.valueOf(value).intValue();
+        }
+        return defaultValue;
+    }
+    
+    public Date getPropertyAsDate(String name, Date defaultValue) {
+        String value = getProperty(name,null);
+        if(value != null) {
+            return DateUtils.getDate(value);
         }
         return defaultValue;
     }
