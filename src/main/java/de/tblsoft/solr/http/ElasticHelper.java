@@ -51,11 +51,46 @@ public class ElasticHelper {
         return uri.toString();
     }
     
+    public static String getIndexFromUrl(String url) throws URISyntaxException {
+        if(url==null) {
+            throw new URISyntaxException("", "The url is null.");
+        }
+        URI uri = new URI(url);
+        String[] parts = uri.getPath().split(Pattern.quote("/"));
+        if(parts.length < 2) {
+            throw new URISyntaxException(url, "The url " + url + " must contain at least one path part.");
+        }
+        String index = parts[1];
+        return index;
+    }
+    public static String getTypeFromUrl(String url) throws URISyntaxException {
+    	if(url==null) {
+    		throw new URISyntaxException("", "The url is null.");
+    	}
+    	URI uri = new URI(url);
+    	String[] parts = uri.getPath().split(Pattern.quote("/"));
+    	if(parts.length < 3) {
+    		throw new URISyntaxException(url, "The url " + url + " must contain at least two path part.");
+    	}
+    	String type = parts[2];
+    	return type;
+    }
+    
     public static String getMappingUrl(String url) throws URISyntaxException {
     	if(!url.endsWith("/")) {
     		url = url + "/";
     	}
     	return url + "_mapping";
+    }
+    
+    public static String getBulkUrl(String url) throws URISyntaxException {
+        if(url==null) {
+            throw new URISyntaxException("", "The url is null.");
+        }
+        URI uri = new URI(url);
+        String path = "/_bulk";
+        uri = uri.resolve(path);
+        return uri.toString();
     }
 
 

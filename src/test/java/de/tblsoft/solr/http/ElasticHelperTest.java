@@ -31,6 +31,50 @@ public class ElasticHelperTest {
     }
 
     @Test
+    public void getTypeFromUrlTest() throws URISyntaxException {
+        String expected = "bar";
+
+        String actual = ElasticHelper.getTypeFromUrl("http://localhost/foo/bar");
+        Assert.assertEquals(expected, actual);
+
+        actual = ElasticHelper.getTypeFromUrl("http://localhost/foo/bar/");
+        Assert.assertEquals(expected, actual);
+
+        actual = ElasticHelper.getTypeFromUrl("http://localhost/foo/bar/?");
+        Assert.assertEquals(expected, actual);
+    }
+
+    
+    @Test(expected=URISyntaxException.class)
+    public void getTypeFromUrlTestWithNoType() throws URISyntaxException {
+      ElasticHelper.getTypeFromUrl("http://localhost/foo");
+    }
+    
+    @Test(expected=URISyntaxException.class)
+    public void getTypeFromUrlTestWithSlashAndNoType() throws URISyntaxException {
+    	ElasticHelper.getTypeFromUrl("http://localhost/foo/");
+    }
+    
+    @Test
+    public void getIndexFromUrlTest() throws URISyntaxException {
+        String expected = "foo";
+        String actual = ElasticHelper.getIndexFromUrl("http://localhost/foo");
+        Assert.assertEquals(expected, actual);
+
+        actual = ElasticHelper.getIndexFromUrl("http://localhost/foo/");
+        Assert.assertEquals(expected, actual);
+
+        actual = ElasticHelper.getIndexFromUrl("http://localhost/foo/bar");
+        Assert.assertEquals(expected, actual);
+
+        actual = ElasticHelper.getIndexFromUrl("http://localhost/foo/bar/");
+        Assert.assertEquals(expected, actual);
+
+        actual = ElasticHelper.getIndexFromUrl("http://localhost/foo/bar/?");
+        Assert.assertEquals(expected, actual);
+    }
+    
+    @Test
     public void getIndexUrlTest() throws URISyntaxException {
         String expected = "http://localhost/foo";
         String actual = ElasticHelper.getIndexUrl("http://localhost/foo");
@@ -62,5 +106,24 @@ public class ElasticHelperTest {
     @Test(expected = URISyntaxException.class)
     public void getIndexUrlTestInvalidElasticIndexUrl() throws URISyntaxException {
         ElasticHelper.getIndexUrl("http://localhost/");
+    }
+    
+    @Test
+    public void getBulkUrlTest() throws URISyntaxException {
+        String expected = "http://localhost/_bulk";
+        String actual = ElasticHelper.getBulkUrl("http://localhost/foo");
+        Assert.assertEquals(expected, actual);
+
+        actual = ElasticHelper.getBulkUrl("http://localhost/foo/");
+        Assert.assertEquals(expected, actual);
+
+        actual = ElasticHelper.getBulkUrl("http://localhost/foo/bar");
+        Assert.assertEquals(expected, actual);
+
+        actual = ElasticHelper.getBulkUrl("http://localhost/foo/bar/");
+        Assert.assertEquals(expected, actual);
+
+        actual = ElasticHelper.getBulkUrl("http://localhost/foo/bar/?");
+        Assert.assertEquals(expected, actual);
     }
 }
