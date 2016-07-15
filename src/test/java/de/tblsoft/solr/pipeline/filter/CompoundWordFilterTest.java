@@ -17,6 +17,19 @@ public class CompoundWordFilterTest extends AbstractFilterTest {
         setClazz(CompoundWordFilter.class);
     }
     
+    @Test
+    public void testGartentor() {
+        configure();
+        document(
+                DocumentBuilder.document().field("noun","gartentor").create(),
+                DocumentBuilder.document().field("noun","garten").create(),
+                DocumentBuilder.document().field("noun","tor").create()
+        );
+        Field d =outputDocumentList.get(0).getField("tokenized");
+        assertFiledList("tokenized", "garten", "tor");
+
+    }
+    
     
     @Test
     public void testLeitungschutzschalter() {

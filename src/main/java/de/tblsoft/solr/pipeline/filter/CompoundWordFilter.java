@@ -1,5 +1,6 @@
 package de.tblsoft.solr.pipeline.filter;
 
+import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
 
@@ -41,6 +42,7 @@ public class CompoundWordFilter extends AbstractFilter {
     	whitelist.add("bau");
     	whitelist.add("leiste");
     	whitelist.add("schutz");
+    	whitelist.add("tor");
     }
 
     @Override
@@ -86,18 +88,23 @@ public class CompoundWordFilter extends AbstractFilter {
 //                	}
                 	
                 }
-                document.addField("tokenized", tokenize(noun, compoundList));
+                List<String> tokens = tokenize(noun, compoundList);
+                List<String> additionalTokens = new ArrayList<String>();
+//                for(String token:tokens) {
+//                	additionalTokens.addAll(tokenize(token, compoundList));
+//                }
+                tokens.addAll(additionalTokens);
+                
+                String joinedTokens = Joiner.on(" ").join(tokens);
+                document.addField("tokenized", joinedTokens);
                 super.document(document);
             }
         }
         super.end();
     }
     
-    String tokenize(String noun, List<String> compoundList) {
-    	if("blumenzwiebel".equals(noun)) {
-    		System.out.println("test");
-    	}
-    	StringBuilder ret = new StringBuilder();
+    List<String> tokenize(String noun, List<String> compoundList) {
+    	List<String> ret = new ArrayList<String>();
     	StringBuilder b = new StringBuilder();
 
     	for (int i = 0; i < noun.length(); i++) {
@@ -115,7 +122,7 @@ public class CompoundWordFilter extends AbstractFilter {
 				}
 			}
 			if(candidate != null && startsWith == false) {
-				ret.append(part).append(" ");
+				ret.add(part);
 				candidate = null;
 				b = new StringBuilder();
 				continue;
@@ -129,7 +136,7 @@ public class CompoundWordFilter extends AbstractFilter {
 			}
 			
 		}
-    	return ret.toString().trim();
+    	return ret;
     }
     
     boolean isOverlap(String compoundToCompare, List<String> compoundList) {
