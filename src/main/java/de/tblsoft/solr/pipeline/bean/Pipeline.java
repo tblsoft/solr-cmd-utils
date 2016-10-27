@@ -1,5 +1,6 @@
 package de.tblsoft.solr.pipeline.bean;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -9,7 +10,7 @@ import java.util.Map;
 public class Pipeline {
     private String name;
 
-    private Map<String,String> variables;
+    private Map<String,String> variables = new HashMap<String, String>();
 
     private Reader reader;
     private List<Filter> filter;
