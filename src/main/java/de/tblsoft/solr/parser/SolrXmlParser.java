@@ -10,6 +10,8 @@ import javax.xml.stream.events.Characters;
 import javax.xml.stream.events.EndElement;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
+
+import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
 
@@ -33,8 +35,9 @@ public class SolrXmlParser {
 
 
         XMLInputFactory xmlInputFactory = XMLInputFactory.newInstance();
+        InputStream is = IOUtils.getInputStream(getInputFileName());
         XMLEventReader xmlEventReader = xmlInputFactory
-                .createXMLEventReader(IOUtils.getInputStream(getInputFileName()));
+                .createXMLEventReader(is);
 
         boolean isDoc = false;
         boolean isFacet = false;
@@ -85,6 +88,8 @@ public class SolrXmlParser {
                 currentValue = characters.getData();
             }
         }
+        is.close();
+        xmlEventReader.close();
 
     }
 
