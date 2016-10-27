@@ -1,5 +1,9 @@
 package de.tblsoft.solr.http;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
@@ -84,6 +88,28 @@ public class HTTPHelper {
 			responseBuilder.append(EntityUtils.toString(response.getEntity()));
 			httpclient.close();
 			return responseBuilder.toString();
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
+	/**
+	 * Store the body of the url in the specified fileName.
+	 * 
+	 * @param url The url where the content is fetched.
+	 * @param fileName The fileName where the content is stored.
+	 */
+	public static void get2File(String url, File fileName) {
+		try {
+			CloseableHttpClient httpclient = HttpClients.createDefault();
+			HttpGet httpPost = new HttpGet(url);
+
+			CloseableHttpResponse response = httpclient.execute(httpPost);
+			InputStream is = response.getEntity().getContent();
+			FileOutputStream fos = new FileOutputStream(fileName);
+			org.apache.commons.io.IOUtils.copy(is, fos);
+			httpclient.close();
+			fos.close();
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
