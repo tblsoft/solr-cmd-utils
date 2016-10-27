@@ -52,6 +52,8 @@ public class PipelineExecuter {
     private ReaderIF reader;
 
     private String yamlFileName;
+    
+    private Map<String, String> pipelineVariables = new HashMap<String, String>();
 
     private static Map<String, Class> classRegestriy = new HashMap<String, Class>();
     static {
@@ -102,6 +104,7 @@ public class PipelineExecuter {
     public void init() {
         try {
             pipeline = readPipelineFromYamlFile(yamlFileName);
+            pipeline.getVariables().putAll(pipelineVariables);
             reader = (ReaderIF) getInstance(pipeline.getReader().getClazz());
             reader.setPipelineExecuter(this);
             reader.setReader(pipeline.getReader());
@@ -130,6 +133,7 @@ public class PipelineExecuter {
             filterInstance.setNextFilter(new LastFilter());
             filterList.add(filterInstance);
         } catch (Exception e) {
+        	e.printStackTrace();
             throw new RuntimeException(e);
         }
     }
@@ -203,4 +207,18 @@ public class PipelineExecuter {
         }
         throw new IllegalArgumentException("The filter with the id: " + filterId + " does not exists.");
     }
+
+	public Map<String, String> getPipelineVariables() {
+		return pipelineVariables;
+	}
+
+	public void setPipelineVariables(Map<String, String> pipelineVariables) {
+		this.pipelineVariables = pipelineVariables;
+	}
+	
+	public void addPipelineVariable(String name, String value) {
+		this.pipelineVariables.put(name, value);
+	}
+    
+    
 }
