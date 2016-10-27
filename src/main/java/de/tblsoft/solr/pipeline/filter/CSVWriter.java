@@ -29,6 +29,8 @@ public class CSVWriter extends AbstractFilter {
     private String[] headers;
 
     private String absoluteFilename;
+    
+    private boolean withHeaders = true;
 
     @Override
     public void init() {
@@ -41,7 +43,7 @@ public class CSVWriter extends AbstractFilter {
             headers = getPropertyAsArray("headers", null);
 
             multiValueSeperator = getProperty("multiValueSeperator", ";");
-
+            withHeaders = getPropertyAsBoolean("withHeaders", true);
 
 
 
@@ -69,7 +71,11 @@ public class CSVWriter extends AbstractFilter {
                 String[] headersFromDocument = getFieldNames(document);
                 PrintWriter out = new PrintWriter(absoluteFilename);
                 CSVFormat format = CSVFormat.RFC4180;
-                printer = format.withDelimiter(delimiter.charAt(0)).withHeader(headersFromDocument).print(out);
+                if(withHeaders) {
+                	printer = format.withDelimiter(delimiter.charAt(0)).withHeader(headersFromDocument).print(out);
+                } else {
+                	printer = format.withDelimiter(delimiter.charAt(0)).print(out);
+                }
                 firstDocument = false;
             } catch (Exception e) {
                 throw new RuntimeException(e);
