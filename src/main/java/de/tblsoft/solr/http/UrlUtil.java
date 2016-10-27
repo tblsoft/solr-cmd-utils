@@ -3,11 +3,16 @@ package de.tblsoft.solr.http;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URLEncodedUtils;
 
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 /**
@@ -43,6 +48,19 @@ public class UrlUtil {
     public static List<NameValuePair> getUrlParams(String url) {
         return getUrlParams(url, "UTF-8");
     }
+    
+    public static Map<String, List<String>> getUrlParamsAsMap(String url) {
+    	Map<String, List<String>> ret = new HashMap<String, List<String>>();
+        List<NameValuePair> nameValuePairList = getUrlParams(url, "UTF-8");
+        for(NameValuePair pair: nameValuePairList) {
+        	String name = pair.getName();
+        	if(ret.get(name) == null) {
+        		ret.put(name, new ArrayList<String>());
+        	}
+        	ret.get(name).add(pair.getValue());
+        }
+        return ret;
+    }
 
     public static List<NameValuePair> getUrlParams(String url, String charset) {
 
@@ -55,5 +73,13 @@ public class UrlUtil {
         } catch (MalformedURLException e) {
             throw new IllegalArgumentException("The url " + url + " is not valid.");
         }
+    }
+    
+    public static String encode(String value) {
+    	try {
+			return URLEncoder.encode(value, "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			throw new RuntimeException(e);
+		}
     }
 }
