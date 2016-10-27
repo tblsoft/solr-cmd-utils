@@ -1,10 +1,15 @@
 package de.tblsoft.solr.util;
 
 import com.google.common.io.Files;
+
 import org.apache.commons.compress.compressors.bzip2.BZip2CompressorInputStream;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.filefilter.IOFileFilter;
+import org.apache.commons.io.filefilter.WildcardFileFilter;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
@@ -34,8 +39,19 @@ public class IOUtils {
 
     public static List<String> getFiles(String path) {
         List<String> fileList = new ArrayList<String>();
-
+        
         File root = new File(path);
+        
+		if(path.contains("*")) {
+			IOFileFilter fileFilter = new WildcardFileFilter(root.getName());
+			IOFileFilter dirFilter = new WildcardFileFilter("*");
+			Collection<File> files = FileUtils.listFiles(root.getParentFile(), fileFilter, dirFilter);
+			for(File file:files) {
+				fileList.add(file.getAbsolutePath());
+			}
+			return fileList;
+		}
+        
         if(root.isFile()) {
             fileList.add(path);
             return fileList;
