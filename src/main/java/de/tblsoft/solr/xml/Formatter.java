@@ -1,6 +1,5 @@
 package de.tblsoft.solr.xml;
 
-import com.sun.org.apache.xml.internal.serializer.OutputPropertiesFactory;
 import de.tblsoft.solr.util.IOUtils;
 
 import javax.xml.transform.OutputKeys;
@@ -29,7 +28,7 @@ public class Formatter {
 
         Transformer transformer = transformerFactory.newTransformer();
         transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-        transformer.setOutputProperty(OutputPropertiesFactory.S_KEY_INDENT_AMOUNT, "2");
+        //transformer.setOutputProperty(OutputPropertiesFactory.S_KEY_INDENT_AMOUNT, "2");
         //transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
         transformer.transform(xmlInput, xmlOutput);
 
