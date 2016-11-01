@@ -1,0 +1,10 @@
+name: "grok unit testing pipeline"
+reader:
+  name: "GrokReader"
+  clazz: "solrcmdutils.GCLogReader"
+  property:
+    filename: "gc.log"
+filter:
+  - name: "Testing Filter"
+    id: "testingFilter"
+    clazz: "solrcmdutils.TestingFilter"
