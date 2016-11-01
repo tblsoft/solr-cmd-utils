@@ -6,8 +6,6 @@ import de.tblsoft.solr.http.UrlUtil;
 import de.tblsoft.solr.pipeline.AbstractFilter;
 import de.tblsoft.solr.pipeline.bean.Document;
 import org.apache.http.NameValuePair;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
 import java.util.List;
 
 
@@ -47,13 +45,13 @@ public class UrlSplitter extends AbstractFilter {
             //we have query parameters and a optional path
             // we have no absolute url
 
-            throw new NotImplementedException();
+            throw new UnsupportedOperationException("The url is not correct " + value);
         } else if (Strings.isNullOrEmpty(value)) {
             // do nothing
 
         } else {
             // we only have a path
-            throw new NotImplementedException();
+            throw new UnsupportedOperationException("The url is not correct " + value);
         }
 
         super.document(document);

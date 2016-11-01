@@ -2,8 +2,7 @@ package de.tblsoft.solr.pipeline.filter;
 
 
 import com.google.common.base.Strings;
-
-import de.hornbach.solr.helper.LinguisticHelper;
+import de.tblsoft.solr.logic.LinguisticHelper;
 import de.tblsoft.solr.pipeline.AbstractFilter;
 import de.tblsoft.solr.pipeline.bean.Document;
 import de.tblsoft.solr.pipeline.bean.Field;
