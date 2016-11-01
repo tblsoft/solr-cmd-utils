@@ -1,0 +1,4 @@
+Jun 2, 2016 2:30:31 PM org.apache.solr.core.SolrCore execute
+INFO: [my-solr-core] webapp=/solr path=/select params={mm=100&foo=bar} hits=41 status=0 QTime=344
+Jun 2, 2016 2:30:31 PM org.apache.solr.core.SolrCore execute
+INFO: [my-solr-core] webapp=/solr path=/select params={mm=100&foo=bar} hits=86 status=0 QTime=2
