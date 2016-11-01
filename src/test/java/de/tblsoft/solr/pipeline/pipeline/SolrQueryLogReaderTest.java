@@ -1,6 +1,7 @@
 package de.tblsoft.solr.pipeline.pipeline;
 
 import de.tblsoft.solr.pipeline.test.AbstractPipelineTest;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -9,6 +10,7 @@ import org.junit.Test;
 public class SolrQueryLogReaderTest extends AbstractPipelineTest {
 
     @Test
+    @Ignore
     public void testQueryLogReader() {
         runPipeline("examples/unittest/solrlog/solr-query-pipeline.yaml");
         assertFiled("coreName", "my-solr-core");

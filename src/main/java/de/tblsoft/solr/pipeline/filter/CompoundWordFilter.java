@@ -1,20 +1,15 @@
 package de.tblsoft.solr.pipeline.filter;
 
 import com.google.common.base.Joiner;
-import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
-
-import de.hornbach.solr.helper.LinguisticHelper;
+import de.tblsoft.solr.logic.LinguisticHelper;
 import de.tblsoft.solr.pipeline.AbstractFilter;
 import de.tblsoft.solr.pipeline.bean.Document;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-import sun.org.mozilla.javascript.internal.ast.ForInLoop;
 
 /**
  * Created by tblsoft 17.05.16.

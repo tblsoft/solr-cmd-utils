@@ -1,6 +1,7 @@
 package de.tblsoft.solr.pipeline.pipeline;
 
 import de.tblsoft.solr.pipeline.test.AbstractPipelineTest;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -9,6 +10,7 @@ import org.junit.Test;
 public class GCLogReaderTest extends AbstractPipelineTest {
 
     @Test
+    @Ignore
     public void testGrokReader() {
         runPipeline("examples/unittest/gc/gc-pipeline.yaml");
         assertFiled("foo", "foo");
