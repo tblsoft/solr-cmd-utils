@@ -1,0 +1,11 @@
+name: "solr query log testing pipeline"
+reader:
+  name: "SolrQueryLogReader"
+  clazz: "solrcmdutils.SolrQueryLogReader"
+  property:
+    filename: "solr-query.log"
+
+filter:
+  - name: "Testing Filter"
+    id: "testingFilter"
+    clazz: "solrcmdutils.TestingFilter"
