@@ -1,17 +1,24 @@
 package de.tblsoft.solr.pipeline.filter;
 
 import com.google.common.base.Strings;
+
 import de.tblsoft.solr.pipeline.AbstractFilter;
 import de.tblsoft.solr.pipeline.bean.Document;
 import de.tblsoft.solr.pipeline.bean.Field;
+import de.tblsoft.solr.pipeline.bean.FieldComperator;
+
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.text.StrSubstitutor;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 public class MappingFilter extends AbstractFilter {
@@ -102,7 +109,22 @@ public class MappingFilter extends AbstractFilter {
 		}
 
 		if (mappedDocument.getFields().size() != 0) {
+
+			addMissingFields(mappedDocument);
+			Collections.sort(mappedDocument.getFields(), new FieldComperator());
 			super.document(mappedDocument);
+		}
+	}
+	
+	void addMissingFields(Document mappedDocument) {
+		Set<String> mappedFieldNames = new HashSet<String>();
+		for(Field field : mappedDocument.getFields()) {
+			mappedFieldNames.add(field.getName());
+		}
+		for(Entry<String, List<String>> entry :mapping.entrySet()) {
+			if(!mappedFieldNames.contains(entry.getKey())) {
+				mappedDocument.addField(entry.getKey(), "");
+			}
 		}
 	}
 
