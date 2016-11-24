@@ -186,6 +186,10 @@ public class PipelineExecuter {
         throw new IllegalArgumentException("The filter with the id: " + filterId + " does not exists.");
     }
 
+    public ReaderIF getReader() {
+        return this.reader;
+    }
+
 	public Map<String, String> getPipelineVariables() {
 		return pipelineVariables;
 	}
