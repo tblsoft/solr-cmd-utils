@@ -49,6 +49,7 @@ public class PipelineExecuter {
         classRegestriy.put("solrcmdutils.SolrQueryLogReader", SolrQueryLogReader.class);
         classRegestriy.put("solrcmdutils.SpyFilter", SpyFilter.class);
         classRegestriy.put("solrcmdutils.StatusFilter", StatusFilter.class);
+        classRegestriy.put("solrcmdutils.StatusTimeFilter", StatusTimeFilter.class);
         classRegestriy.put("solrcmdutils.MappingFilter", MappingFilter.class);
         classRegestriy.put("solrcmdutils.EncodingCorrectionFilter", EncodingCorrectionFilter.class);
         classRegestriy.put("solrcmdutils.RegexSplitFilter", RegexSplitFilter.class);
