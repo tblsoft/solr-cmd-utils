@@ -58,6 +58,27 @@ public class MappingFilterTest extends AbstractFilterTest {
         assertNumberOfDocuments(1);
         assertNumberOfFields(2);
     }
+
+
+    @Test
+    public void testMappingAddEmptyFieldIfNotExists() {
+        configure();
+        putProperty("addEmptyFieldIfNotExists", "true");
+        addProperty("mapping", "firstname->forename");
+        addProperty("mapping", "lastname->surname");
+        addProperty("mapping", "strasse->street");
+        addProperty("mapping", "strasse->street_additional");
+        createField("foo", "bar");
+        createField("firstname", "John");
+        createField("lastname", "Doe");
+        runTest();
+        assertFiled("forename", "John");
+        assertFiled("surname", "Doe");
+        assertFiled("street", "");
+        assertFiled("street_additional", "");
+        assertNumberOfDocuments(1);
+        assertNumberOfFields(4);
+    }
     
     @Test
     public void testMappingTrimLowercaseMd5() {

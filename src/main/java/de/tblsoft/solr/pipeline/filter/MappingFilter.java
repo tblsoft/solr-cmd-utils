@@ -27,8 +27,15 @@ public class MappingFilter extends AbstractFilter {
 	private Map<String, List<String>> mappingFunctions = new HashMap<String, List<String>>();
 	private Map<String, String> joins = new HashMap<String, String>();
 
+    private boolean sortFieldsByName = false;
+    private boolean addEmptyFieldIfNotExists = false;
+
+
 	@Override
 	public void init() {
+
+        sortFieldsByName = getPropertyAsBoolean("sortFieldsByName", false);
+        addEmptyFieldIfNotExists = getPropertyAsBoolean("addEmptyFieldIfNotExists", false);
 
 		List<String> tempMapping = getPropertyAsList("mapping",
 				new ArrayList<String>());
@@ -111,20 +118,33 @@ public class MappingFilter extends AbstractFilter {
 		if (mappedDocument.getFields().size() != 0) {
 
 			addMissingFields(mappedDocument);
-			Collections.sort(mappedDocument.getFields(), new FieldComperator());
+            sortFieldsByName(mappedDocument);
 			super.document(mappedDocument);
 		}
 	}
+
+    void sortFieldsByName(Document mappedDocument) {
+        if(!sortFieldsByName) {
+            return;
+        }
+        Collections.sort(mappedDocument.getFields(), new FieldComperator());
+
+    }
 	
 	void addMissingFields(Document mappedDocument) {
+        if(!addEmptyFieldIfNotExists) {
+            return;
+        }
 		Set<String> mappedFieldNames = new HashSet<String>();
 		for(Field field : mappedDocument.getFields()) {
 			mappedFieldNames.add(field.getName());
 		}
 		for(Entry<String, List<String>> entry :mapping.entrySet()) {
-			if(!mappedFieldNames.contains(entry.getKey())) {
-				mappedDocument.addField(entry.getKey(), "");
-			}
+            for(String mappedName: entry.getValue()) {
+			    if(!mappedFieldNames.contains(mappedName)) {
+				    mappedDocument.addField(mappedName, "");
+			    }
+            }
 		}
 	}
 
