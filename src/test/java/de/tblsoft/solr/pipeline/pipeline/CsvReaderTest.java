@@ -22,6 +22,19 @@ public class CsvReaderTest extends AbstractPipelineTest {
     }
 
     @Test
+    public void testCsvReaderMaxRows() {
+        runPipeline("examples/unittest/csv-reader-pipeline-max-rows.yaml");
+        assertFiled("column1", "foo");
+        assertFiled("column2", "bar");
+
+        assertNumberOfDocuments(1);
+        assertNumberOfFields(2);
+
+        assertInitWasDelegated();
+        assertEndWasDelegated();
+    }
+
+    @Test
     public void testCsvReaderWithBz2() {
         runPipeline("examples/unittest/csv-reader-bz2-pipeline.yaml");
         assertFiled("column1", "foo");
