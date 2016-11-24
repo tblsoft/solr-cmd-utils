@@ -45,6 +45,15 @@ public abstract class AbstractBaseTest {
         Assert.assertNull(f);
     }
 
+    public void assertFiledExists(String name) {
+        if(outputDocumentList.size() == 0) {
+            Assert.fail("There is no output document.");
+        }
+        Document document = outputDocumentList.get(0);
+        Field f = document.getField(name);
+        Assert.assertNotNull(f);
+    }
+
     public void assertFiledList(String name, String... expected) {
         Document document = outputDocumentList.get(0);
         List<String> actual = document.getFieldValues(name);

@@ -35,6 +35,21 @@ public class CsvReaderTest extends AbstractPipelineTest {
     }
 
     @Test
+    public void testCsvReaderAddMeta() {
+        runPipeline("examples/unittest/csv-reader-pipeline-add-meta.yaml");
+        assertFiled("column1", "foo");
+        assertFiled("column2", "bar");
+        assertFiled("rowNumber", "1");
+        assertFiledExists("fileName");
+
+        assertNumberOfDocuments(2);
+        assertNumberOfFields(4);
+
+        assertInitWasDelegated();
+        assertEndWasDelegated();
+    }
+
+    @Test
     public void testCsvReaderWithBz2() {
         runPipeline("examples/unittest/csv-reader-bz2-pipeline.yaml");
         assertFiled("column1", "foo");
