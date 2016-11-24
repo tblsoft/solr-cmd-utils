@@ -1,7 +1,7 @@
 package de.tblsoft.solr.pipeline.filter;
 
 import de.tblsoft.solr.pipeline.test.AbstractFilterTest;
-import org.junit.Test;
+import org.junit.*;
 
 /**
  * Created by tblsoft on 26.04.16.
@@ -78,6 +78,25 @@ public class MappingFilterTest extends AbstractFilterTest {
         assertFiled("street_additional", "");
         assertNumberOfDocuments(1);
         assertNumberOfFields(4);
+    }
+
+    @Test
+    public void testMappingSortFieldsByName() {
+        configure();
+        putProperty("sortFieldsByName", "true");
+        addProperty("mapping", "a->d");
+        addProperty("mapping", "b->c");
+        createField("foo", "bar");
+        createField("b", "b_value");
+        createField("a", "a_value");
+        runTest();
+        assertFiled("d", "a_value");
+        assertFiled("c", "b_value");
+
+        Assert.assertEquals("c",this.outputDocumentList.get(0).getFields().get(0).getName());
+        Assert.assertEquals("d",this.outputDocumentList.get(0).getFields().get(1).getName());
+        assertNumberOfDocuments(1);
+        assertNumberOfFields(2);
     }
     
     @Test
