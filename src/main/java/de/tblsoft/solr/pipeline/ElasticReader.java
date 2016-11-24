@@ -20,6 +20,7 @@ public class ElasticReader extends AbstractReader {
 	private Gson gson;
 
 	private String url;
+	private String scroll;
 
 	// TODO implement paging
 	@Override
@@ -35,8 +36,9 @@ public class ElasticReader extends AbstractReader {
 			
 			
 			url = getProperty("url", null);
+			scroll = getProperty("scroll", "1m");
 			String scrollBaseUrl = ElasticHelper.getScrollUrl(url);
-			pagedUrl = url + "&scroll=1m";
+			pagedUrl = url + "&scroll=" + scroll;
 
 			do {
 				 
@@ -67,7 +69,7 @@ public class ElasticReader extends AbstractReader {
 					executer.document(document);
 				}
 				
-				pagedUrl = scrollBaseUrl + "?scroll=1m&scroll_id=" + scrollId;
+				pagedUrl = scrollBaseUrl + "?scroll=" + scroll + "&scroll_id=" + scrollId;
 			
 			} while(hasHits);
 			executer.end();
