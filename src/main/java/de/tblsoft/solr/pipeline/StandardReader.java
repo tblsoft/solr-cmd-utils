@@ -81,7 +81,9 @@ public class StandardReader extends SolrXmlParser implements ReaderIF {
     @Override
     public void end() {
     	try {
-			Files.deleteIfExists(tempFile.toPath());
+    		if(tempFile != null) {
+    			Files.deleteIfExists(tempFile.toPath());
+    		}
 		} catch (IOException e) {
 			throw new RuntimeException(e);		}
 
