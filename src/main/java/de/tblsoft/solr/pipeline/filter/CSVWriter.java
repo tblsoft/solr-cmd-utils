@@ -1,15 +1,21 @@
 package de.tblsoft.solr.pipeline.filter;
 
 import com.google.common.base.Joiner;
+
 import de.tblsoft.solr.pipeline.AbstractFilter;
 import de.tblsoft.solr.pipeline.bean.Document;
 import de.tblsoft.solr.pipeline.bean.Field;
 import de.tblsoft.solr.util.IOUtils;
+
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 
+import java.io.BufferedWriter;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -69,13 +75,20 @@ public class CSVWriter extends AbstractFilter {
         if(firstDocument) {
             try {
                 String[] headersFromDocument = getFieldNames(document);
-                PrintWriter out = new PrintWriter(absoluteFilename);
+                //PrintWriter out = new PrintWriter(absoluteFilename);
+                OutputStream out = IOUtils.getOutputStream(absoluteFilename);
                 CSVFormat format = CSVFormat.RFC4180;
                 if(withHeaders) {
-                	printer = format.withDelimiter(delimiter.charAt(0)).withHeader(headersFromDocument).print(out);
+                	format = format.withDelimiter(delimiter.charAt(0)).withHeader(headersFromDocument);
+                	
+
+                	
                 } else {
-                	printer = format.withDelimiter(delimiter.charAt(0)).print(out);
+                	format = format.withDelimiter(delimiter.charAt(0));
                 }
+                Writer out1 = new BufferedWriter(new OutputStreamWriter(out));
+                
+            	printer = new CSVPrinter(out1, format);
                 firstDocument = false;
             } catch (Exception e) {
                 throw new RuntimeException(e);
@@ -85,7 +98,7 @@ public class CSVWriter extends AbstractFilter {
             List<List<String>> csvRows = new ArrayList<List<String>>();
             List<String> csvList = new ArrayList<String>();
             for(Field field: document.getFields()) {
-                String value = Joiner.on(multiValueSeperator).join(field.getValues());
+            	String	value = Joiner.on(multiValueSeperator).skipNulls().join(field.getValues());
                 csvList.add(value);
             }
             csvRows.add(csvList);
@@ -107,6 +120,7 @@ public class CSVWriter extends AbstractFilter {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        super.end();
 
     }
 
