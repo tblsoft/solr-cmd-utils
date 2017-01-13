@@ -1,27 +1,21 @@
 package de.tblsoft.solr.pipeline.filter;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.math.NumberUtils;
-
 import com.beust.jcommander.Strings;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-
 import de.tblsoft.solr.http.ElasticHelper;
 import de.tblsoft.solr.http.HTTPHelper;
 import de.tblsoft.solr.pipeline.AbstractFilter;
 import de.tblsoft.solr.pipeline.bean.Document;
 import de.tblsoft.solr.pipeline.bean.Field;
 import de.tblsoft.solr.util.IOUtils;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.math.NumberUtils;
+
+import java.io.File;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.util.*;
 
 public class ElasticWriter extends AbstractFilter {
 
@@ -39,8 +33,12 @@ public class ElasticWriter extends AbstractFilter {
 
 	private List<Document> buffer = new ArrayList<Document>();
 
+    private int bufferSize;
+
 	@Override
 	public void init() {
+
+        bufferSize = getPropertyAsInt("bufferSize", 10000);
 		location = getProperty("location", null);
 		verify(location, "For the JsonWriter a location must be defined.");
 
@@ -137,7 +135,7 @@ public class ElasticWriter extends AbstractFilter {
 
 	@Override
 	public void document(Document document) {
-		if (buffer.size() <= 10000) {
+		if (buffer.size() <= bufferSize) {
 			buffer.add(document);
 		} else {
 			procesBuffer();
