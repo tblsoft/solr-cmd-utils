@@ -3,7 +3,11 @@ package de.tblsoft.solr.http;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.net.HttpCookie;
+import java.util.List;
 
+import org.apache.http.Header;
+import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
@@ -125,5 +129,27 @@ public class HTTPHelper {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+    
+ 
+    
+    public static String getCookieValueFromHeader(String cookieName, HttpResponse response) {
+    	Header[] headers = response.getHeaders("Set-Cookie");
+    	if(headers == null) {
+    		return null;
+    	}
+    	
+    	for (int i = 0; i < headers.length; i++) {
+    		Header header = headers[i];
+        	List<HttpCookie> cookies = HttpCookie.parse(header.getValue());
+        	for(HttpCookie cookie : cookies) {
+        		if(cookie.getName().equals(cookieName)) {
+        			return cookie.getValue();
+        		}
+        	}
+		}
+
+    	return null;
+
     }
 }

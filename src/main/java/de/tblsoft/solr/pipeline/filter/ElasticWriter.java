@@ -38,6 +38,8 @@ public class ElasticWriter extends AbstractFilter {
 	private String idField;
 
 	private List<Document> buffer = new ArrayList<Document>();
+	
+	private int bufferSize = 10000;
 
 	@Override
 	public void init() {
@@ -48,7 +50,8 @@ public class ElasticWriter extends AbstractFilter {
 		elasticMappingLocation = getProperty("elasticMappingLocation", null);
 
 		idField = getProperty("idField", null);
-
+		bufferSize = getPropertyAsInt("bufferSize", 10000);
+		
 		GsonBuilder builder = new GsonBuilder();
 		gson = builder.create();
 
@@ -137,9 +140,8 @@ public class ElasticWriter extends AbstractFilter {
 
 	@Override
 	public void document(Document document) {
-		if (buffer.size() <= 10000) {
-			buffer.add(document);
-		} else {
+		buffer.add(document);
+		if (buffer.size() >= bufferSize) {
 			procesBuffer();
 			buffer = new ArrayList<Document>();
 		}
