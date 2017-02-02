@@ -7,6 +7,7 @@ import de.tblsoft.solr.pipeline.AbstractFilter;
 import de.tblsoft.solr.pipeline.bean.Document;
 import org.apache.http.NameValuePair;
 import java.util.List;
+import java.util.regex.Pattern;
 
 
 public class UrlSplitter extends AbstractFilter {
@@ -35,6 +36,14 @@ public class UrlSplitter extends AbstractFilter {
 
             String path = UrlUtil.getPath(value);
             document.addField(fieldPrefix + "_path", path);
+
+            String[] pathSplitted = path.split(Pattern.quote("/"));
+            for (int i = 0; i < pathSplitted.length; i++) {
+                document.addField(fieldPrefix + "_path_" + i, pathSplitted[i]);
+                document.addField(fieldPrefix + "_pathall", pathSplitted[i]);
+            }
+
+            document.addField(fieldPrefix + "_pathcount", String.valueOf(pathSplitted.length));
 
 
             String host = UrlUtil.getHost(value);
