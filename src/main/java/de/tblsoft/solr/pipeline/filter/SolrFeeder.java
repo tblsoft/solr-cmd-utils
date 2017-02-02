@@ -98,6 +98,9 @@ public class SolrFeeder extends AbstractFilter {
 
 
     private boolean isFieldIgnored(String name) {
+        if(ignoreFields == null) {
+            return false;
+        }
         for (String pattern : ignoreFields) {
             if (name.matches(pattern)) {
                 return true;
