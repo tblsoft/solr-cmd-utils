@@ -7,6 +7,7 @@ import de.tblsoft.solr.pipeline.bean.Document;
 import de.tblsoft.solr.pipeline.bean.Field;
 import de.tblsoft.solr.pipeline.bean.FieldComperator;
 
+import de.tblsoft.solr.util.DateUtils;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.text.StrSubstitutor;
@@ -73,8 +74,33 @@ public class MappingFilter extends AbstractFilter {
             return StringUtils.lowerCase(value);
         } else if ("trim".equals(function)) {
             return StringUtils.trim(value);
-        }
+        } else if ("toSolrDate".equals(function)) {
+			return DateUtils.toSolrDate(value);
+		} else if ("uniq".equals(function)) {
+			return value;
+		}
 
+		throw new IllegalArgumentException("The function: " + function
+				+ " is not implemented.");
+	}
+
+
+	public void executeFieldFunction(String function, Field field) {
+
+		if("md5".equals(function)) {
+			return;
+		} else if ("lowercase".equals(function)) {
+			return;
+		} else if ("trim".equals(function)) {
+			return;
+		} else if ("toSolrDate".equals(function)) {
+			return;
+		} else if ("uniq".equals(function)) {
+			Set<String> uniqValues= new HashSet<String>();
+			uniqValues.addAll(field.getValues());
+			field.setValues(new ArrayList(uniqValues));
+			return;
+		}
 		throw new IllegalArgumentException("The function: " + function
 				+ " is not implemented.");
 	}
@@ -100,7 +126,11 @@ public class MappingFilter extends AbstractFilter {
 						newValues.add(newValue);
 					}
 
-					mappedDocument.setField(mappedName, newValues);
+					mappedDocument.addField(mappedName, newValues);
+					Field mappedField = mappedDocument.getField(mappedName);
+					for (String function : mappedFunctions) {
+						executeFieldFunction(function, mappedField);
+					}
 				}
 			}
 		}

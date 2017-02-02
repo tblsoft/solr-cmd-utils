@@ -109,6 +109,33 @@ public class MappingFilterTest extends AbstractFilterTest {
         assertNumberOfDocuments(1);
         assertNumberOfFields(1);
     }
+
+    @Test
+    public void testMappingToSolrDate() {
+        configure();
+        addProperty("mapping", "oldDate->newDate|toSolrDate");
+        createField("oldDate", "2015-09-13T20:29:00+0200");
+        runTest();
+        assertFiled("newDate", "2015-09-13T18:29:00Z");
+        assertNumberOfDocuments(1);
+        assertNumberOfFields(1);
+    }
+
+    @Test
+    public void testMappingUniq() {
+        configure();
+        addProperty("mapping", "keywords->allkeywords|uniq");
+        addProperty("mapping", "newsKeywords->allkeywords|uniq");
+        createField("keywords", "foo");
+        createField("keywords", "bar");
+        createField("newsKeywords", "alice");
+        createField("newsKeywords", "bob");
+        createField("newsKeywords", "foo");
+        runTest();
+        assertFiledList("allkeywords", "bob","alice","foo","bar");
+        assertNumberOfDocuments(1);
+        assertNumberOfFields(1);
+    }
     
     @Test
     public void testMappingForMultipleFields() {
