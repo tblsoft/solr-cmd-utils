@@ -53,9 +53,14 @@ public abstract class AbstractStatusFilter extends AbstractFilter {
     	if(duration < 300000 ) {
     		long durationInSeconds = duration / 1000;    		
     		return durationInSeconds + " seconds";
-    	}
-    	long durationInMinute = duration / 1000 / 60;
-    	return durationInMinute + " minutes";
+    	} else if (duration < 180*60*1000) {
+            long durationInMinute = duration / 1000 / 60;
+            return durationInMinute + " minutes";
+        } else {
+            long durationInMinute = duration / 1000 / 60;
+            long durationInHours = durationInMinute / 60;
+            return durationInHours + " hours " + durationInMinute + " minutes";
+        }
     }
     
     void printStatus(long duration, long lapDuration) {
