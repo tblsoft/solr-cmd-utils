@@ -1,5 +1,7 @@
 package de.tblsoft.solr.pipeline.bean;
 
+import com.google.common.base.Strings;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -89,8 +91,23 @@ public class Document {
         } else {
             existingField.getValues().add(value);
         }
+    }
 
+    public void addField(String name, List<String> values) {
+        Field existingField = getField(name);
+        if(existingField == null) {
+            Field field = new Field(name,values);
+            this.fields.add(field);
+        } else {
+            existingField.getValues().addAll(values);
+        }
+    }
 
+    public void addFieldIfNotNullOrEmpty(String name, String value) {
+        if(Strings.isNullOrEmpty(value)) {
+            return;
+        }
+        addField(name,value);
     }
 
 
