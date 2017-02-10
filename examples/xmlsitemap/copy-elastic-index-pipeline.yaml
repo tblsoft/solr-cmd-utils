@@ -1,0 +1,33 @@
+name: "copy elastic index"
+reader:
+  name: "Elastic Reader"
+  clazz: "solrcmdutils.ElasticReader"
+  property:
+    url: "http://localhost:9200/sport1/sport1/_search?q=*"
+    #url: "http://localhost:9200/sport1/sport1/_search?q=loc:%22http://www.sport1.de/fussball/bundesliga/2015/09/1899-hoffenheim-dietmar-hopp-will-keine-trainerdiskussion%22"
+
+filter:
+  - name: "Status filter"
+    clazz: "solrcmdutils.StatusTimeFilter"
+    disabled: "false"
+  - name: "extract information from the html field"
+    clazz: "solrcmdutils.HtmlJsoupFilter"
+    property:
+      htmlField: "http_payload"
+      deleteHtmlField: "true"
+  - name: "entity extraction"
+    clazz: "solrcmdutils.EntityExtractionFilter"
+    disabled: "false"
+    property:
+      fieldList:
+        - "articleBody"
+        - "h1"
+  - name: "Elastic Writer"
+    clazz: "solrcmdutils.ElasticWriter"
+    property:
+      type: "elastic"
+      disabled: "true"
+      delete: "true"
+      elasticMappingLocation: "xmlsitemap-elastic-mapping.json"
+      location: "http://localhost:19200/sport1backup/sport1"
+      bufferSize: "50"

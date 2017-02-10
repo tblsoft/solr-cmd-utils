@@ -1,0 +1,43 @@
+{
+    "mappings": {
+        "sport1" : {
+            "sport1" : {
+
+                "dynamic_templates": [
+                    {
+                        "http_payload": {
+                            "match":              "http_payload*",
+                            "mapping": {"type" : "string", "index" : "analyzed"}
+                        }
+                    },
+                    {
+                        "http_time": {
+                            "match":              "http_time*",
+                            "mapping": {"type" : "date", "index" : "not_analyzed"}
+                        }
+                    },
+                    {
+                        "http_size": {
+                            "match":              "http_size*",
+                            "mapping": {"type" : "long", "index" : "not_analyzed"}
+                        }
+                    },
+                    {
+                        "http_duration": {
+                            "match":              "http_duration*",
+                            "mapping": {"type" : "long", "index" : "not_analyzed"}
+                        }
+                    },
+                    {
+                        "loc": {
+                            "match":              "*",
+                            "mapping": {"type" : "string", "index" : "not_analyzed"}
+                        }
+                    }
+                ]
+            }
+
+
+        }
+    }
+}

@@ -38,6 +38,13 @@ public class PipelineExecuter {
         classRegestriy.put("solrcmdutils.GCLogReader", GCLogReader.class);
         classRegestriy.put("solrcmdutils.ElasticReader", ElasticReader.class);
         classRegestriy.put("solrcmdutils.XmlReader", XmlReader.class);
+        classRegestriy.put("solrcmdutils.XmlSitemapReader", XmlSitemapReader.class);
+        classRegestriy.put("solrcmdutils.HttpFilter", HttpFilter.class);
+        classRegestriy.put("solrcmdutils.HtmlJsoupFilter", HtmlJsoupFilter.class);
+        classRegestriy.put("solrcmdutils.EntityExtractionFilter", EntityExtractionFilter.class);
+        classRegestriy.put("solrcmdutils.ValidationFilter", ValidationFilter.class);
+        classRegestriy.put("solrcmdutils.OpenThesaurusReader", OpenThesaurusReader.class);
+        classRegestriy.put("solrcmdutils.DictionaryNormalizationFilter", DictionaryNormalizationFilter.class);
         classRegestriy.put("solrcmdutils.ThreadDumpReader", ThreadDumpReader.class);
         classRegestriy.put("solrcmdutils.DateFilter", DateFilter.class);
         classRegestriy.put("solrcmdutils.UrlSplitter", UrlSplitter.class);
@@ -53,6 +60,7 @@ public class PipelineExecuter {
         classRegestriy.put("solrcmdutils.MappingFilter", MappingFilter.class);
         classRegestriy.put("solrcmdutils.EncodingCorrectionFilter", EncodingCorrectionFilter.class);
         classRegestriy.put("solrcmdutils.RegexSplitFilter", RegexSplitFilter.class);
+        classRegestriy.put("solrcmdutils.FieldSplitter", FieldSplitter.class);
         classRegestriy.put("solrcmdutils.IgnoreDocumentFilter", IgnoreDocumentFilter.class);
         classRegestriy.put("solrcmdutils.BeanShellFilter", BeanShellFilter.class);
         classRegestriy.put("solrcmdutils.TokenCounterFilter", TokenCounterFilter.class);

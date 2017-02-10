@@ -1,16 +1,15 @@
 package de.tblsoft.solr.pipeline;
 
-import java.util.Iterator;
-import java.util.Map.Entry;
-
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
-
 import de.tblsoft.solr.http.ElasticHelper;
 import de.tblsoft.solr.http.HTTPHelper;
 import de.tblsoft.solr.pipeline.bean.Document;
 import de.tblsoft.solr.pipeline.bean.Reader;
+
+import java.util.Iterator;
+import java.util.Map.Entry;
 
 /**
  * Created by tblsoft on 14.05.16.
@@ -72,7 +71,7 @@ public class ElasticReader extends AbstractReader {
 				pagedUrl = scrollBaseUrl + "?scroll=" + scroll + "&scroll_id=" + scrollId;
 			
 			} while(hasHits);
-			executer.end();
+			//executer.end();
 
 		} catch (Exception e) {
 			throw new RuntimeException(e);

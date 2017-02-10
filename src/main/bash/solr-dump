@@ -5,4 +5,7 @@
 # author: tbl
 #
 
-java -cp $SOLR_CMD_UTILS_HOME/lib/*.jar de.tblsoft.solr.cmd.Cmd -cmd solrDump $@
+jarfiles=$(find $SOLR_CMD_UTILS_HOME/lib -name '*.jar' | xargs echo | tr ' ' ':')
+classpath=":$SOLR_CMD_UTILS_HOME/lib/classes:$jarfiles:"
+
+java -cp $classpath de.tblsoft.solr.cmd.Cmd -cmd solrDump $@

@@ -1,0 +1,9 @@
+#!/bin/sh
+#
+# A command line tool for solr.
+#
+# author: tbl
+#
+
+set -e
+find -L $SOLR_CMD_UTILS_HOME/lib/classes -name *.java | xargs javac -classpath $SOLR_CMD_UTILS_HOME/lib/*.jar
