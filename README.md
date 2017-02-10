@@ -50,7 +50,13 @@ If you have a full feed every night, you can check the number of results that we
 
     solr-numfound -in "http://localhost:8983/solr/solr-core/select?q=*&fq=processingtime:[*+TO+NOW/DAY-1DAY]"
 
-        
+
+## Logging
+For logging the slf4j simple logger is used. The log level can be configured with the following java opts parameter:
+```
+export SOLR_CMD_UTILS_JAVA_OPTS="-Dorg.slf4j.simpleLogger.defaultLogLevel=debug" 
+```
+       
 ## Todo's
 * Documentation for installation
 * improve help menu for the command line options

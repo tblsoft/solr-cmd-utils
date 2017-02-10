@@ -8,4 +8,4 @@
 jarfiles=$(find $SOLR_CMD_UTILS_HOME/lib -name '*.jar' | xargs echo | tr ' ' ':')
 classpath=":$SOLR_CMD_UTILS_HOME/lib/classes:$jarfiles:"
 
-java -cp $classpath de.tblsoft.solr.cmd.Cmd -cmd solrDump $@
+java -cp $classpath $SOLR_CMD_UTILS_JAVA_OPTS de.tblsoft.solr.cmd.Cmd -cmd solrDump $@
