@@ -4,6 +4,8 @@ import de.tblsoft.solr.pipeline.bean.Document;
 import de.tblsoft.solr.pipeline.bean.Filter;
 import de.tblsoft.solr.pipeline.bean.Pipeline;
 import de.tblsoft.solr.pipeline.filter.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 
@@ -19,6 +21,9 @@ import java.util.Map;
  * Created by tblsoft on 23.01.16.
  */
 public class PipelineExecuter {
+
+    private static Logger LOG = LoggerFactory.getLogger(PipelineExecuter.class);
+
 
 
     private Pipeline pipeline;
@@ -88,6 +93,7 @@ public class PipelineExecuter {
     }
 
     public void init() {
+        LOG.debug("Read the pipeline configuration from the yaml file: {}", yamlFileName);
         try {
             pipeline = readPipelineFromYamlFile(yamlFileName);
             pipeline.getVariables().putAll(pipelineVariables);
@@ -145,9 +151,13 @@ public class PipelineExecuter {
     }
 
     public void execute() {
+        LOG.debug("Start the initialization.");
         init();
+        LOG.debug("Start the initialization for all filters.");
         filterList.get(0).init();
+        LOG.debug("Read the input from the configured reader.");
         reader.read();
+        LOG.debug("Finalize the pipeline.");
         end();
     }
 
