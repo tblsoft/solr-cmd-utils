@@ -1,0 +1,11 @@
+#!/bin/sh
+#
+# A command line tool for solr cmd util pipelines.
+#
+# author: tbl
+#
+
+jarfiles=$(find $SOLR_CMD_UTILS_HOME/lib -name '*.jar' | xargs echo | tr ' ' ':')
+classpath=":$SOLR_CMD_UTILS_HOME/lib/classes:$jarfiles:"
+
+java -cp $classpath $SOLR_CMD_UTILS_JAVA_OPTS de.tblsoft.solr.cmd.Pipeline $@

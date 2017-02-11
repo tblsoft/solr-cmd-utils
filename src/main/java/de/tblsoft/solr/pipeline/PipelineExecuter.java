@@ -12,10 +12,7 @@ import org.yaml.snakeyaml.constructor.Constructor;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by tblsoft on 23.01.16.
@@ -96,7 +93,12 @@ public class PipelineExecuter {
         LOG.debug("Read the pipeline configuration from the yaml file: {}", yamlFileName);
         try {
             pipeline = readPipelineFromYamlFile(yamlFileName);
+
+            LOG.debug("Default variables in the pipeline {}", pipeline.getVariables());
+            LOG.debug("Configured variables in the pipeline {}", pipelineVariables);
             pipeline.getVariables().putAll(pipelineVariables);
+            LOG.debug("Effective variables in the pipeline {}", pipeline.getVariables());
+
             reader = (ReaderIF) getInstance(pipeline.getReader().getClazz());
             reader.setPipelineExecuter(this);
             reader.setReader(pipeline.getReader());
