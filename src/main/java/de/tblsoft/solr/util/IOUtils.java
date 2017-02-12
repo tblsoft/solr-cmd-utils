@@ -24,6 +24,8 @@ public class IOUtils {
     		return fileName;
     	} else if(fileName.startsWith("/")) {
             return fileName;
+    	} else if(fileName.startsWith("./")) {
+            return fileName;
         } else {
             return directory + "/" + fileName;
         }
