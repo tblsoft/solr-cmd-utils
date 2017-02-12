@@ -15,18 +15,18 @@ import java.util.Map;
 public class PipelineArgs {
 
 
-    @DynamicParameter(names = "-P", description = "Dynamic parameters.")
-    private Map<String,String> parameters = new HashMap<String, String>();
+    @DynamicParameter(names = "-V", description = "Dynamic variables for the pipeline. Overrides the default variables in the pipeline file.")
+    private Map<String,String> variables = new HashMap<String, String>();
 
-    @Parameter(names = { "-pipeline", "-p"}, description = "The file for the pipeline.", required = true)
+    @Parameter(names = { "-pipeline", "-p"}, description = "The filename for the pipeline.", required = true)
     private String pipeline = null;
 
-    public Map<String, String> getParameters() {
-        return parameters;
+    public Map<String, String> getVariables() {
+        return variables;
     }
 
-    public void setParameters(Map<String, String> parameters) {
-        this.parameters = parameters;
+    public void setVariables(Map<String, String> variables) {
+        this.variables = variables;
     }
 
     public String getPipeline() {

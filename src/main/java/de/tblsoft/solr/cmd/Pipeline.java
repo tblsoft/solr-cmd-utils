@@ -19,25 +19,24 @@ public class Pipeline {
     public static void main(String[] args) throws Exception {
         PipelineArgs pipelineArgs = new PipelineArgs();
         Pipeline pipeline = new Pipeline();
+        pipeline.jc = new JCommander(pipelineArgs);
+        pipeline.jc.setProgramName("solr-pipeline");
 
         try {
-            pipeline.jc = new JCommander(pipelineArgs, args);
+            pipeline.jc.parse(args);
         } catch (ParameterException e) {
-            LOG.error(e.getMessage());
+            StringBuilder usage = new StringBuilder();
+            pipeline.jc.usage(usage);
+            LOG.error("{}\n{}",e.getMessage(), usage);
+            return;
         }
 
         PipelineExecuter pipelineExecuter = new PipelineExecuter(pipelineArgs.getPipeline());
-        pipelineExecuter.setPipelineVariables(pipelineArgs.getParameters());
+        pipelineExecuter.setPipelineVariables(pipelineArgs.getVariables());
         pipelineExecuter.execute();
 
 
 
-
-    }
-
-
-    void printHelp(String help) {
-        JCommander.getConsole().println(help);
 
     }
 

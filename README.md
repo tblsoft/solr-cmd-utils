@@ -21,7 +21,10 @@ To call the util function from every location, you have to add the following exp
 * Linux, OS X, or Unix
 * Java 7
 
+## solr-pipeline
+The following command executes the pipeline csv-writer-pipeline.yaml and set the variable filename. The file will be written to the location test.csv.
 
+    solr-pipeline -p examples/unittest/csv-writer-pipeline.yaml -Vfilename=test.csv
 ## solr-dump
     solr-dump -in "http://localhost:8983/solr/source-core/select?q=*&rows=1000" \
         -out "http://localhost:8983/solr/dest-core" \
