@@ -1,0 +1,33 @@
+name: "solr num found example"
+reader:
+  name: "CsvReader"
+  clazz: "solrcmdutils.CSVReader"
+  property:
+    filename: "query.csv"
+
+filter:
+  - name: "Status filter"
+    clazz: "solrcmdutils.StatusTimeFilter"
+    disabled: "false"
+  - name: "Mapping Filter URLencode the query"
+    clazz: "solrcmdutils.MappingFilter"
+    property:
+        mapping:
+          - "query->query|urlencode"
+          - "query->keyword"
+  - name: "Mapping Filter URLencode the query"
+    clazz: "solrcmdutils.MappingFilter"
+    property:
+        mapping:
+          - "join:query=foo=bar&q=${query}"
+          - "keyword->keyword"
+  - name: "Solr num found filter"
+    disabled: "false"
+    clazz: "solrcmdutils.SolrNumFoundFilter"
+    property:
+      solrUrl: "http://localhost:8983/solr/tbltest"
+  - name: "CSV Writer"
+    clazz: "solrcmdutils.CSVWriter"
+    disabled: "false"
+    property:
+      filename: "numfound2.csv"

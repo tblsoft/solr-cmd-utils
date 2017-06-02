@@ -1,0 +1,42 @@
+name: "copy elastic index"
+reader:
+  name: "CsvReader"
+  clazz: "solrcmdutils.CSVReader"
+  property:
+    filename: "cs_factfinder_export_de.csv"
+    charset: "iso-8859-15"
+    delimiter: ";"
+filter:
+  - name: "Status filter"
+    clazz: "solrcmdutils.StatusTimeFilter"
+    disabled: "false"
+
+  - name: "Key Value Splitter"
+    clazz: "solrcmdutils.KeyValueSplitterFilter"
+    property:
+      fieldName: "Attributes"
+      keyPrefix: "attr_"
+  - name: "Mapping Filter"
+    clazz: "solrcmdutils.MappingFilter"
+    disabled: "true"
+    property:
+        mapping:
+          - "Sale->Sale"
+          - "Description->Description"
+          - "Rating->Rating"
+          - "MasterArticleNumber->MasterArticleNumber"
+          - "ArticleNumber->ArticleNumber"
+  - name: "CSV Writer"
+    clazz: "solrcmdutils.CSVWriter"
+    property:
+      filename: "analyze.csv"
+  - name: "Solr Feeder"
+    clazz: "solrcmdutils.SolrFeeder"
+    property:
+      serverUrl: "http://localhost:8983/solr/bar"
+      queueSize: "100"
+      threads: "25"
+      deleteIndex: "true"
+
+
+

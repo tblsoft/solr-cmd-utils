@@ -51,6 +51,7 @@ public class PipelineExecuter {
         classRegestriy.put("solrcmdutils.DateFilter", DateFilter.class);
         classRegestriy.put("solrcmdutils.UrlSplitter", UrlSplitter.class);
         classRegestriy.put("solrcmdutils.GrepFilter", GrepFilter.class);
+        classRegestriy.put("solrcmdutils.KeyValueSplitterFilter", KeyValueSplitterFilter.class);
         classRegestriy.put("solrcmdutils.FieldJoiner", FieldJoiner.class);
         classRegestriy.put("solrcmdutils.JsonWriter", JsonWriter.class);
         classRegestriy.put("solrcmdutils.ElasticWriter", ElasticWriter.class);
@@ -59,6 +60,7 @@ public class PipelineExecuter {
         classRegestriy.put("solrcmdutils.SpyFilter", SpyFilter.class);
         classRegestriy.put("solrcmdutils.StatusFilter", StatusFilter.class);
         classRegestriy.put("solrcmdutils.StatusTimeFilter", StatusTimeFilter.class);
+        classRegestriy.put("solrcmdutils.StatisticFilter", StatisticFilter.class);
         classRegestriy.put("solrcmdutils.MappingFilter", MappingFilter.class);
         classRegestriy.put("solrcmdutils.EncodingCorrectionFilter", EncodingCorrectionFilter.class);
         classRegestriy.put("solrcmdutils.RegexSplitFilter", RegexSplitFilter.class);
@@ -70,6 +72,7 @@ public class PipelineExecuter {
         classRegestriy.put("solrcmdutils.CompoundWordFilter", CompoundWordFilter.class);
         classRegestriy.put("solrcmdutils.LinkCheckerFilter", LinkCheckerFilter.class);
         classRegestriy.put("solrcmdutils.SolrFeeder", SolrFeeder.class);
+        classRegestriy.put("solrcmdutils.SolrNumFoundFilter", SolrNumFoundFilter.class);
         classRegestriy.put("solrcmdutils.SystemOutWriter", SystemOutWriter.class);
         classRegestriy.put("solrcmdutils.NounExtractorFilter", NounExtractorFilter.class);
         classRegestriy.put("solrcmdutils.FileLineWriter", FileLineWriter.class);
