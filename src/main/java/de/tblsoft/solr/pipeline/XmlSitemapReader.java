@@ -83,7 +83,7 @@ public class XmlSitemapReader extends AbstractReader {
         String robots = HTTPHelper.get(domain);
 
         List<String> sitemapList = new ArrayList<String>();
-        String sitemapPattern = "Sitemap: (.*)";
+        String sitemapPattern = "(?i)Sitemap: (.*)";
         Scanner scanner = new Scanner(robots);
         while (scanner.hasNextLine()) {
             String line = scanner.nextLine();
