@@ -6,6 +6,7 @@ import org.apache.http.client.utils.URLEncodedUtils;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
@@ -48,6 +49,10 @@ public class UrlUtil {
     public static List<NameValuePair> getUrlParams(String url) {
         return getUrlParams(url, "UTF-8");
     }
+
+    public static List<NameValuePair> getUrlParamsForQuery(String query) {
+        return getUrlParams("http://localhost?" + query, "UTF-8");
+    }
     
     public static Map<String, List<String>> getUrlParamsAsMap(String url) {
     	Map<String, List<String>> ret = new HashMap<String, List<String>>();
@@ -81,5 +86,13 @@ public class UrlUtil {
 		} catch (UnsupportedEncodingException e) {
 			throw new RuntimeException(e);
 		}
+    }
+
+    public static String decode(String value) {
+        try {
+            return URLDecoder.decode(value, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

@@ -1,22 +1,19 @@
 package de.tblsoft.solr.http;
 
+import com.google.common.base.Strings;
+import org.apache.http.Header;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.*;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.net.HttpCookie;
 import java.util.List;
-
-import org.apache.http.Header;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpDelete;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.methods.HttpPut;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.util.EntityUtils;
 
 /**
  * Created by tblsoft on 18.03.16.
@@ -152,4 +149,15 @@ public class HTTPHelper {
     	return null;
 
     }
+
+    public static String removeQueryParameter(String url) {
+		if(Strings.isNullOrEmpty(url)) {
+			return url;
+		}
+		int index = url.indexOf("?");
+		if(index > 0) {
+			return url.substring(0, index);
+		}
+		return url;
+	}
 }
