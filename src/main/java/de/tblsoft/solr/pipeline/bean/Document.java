@@ -83,6 +83,10 @@ public class Document {
         return null;
     }
 
+    public void addField(Field field) {
+        addField(field.getName(), field.getValues());
+    }
+
     public void addField(String name, String value) {
         Field existingField = getField(name);
         if(existingField == null) {
