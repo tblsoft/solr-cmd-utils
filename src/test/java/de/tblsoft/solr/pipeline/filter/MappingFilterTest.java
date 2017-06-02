@@ -108,7 +108,32 @@ public class MappingFilterTest extends AbstractFilterTest {
         assertFiled("noun", "0f194a56105d09847fffcdf8c9eaf979");
         assertNumberOfDocuments(1);
         assertNumberOfFields(1);
+
     }
+
+    @Test
+    public void testMappingUrlencode() {
+        configure();
+        addProperty("mapping", "noun->noun|urlencode");
+        createField("noun", "Bär");
+        runTest();
+        assertFiled("noun", "B%C3%A4r");
+        assertNumberOfDocuments(1);
+        assertNumberOfFields(1);
+    }
+
+
+    @Test
+    public void testMappingUrldecode() {
+        configure();
+        addProperty("mapping", "noun->noun|urldecode");
+        createField("noun", "B%C3%A4r");
+        runTest();
+        assertFiled("noun", "Bär");
+        assertNumberOfDocuments(1);
+        assertNumberOfFields(1);
+    }
+
 
     @Test
     public void testMappingToSolrDate() {
