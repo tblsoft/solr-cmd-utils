@@ -2,6 +2,7 @@ package de.tblsoft.solr.pipeline.filter;
 
 import com.google.common.base.Strings;
 
+import de.tblsoft.solr.http.UrlUtil;
 import de.tblsoft.solr.pipeline.AbstractFilter;
 import de.tblsoft.solr.pipeline.bean.Document;
 import de.tblsoft.solr.pipeline.bean.Field;
@@ -72,6 +73,10 @@ public class MappingFilter extends AbstractFilter {
             return DigestUtils.md5Hex(value);
         } else if ("lowercase".equals(function)) {
             return StringUtils.lowerCase(value);
+        } else if ("urlencode".equals(function)) {
+            return UrlUtil.encode(value);
+        } else if ("urldecode".equals(function)) {
+            return UrlUtil.decode(value);
         } else if ("trim".equals(function)) {
             return StringUtils.trim(value);
         } else if ("toSolrDate".equals(function)) {
@@ -90,6 +95,10 @@ public class MappingFilter extends AbstractFilter {
 		if("md5".equals(function)) {
 			return;
 		} else if ("lowercase".equals(function)) {
+			return;
+		} else if ("urlencode".equals(function)) {
+			return;
+		} else if ("urldecode".equals(function)) {
 			return;
 		} else if ("trim".equals(function)) {
 			return;
