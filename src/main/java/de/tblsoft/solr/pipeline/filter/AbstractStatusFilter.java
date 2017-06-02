@@ -28,8 +28,8 @@ public abstract class AbstractStatusFilter extends AbstractFilter {
     public void document(Document document) {
     	documentCounter++;
     	lapCount++;
-    	long now = System.currentTimeMillis();
         if(printCurrentStatus()) {
+            long now = System.currentTimeMillis();
             long duration = now - start;
             long lapDuration = now - lapStart;
 
