@@ -5,7 +5,7 @@
 [![MIT License](https://img.shields.io/npm/l/check-dependencies.svg?style=flat-square)](http://opensource.org/licenses/MIT)
 [![Documentation Status](http://readthedocs.org/projects/solr-cmd-utils/badge/?version=latest)](http://solr-cmd-utils.readthedocs.io/en/latest/?badge=latest)
 [![Join the chat at https://gitter.im/solr-cmd-utils/Lobby](https://badges.gitter.im/solr-cmd-utils/Lobby.svg)](https://gitter.im/solr-cmd-utils/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-
+[![Dependencies](https://www.versioneye.com/user/projects/594d7a58368b0800675fd1c7/badge.svg?style=flat)](https://www.versioneye.com/user/projects/594d7a58368b0800675fd1c7)
 
 ## Installation
 Assuming you want to install the lib to the `~/dev/solr-cmd-utils` directory, you have to do the following tasks:
