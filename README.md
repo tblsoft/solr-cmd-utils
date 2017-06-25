@@ -1,12 +1,13 @@
 # solr-cmd-utils
 
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/478cf34208e148e78e862f233f2a7cd5)](https://www.codacy.com/app/tbl/solr-cmd-utils?utm_source=github.com&utm_medium=referral&utm_content=tblsoft/solr-cmd-utils&utm_campaign=badger)
 [![Build Status](https://travis-ci.org/tblsoft/solr-cmd-utils.svg?branch=master)](https://travis-ci.org/tblsoft/solr-cmd-utils)
 [![Coverage Status](https://coveralls.io/repos/github/tblsoft/solr-cmd-utils/badge.svg?branch=master)](https://coveralls.io/github/tblsoft/solr-cmd-utils?branch=master)
 [![MIT License](https://img.shields.io/npm/l/check-dependencies.svg?style=flat-square)](http://opensource.org/licenses/MIT)
 [![Documentation Status](http://readthedocs.org/projects/solr-cmd-utils/badge/?version=latest)](http://solr-cmd-utils.readthedocs.io/en/latest/?badge=latest)
 [![Join the chat at https://gitter.im/solr-cmd-utils/Lobby](https://badges.gitter.im/solr-cmd-utils/Lobby.svg)](https://gitter.im/solr-cmd-utils/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Dependencies](https://www.versioneye.com/user/projects/594d7a58368b0800675fd1c7/badge.svg?style=flat)](https://www.versioneye.com/user/projects/594d7a58368b0800675fd1c7)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/478cf34208e148e78e862f233f2a7cd5)](https://www.codacy.com/app/tbl/solr-cmd-utils?utm_source=github.com&utm_medium=referral&utm_content=tblsoft/solr-cmd-utils&utm_campaign=badger)
+[![Stories in Ready](https://badge.waffle.io/tblsoft/solr-cmd-utils.svg?label=ready&title=Ready)](http://waffle.io/tblsoft/solr-cmd-utils) 
 
 ## Installation
 Assuming you want to install the lib to the `~/dev/solr-cmd-utils` directory, you have to do the following tasks:
