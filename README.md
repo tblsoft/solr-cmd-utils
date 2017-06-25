@@ -1,5 +1,6 @@
 # solr-cmd-utils
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/478cf34208e148e78e862f233f2a7cd5)](https://www.codacy.com/app/tbl/solr-cmd-utils?utm_source=github.com&utm_medium=referral&utm_content=tblsoft/solr-cmd-utils&utm_campaign=badger)
 [![Build Status](https://travis-ci.org/tblsoft/solr-cmd-utils.svg?branch=master)](https://travis-ci.org/tblsoft/solr-cmd-utils)
 [![Coverage Status](https://coveralls.io/repos/github/tblsoft/solr-cmd-utils/badge.svg?branch=master)](https://coveralls.io/github/tblsoft/solr-cmd-utils?branch=master)
 [![MIT License](https://img.shields.io/npm/l/check-dependencies.svg?style=flat-square)](http://opensource.org/licenses/MIT)
