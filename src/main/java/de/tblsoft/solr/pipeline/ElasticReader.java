@@ -21,7 +21,6 @@ public class ElasticReader extends AbstractReader {
 	private String url;
 	private String scroll;
 
-	// TODO implement paging
 	@Override
 	public void read() {
 		GsonBuilder builder = new GsonBuilder();
