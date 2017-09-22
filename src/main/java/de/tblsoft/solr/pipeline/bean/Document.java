@@ -68,6 +68,10 @@ public class Document {
         this.fields.add(field);
     }
 
+    public void setField(String name, Object value) {
+        setField(name, String.valueOf(value));
+    }
+
     public void setField(String name, String value) {
         Field field = new Field(name,value);
         deleteField(name);

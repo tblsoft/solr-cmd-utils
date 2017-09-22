@@ -20,7 +20,7 @@ public abstract class AbstractFilter implements FilterIF {
 
     protected FilterIF nextFilter;
 
-    private Filter filter;
+    protected Filter filter;
 
     private String baseDir;
 
