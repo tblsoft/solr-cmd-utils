@@ -1,5 +1,6 @@
 package de.tblsoft.solr.pipeline;
 
+import de.tblsoft.solr.compare.SolrCompareFilter;
 import de.tblsoft.solr.pipeline.bean.Document;
 import de.tblsoft.solr.pipeline.bean.Filter;
 import de.tblsoft.solr.pipeline.bean.Pipeline;
@@ -38,6 +39,7 @@ public class PipelineExecuter {
         classRegestriy.put("solrcmdutils.StandardReader", StandardReader.class);
         classRegestriy.put("solrcmdutils.GrokReader", GrokReader.class);
         classRegestriy.put("solrcmdutils.GCLogReader", GCLogReader.class);
+        classRegestriy.put("solrcmdutils.ElasticJsonPathReader", ElasticJsonPathReader.class);
         classRegestriy.put("solrcmdutils.ElasticReader", ElasticReader.class);
         classRegestriy.put("solrcmdutils.XmlReader", XmlReader.class);
         classRegestriy.put("solrcmdutils.XmlSitemapReader", XmlSitemapReader.class);
@@ -67,12 +69,14 @@ public class PipelineExecuter {
         classRegestriy.put("solrcmdutils.FieldSplitter", FieldSplitter.class);
         classRegestriy.put("solrcmdutils.IgnoreDocumentFilter", IgnoreDocumentFilter.class);
         classRegestriy.put("solrcmdutils.BeanShellFilter", BeanShellFilter.class);
+        classRegestriy.put("solrcmdutils.LookupFilter", LookupFilter.class);
         classRegestriy.put("solrcmdutils.TokenCounterFilter", TokenCounterFilter.class);
         classRegestriy.put("solrcmdutils.CharCounterFilter", CharCounterFilter.class);
         classRegestriy.put("solrcmdutils.CompoundWordFilter", CompoundWordFilter.class);
         classRegestriy.put("solrcmdutils.LinkCheckerFilter", LinkCheckerFilter.class);
         classRegestriy.put("solrcmdutils.SolrFeeder", SolrFeeder.class);
         classRegestriy.put("solrcmdutils.SolrNumFoundFilter", SolrNumFoundFilter.class);
+        classRegestriy.put("solrcmdutils.SolrCompareFilter", SolrCompareFilter.class);
         classRegestriy.put("solrcmdutils.SystemOutWriter", SystemOutWriter.class);
         classRegestriy.put("solrcmdutils.NounExtractorFilter", NounExtractorFilter.class);
         classRegestriy.put("solrcmdutils.FileLineWriter", FileLineWriter.class);
