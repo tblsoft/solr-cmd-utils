@@ -9,6 +9,7 @@
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/478cf34208e148e78e862f233f2a7cd5)](https://www.codacy.com/app/tbl/solr-cmd-utils?utm_source=github.com&utm_medium=referral&utm_content=tblsoft/solr-cmd-utils&utm_campaign=badger)
 [![codebeat badge](https://codebeat.co/badges/d9a8307b-c8e9-4a70-9ba5-e05eb1ca1a43)](https://codebeat.co/projects/github-com-tblsoft-solr-cmd-utils-master)
 [![Stories in Ready](https://badge.waffle.io/tblsoft/solr-cmd-utils.svg?label=ready&title=Ready)](http://waffle.io/tblsoft/solr-cmd-utils) 
+[![Code Climate](https://codeclimate.com/github/codeclimate/codeclimate/badges/gpa.svg)](https://codeclimate.com/github/codeclimate/codeclimate)
 
 ## Installation
 Assuming you want to install the lib to the `~/dev/solr-cmd-utils` directory, you have to do the following tasks:
