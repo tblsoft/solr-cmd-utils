@@ -28,14 +28,19 @@ public abstract class AbstractBaseTest {
         print(outputDocumentList);
     }
 
-    public void assertFiled(String name, String expected) {
-        if(outputDocumentList.size() == 0) {
-            Assert.fail("There is no output document.");
+    public void assertFiled(int position, String name, String expected) {
+        if(outputDocumentList.size() <= position) {
+            Assert.fail("There is no output document for position: " + position);
         }
-        Document document = outputDocumentList.get(0);
+        Document document = outputDocumentList.get(position);
         String actual = document.getFieldValue(name);
         Assert.assertEquals(expected, actual);
     }
+
+    public void assertFiled(String name, String expected) {
+        assertFiled(0,name,expected);
+    }
+
     public void assertFiledNotExists(String name) {
         if(outputDocumentList.size() == 0) {
             Assert.fail("There is no output document.");
