@@ -5,7 +5,7 @@ public class LinguisticHelper {
 	
 	
     public static boolean containsOnlyGermanCharacters(String value) {
-        return value.matches("[A-Za-zÖÄÜöäüß�������]*");
+        return value.matches("[A-Za-zÖÄÜöäüß]*");
     }
 
 
