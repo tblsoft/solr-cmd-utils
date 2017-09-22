@@ -31,6 +31,9 @@ public class IOUtils {
         }
     }
 
+    public static File getAbsoluteFileAsFile(String directory, String fileName) {
+        return new File(getAbsoluteFile(directory, fileName));
+    }
 
     public static String getDirectoryForFile(String file) {
         File f = new File(file);
