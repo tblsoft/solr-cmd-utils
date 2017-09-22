@@ -29,9 +29,32 @@ public class XmlSitemapReader extends AbstractReader {
 
         sitemapBlacklits = getPropertyAsList("sitemapBlacklits", new ArrayList<String>());
 
-        List<String> urls = getPropertyAsList("urls", null);
+        List<String> urls = getPropertyAsList("urls", new ArrayList<String>());
+        List<String> sitemapIndexUrls = getPropertyAsList("sitemapIndexUrls", new ArrayList<String>());
+        List<String> sitemapUrls = getPropertyAsList("sitemapUrls", new ArrayList<String>());
 
         try {
+
+            for(String sitemapUrl: sitemapUrls) {
+                String sitemapContent = HTTPHelper.get(sitemapUrl);
+                InputStream is = org.apache.commons.io.IOUtils.toInputStream(sitemapContent, "UTF-8");
+                UrlSet urlset = parseSitemap(is);
+                is.close();
+
+                if (urlset != null) {
+                    addDocument(urlset, null, sitemapUrl);
+                }
+
+            }
+
+            for(String url: sitemapIndexUrls) {
+                if (sitemapBlacklits.contains(url)) {
+                    continue;
+                }
+                String sitemapIndexContent = HTTPHelper.get(url);;
+                processSitemapIndex(sitemapIndexContent, url);
+            }
+
             for(String url: urls) {
                 List<String> sitemapList = readSitemapUrlsFromRobotsTxt(url);
                 for (String sitemap : sitemapList) {
@@ -51,9 +74,6 @@ public class XmlSitemapReader extends AbstractReader {
                     }
                 }
             }
-
-
-
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
