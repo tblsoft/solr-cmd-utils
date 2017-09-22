@@ -27,19 +27,21 @@ public class AggregationCountFilterTest extends AbstractFilterTest {
     }
 
     @Test
-    public void testAggregationFilter() {
+    public void testAggregationCountFilter() {
         configure();
         Document document1 = DocumentBuilder.document().field("field1", "value1").create();
         Document document2 = DocumentBuilder.document().field("field1", "value1").field("field2","value2").create();
         document(document1, document2);
-        print();
-        assertFiled(0, "value", "value2");
-        assertFiled(0, "count", "1");
-        assertFiled(0, "type", "field2");
 
-        assertFiled(1, "value", "value1");
-        assertFiled(1, "count", "2");
-        assertFiled(1, "type", "field1");
+        sortDocumentListByField("value");
+
+        assertFiled(0, "value", "value1");
+        assertFiled(0, "count", "2");
+        assertFiled(0, "type", "field1");
+
+        assertFiled(1, "value", "value2");
+        assertFiled(1, "count", "1");
+        assertFiled(1, "type", "field2");
 
         assertNumberOfDocuments(2);
         assertNumberOfFields(3);

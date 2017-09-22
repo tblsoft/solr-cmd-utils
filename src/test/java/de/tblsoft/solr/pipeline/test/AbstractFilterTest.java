@@ -5,12 +5,14 @@ import de.tblsoft.solr.pipeline.PipelineExecuter;
 import de.tblsoft.solr.pipeline.bean.Document;
 import de.tblsoft.solr.pipeline.bean.DocumentBuilder;
 import de.tblsoft.solr.pipeline.bean.Filter;
+import de.tblsoft.solr.pipeline.bean.DocumentComparator;
 import de.tblsoft.solr.pipeline.filter.LastFilter;
 import de.tblsoft.solr.pipeline.filter.TestingFilter;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -106,5 +108,9 @@ public abstract class AbstractFilterTest extends AbstractBaseTest {
         filter.init();
         return filter;
 
+    }
+
+    protected void sortDocumentListByField(String fieldName) {
+        Collections.sort(outputDocumentList, new DocumentComparator(fieldName));
     }
 }
