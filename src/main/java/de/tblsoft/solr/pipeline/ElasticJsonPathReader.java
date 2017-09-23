@@ -1,8 +1,5 @@
 package de.tblsoft.solr.pipeline;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonElement;
 import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
 import com.jayway.jsonpath.PathNotFoundException;
@@ -10,10 +7,11 @@ import de.tblsoft.solr.http.ElasticHelper;
 import de.tblsoft.solr.http.HTTPHelper;
 import de.tblsoft.solr.pipeline.bean.Document;
 import de.tblsoft.solr.pipeline.bean.Reader;
+import de.tblsoft.solr.pipeline.filter.SimpleMapping;
 
-import java.util.Iterator;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map.Entry;
+import java.util.Map;
 
 /**
  * Created by tblsoft on 14.05.16.
@@ -23,12 +21,14 @@ public class ElasticJsonPathReader extends AbstractReader {
 	private String url;
 	private String scroll;
 
-	@Override
 	public void read() {
 		String response = "";
 		String pagedUrl = "";
 		String scrollId = "";
 		boolean hasHits = false;
+
+		SimpleMapping simpleMapping = new SimpleMapping(getPropertyAsList("mapping", new ArrayList<String>()));
+		Map<String, List<String>> mapping = simpleMapping.getMapping();
 		try {
 			url = getProperty("url", null);
 			scroll = getProperty("scroll", "1m");
@@ -45,18 +45,17 @@ public class ElasticJsonPathReader extends AbstractReader {
 				for(Object obj: elasticHits){
 					hasHits=true;
 					Document document = new Document();
-					try {
-						Object title = JsonPath.parse(obj).read("$['h1']");
-						if (title instanceof List) {
 
-						} else {
-							document.setField("title", title);
+					for(Map.Entry<String, List<String>> mappingEntry : mapping.entrySet()) {
+						try {
+							Object parsedValue = JsonPath.parse(obj).read(mappingEntry.getKey());
+							for(String target: mappingEntry.getValue()) {
+								document.setField(target, parsedValue);
+							}
+						} catch (PathNotFoundException e) {
+							//ignore
 						}
-					} catch (PathNotFoundException e) {
-						//ignore
 					}
-
-
 					executer.document(document);
 				}
 				

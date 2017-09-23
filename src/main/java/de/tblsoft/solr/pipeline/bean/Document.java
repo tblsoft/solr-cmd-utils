@@ -69,8 +69,25 @@ public class Document {
     }
 
     public void setField(String name, Object value) {
-        setField(name, String.valueOf(value));
+        if(value instanceof List) {
+            deleteField(name);
+            addField(name, value);
+        } else {
+            setField(name, String.valueOf(value));
+        }
     }
+
+    public void addField(String name, Object value) {
+        if(value instanceof List) {
+            List valueList = (List) value;
+            for(Object v: valueList) {
+                addField(name, String.valueOf(v));
+            }
+        } else {
+            addField(name, String.valueOf(value));
+        }
+    }
+
 
     public void setField(String name, String value) {
         Field field = new Field(name,value);
