@@ -1,6 +1,7 @@
 package de.tblsoft.solr.util;
 
-import com.google.api.client.repackaged.com.google.common.base.Strings;
+
+import com.google.common.base.Strings;
 
 import java.util.HashMap;
 import java.util.Map;
