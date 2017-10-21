@@ -71,6 +71,7 @@ public class PipelineExecuter {
         classRegestriy.put("solrcmdutils.BeanShellFilter", BeanShellFilter.class);
         classRegestriy.put("solrcmdutils.LookupFilter", LookupFilter.class);
         classRegestriy.put("solrcmdutils.TokenCounterFilter", TokenCounterFilter.class);
+        classRegestriy.put("solrcmdutils.TokenizerrFilter", TokenizerFilter.class);
         classRegestriy.put("solrcmdutils.CharCounterFilter", CharCounterFilter.class);
         classRegestriy.put("solrcmdutils.CompoundWordFilter", CompoundWordFilter.class);
         classRegestriy.put("solrcmdutils.LinkCheckerFilter", LinkCheckerFilter.class);
