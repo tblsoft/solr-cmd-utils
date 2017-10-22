@@ -18,6 +18,8 @@ public class TokenizerFilterTest extends AbstractFilterTest {
         configure();
         runTest();
         assertNumberOfDocuments(0);
+        assertInitWasDelegated();
+        assertEndWasDelegated();
     }
 
 
@@ -27,12 +29,15 @@ public class TokenizerFilterTest extends AbstractFilterTest {
     }
 
     @Test
-    public void testDateFilter() {
+    public void testTokenizerFilter() {
         configure();
         createField("text", "today is a nice day");
         createField("text2", "because the sun is shining");
         runTest();
         assertNumberOfDocuments(10);
         assertFiled("token", "today");
+
+        assertInitWasDelegated();
+        assertEndWasDelegated();
     }
 }
