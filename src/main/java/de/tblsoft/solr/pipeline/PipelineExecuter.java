@@ -39,6 +39,7 @@ public class PipelineExecuter {
         classRegestriy.put("solrcmdutils.StandardReader", StandardReader.class);
         classRegestriy.put("solrcmdutils.GrokReader", GrokReader.class);
         classRegestriy.put("solrcmdutils.GCLogReader", GCLogReader.class);
+        classRegestriy.put("solrcmdutils.JsonPathReader", JsonPathReader.class);
         classRegestriy.put("solrcmdutils.ElasticJsonPathReader", ElasticJsonPathReader.class);
         classRegestriy.put("solrcmdutils.ElasticReader", ElasticReader.class);
         classRegestriy.put("solrcmdutils.XmlReader", XmlReader.class);
