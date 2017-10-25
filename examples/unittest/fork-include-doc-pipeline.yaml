@@ -1,0 +1,10 @@
+filter:
+  - name: "Mapping Filter"
+    clazz: "solrcmdutils.MappingFilter"
+    property:
+      mapping:
+        - "column2->column2"
+  - name: "Print Filter"
+    clazz: "solrcmdutils.SystemOutWriter"
+    property:
+      prefix: " forked "
