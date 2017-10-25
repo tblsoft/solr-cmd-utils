@@ -51,6 +51,7 @@ public class SystemOutWriter extends AbstractFilter {
         System.out.println("end");
         System.out.println("fields: " + fieldCounter);
         System.out.println("documents: " + documentCounter);
+        super.end();
     }
 
 }
