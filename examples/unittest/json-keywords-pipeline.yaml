@@ -1,0 +1,15 @@
+name: "Read Keywords"
+reader:
+  name: "CsvReader"
+  clazz: "solrcmdutils.JsonPathReader"
+  property:
+    filename: "keywords.json"
+    rootPath: "$"
+    mapping:
+      - "$['foo']->foo"
+      - "$['bar']->bar"
+      - "$['barArray']->barArray"
+filter:
+  - name: "Testing Filter"
+    id: "testingFilter"
+    clazz: "solrcmdutils.TestingFilter"

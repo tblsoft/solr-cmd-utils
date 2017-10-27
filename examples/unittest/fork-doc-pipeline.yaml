@@ -1,0 +1,23 @@
+name: "Fork Document"
+reader:
+  name: "CsvReader"
+  clazz: "solrcmdutils.CSVReader"
+  property:
+    filename: "example.csv"
+filter:
+  - name: "Testing Filter"
+    id: "testingFilter"
+    clazz: "solrcmdutils.TestingFilter"
+  - name: "Fork Document"
+    clazz: "solrcmdutils.ForkDocumentFilter"
+    property:
+      include: "fork-include-doc-pipeline.yaml"
+  - name: "Mapping Filter"
+    clazz: "solrcmdutils.MappingFilter"
+    property:
+      mapping:
+        - "column1->column1"
+  - name: "Print Filter"
+    clazz: "solrcmdutils.SystemOutWriter"
+    property:
+      prefix: " origin "

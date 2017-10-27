@@ -4,6 +4,7 @@ import com.google.common.base.Joiner;
 import de.tblsoft.solr.pipeline.AbstractFilter;
 import de.tblsoft.solr.pipeline.bean.Document;
 import de.tblsoft.solr.pipeline.bean.Field;
+import de.tblsoft.solr.util.IOUtils;
 
 import java.util.List;
 
@@ -12,11 +13,21 @@ import java.util.List;
  */
 public class SystemOutWriter extends AbstractFilter {
 
+    private String prefix;
 
     private int fieldCounter =0;
 
     private int documentCounter =0;
 
+    @Override
+    public void init() {
+        try {
+            prefix = getProperty("prefix", "");
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        super.init();
+    }
 
     @Override
     public void document(Document document) {
@@ -25,10 +36,10 @@ public class SystemOutWriter extends AbstractFilter {
         if(values != null) {
             for(Field f :values) {
                 fieldCounter++;
-                System.out.print("name: " + f.getName());
+                System.out.print(prefix+"name: " + f.getName());
 
                 String out = Joiner.on(", ").join(f.getValues());
-                System.out.println(" -- value: " + out );
+                System.out.println(prefix+" -- value: " + out );
             }
         }
 
@@ -40,6 +51,7 @@ public class SystemOutWriter extends AbstractFilter {
         System.out.println("end");
         System.out.println("fields: " + fieldCounter);
         System.out.println("documents: " + documentCounter);
+        super.end();
     }
 
 }
