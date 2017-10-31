@@ -1,0 +1,14 @@
+name: "netbase example pipeline"
+reader:
+  name: "NetbaseReader"
+  clazz: "solrcmdutils.NetbaseReader"
+  property:
+    url: "http://de.netbase.pannous.com:81/json/"
+    netbaseIds:
+      - "-11995"
+
+filter:
+  - name: "CSV Writer"
+    clazz: "solrcmdutils.CSVWriter"
+    property:
+        filename: "netbase.csv"
