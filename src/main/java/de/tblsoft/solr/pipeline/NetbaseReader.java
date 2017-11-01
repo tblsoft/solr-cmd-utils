@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map.Entry;
 
 /**
- * Created by tblsoft on 31.10.17.
+ * Read from Quasiris Netbase
  */
 public class NetbaseReader extends AbstractReader {
 
@@ -29,7 +29,7 @@ public class NetbaseReader extends AbstractReader {
 			url = getProperty("url", null);
 			List<String> netbaseIds = getPropertyAsList("netbaseIds",new ArrayList<String>());
 			for (String netbaseId : netbaseIds) {
-				String netBaseUrl = url + netbaseId;
+				String netBaseUrl = url + netbaseId + "+limit+100000";
 				String response = HTTPHelper.get(netBaseUrl);
 
 				JsonElement jsonResponse = gson.fromJson(response,
