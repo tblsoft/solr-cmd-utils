@@ -88,6 +88,7 @@ public class PipelineExecuter {
         classRegestriy.put("solrcmdutils.DuplicateRemovalFilter", DuplicateRemovalFilter.class);
         classRegestriy.put("solrcmdutils.ForkDocumentFilter", ForkDocumentFilter.class);
         classRegestriy.put("solrcmdutils.NetbaseReader", NetbaseReader.class);
+        classRegestriy.put("solrcmdutils.BlacklistTopicFilter", BlacklistTopicFilter.class);
 
     }
 
