@@ -1,0 +1,35 @@
+name: "xml unit testing pipeline"
+reader:
+  name: "XmlReader"
+  clazz: "solrcmdutils.XmlReader"
+  property:
+    #filename: "germany-example.osm"
+    filename: "/Users/oelbaer/Downloads/germany-latest.osm"
+    transformations:
+      - osm.stx
+
+filter:
+  - name: "Status filter"
+    clazz: "solrcmdutils.StatusTimeFilter"
+  - name: "Grep Filter"
+    clazz: "solrcmdutils.GrepFilter"
+    disabled: false
+    property:
+        fieldName: "tagkey_place"
+        pattern: ".*"
+        #pattern: ".*Wortart\\|Substantiv\\|Deutsch.*"
+  - name: "Mapping Filter"
+    clazz: "solrcmdutils.MappingFilter"
+    disabled: false
+    property:
+        mapping:
+          - "lat->lat"
+          - "lon->lon"
+          - "tagkey_is_in->is_in"
+          - "tagkey_place->place"
+          - "tagkey_name->name"
+  - name: "CSV Writer"
+    clazz: "solrcmdutils.CSVWriter"
+    disabled: false
+    property:
+        filename: "osm-output.csv"

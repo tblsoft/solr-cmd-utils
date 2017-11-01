@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<stx:transform xmlns:stx="http://stx.sourceforge.net/2002/ns" xmlns:wiki="http://www.mediawiki.org/xml/export-0.10/"
+               version="1.0">
+
+
+    <stx:template match="/">
+        <documents>
+            <stx:process-children />
+        </documents>
+    </stx:template>
+    <stx:template match="node">
+        <document>
+            <field name="lat">
+                <stx:value-of select="@lat"></stx:value-of>
+            </field>
+            <field name="lon">
+                <stx:value-of select="@lon"></stx:value-of>
+            </field>
+            <stx:process-children />
+        </document>
+    </stx:template>
+
+    <stx:template match="node/tag">
+        <field name="tagkey_{@k}">
+            <stx:value-of select="@v"></stx:value-of>
+        </field>
+    </stx:template>
+</stx:transform>
