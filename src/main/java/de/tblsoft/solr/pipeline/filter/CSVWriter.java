@@ -74,12 +74,14 @@ public class CSVWriter extends AbstractFilter {
     public void document(Document document) {
         if(firstDocument) {
             try {
-                String[] headersFromDocument = getFieldNames(document);
+                if(headers == null) {
+                    headers = getFieldNames(document);
+                }
                 //PrintWriter out = new PrintWriter(absoluteFilename);
                 OutputStream out = IOUtils.getOutputStream(absoluteFilename);
                 CSVFormat format = CSVFormat.RFC4180;
                 if(withHeaders) {
-                	format = format.withDelimiter(delimiter.charAt(0)).withHeader(headersFromDocument);
+                	format = format.withDelimiter(delimiter.charAt(0)).withHeader(headers);
                 	
 
                 	
@@ -97,8 +99,12 @@ public class CSVWriter extends AbstractFilter {
         try {
             List<List<String>> csvRows = new ArrayList<List<String>>();
             List<String> csvList = new ArrayList<String>();
-            for(Field field: document.getFields()) {
-            	String	value = Joiner.on(multiValueSeperator).skipNulls().join(field.getValues());
+            for (String headerField : headers) {
+                Field field = document.getField(headerField);
+                String value = null;
+                if(field != null && field.getValues() != null) {
+                    value = Joiner.on(multiValueSeperator).skipNulls().join(field.getValues());
+                }
                 csvList.add(value);
             }
             csvRows.add(csvList);
