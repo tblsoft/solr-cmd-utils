@@ -14,7 +14,7 @@
 ## Installation
 Assuming you want to install the lib to the `~/dev/solr-cmd-utils` directory, you have to do the following tasks:
 
-    curl -L "https://github.com/tblsoft/solr-cmd-utils/releases/download/0.0.1/solr-cmd-utils-0.0.1.tar.gz" | tar xvfz - -C ~/dev
+    curl -L "https://github.com/tblsoft/solr-cmd-utils/releases/download/1.0/solr-cmd-utils-1.0-cmd.tar.gz" | tar xvfz - -C ~/dev
 
 To call the util function from every location, you have to add the following exports to your `.profile`
 
