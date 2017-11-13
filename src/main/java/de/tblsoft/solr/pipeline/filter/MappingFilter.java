@@ -19,6 +19,8 @@ public class MappingFilter extends AbstractFilter {
     private boolean sortFieldsByName = false;
     private boolean addEmptyFieldIfNotExists = false;
 
+    private boolean appendFields = false;
+
     private SimpleMapping simpleMapping;
 
 	@Override
@@ -26,6 +28,7 @@ public class MappingFilter extends AbstractFilter {
 
         sortFieldsByName = getPropertyAsBoolean("sortFieldsByName", false);
         addEmptyFieldIfNotExists = getPropertyAsBoolean("addEmptyFieldIfNotExists", false);
+		appendFields = getPropertyAsBoolean("appendFields", false);
 		simpleMapping = new SimpleMapping(getPropertyAsList("mapping", new ArrayList<String>()));
 		mapping = simpleMapping.getMapping();
 		mappingFunctions = simpleMapping.getMappingFunctions();
@@ -37,7 +40,14 @@ public class MappingFilter extends AbstractFilter {
 
 	@Override
 	public void document(Document document) {
-		Document mappedDocument = new Document();
+		Document mappedDocument;
+		if(!appendFields) {
+			mappedDocument = new Document();
+		} else {
+			mappedDocument = new Document();
+			mappedDocument.getFields().addAll(document.getFields());
+		}
+
 		for (Field f : document.getFields()) {
 			List<String> mappedNameList = mapping.get(f.getName());
 			if(mappedNameList == null) {
