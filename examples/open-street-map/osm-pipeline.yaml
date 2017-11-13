@@ -1,10 +1,12 @@
+variables:
+  filename: "/Users/oelbaer/Downloads/germany-latest.osm"
+  elasticIndex: "http://localhost:9200/quantum/quantum"
 name: "xml unit testing pipeline"
 reader:
   name: "XmlReader"
   clazz: "solrcmdutils.XmlReader"
   property:
-    #filename: "germany-example.osm"
-    filename: "/Users/oelbaer/Downloads/germany-latest.osm"
+    filename: "${variables.filename}"
     transformations:
       - osm.stx
 
@@ -17,19 +19,28 @@ filter:
     property:
         fieldName: "tagkey_place"
         pattern: ".*"
-        #pattern: ".*Wortart\\|Substantiv\\|Deutsch.*"
+        #pattern: "^village$|^town$|^suburb$|^city$"
   - name: "Mapping Filter"
     clazz: "solrcmdutils.MappingFilter"
     disabled: false
     property:
+        appendFields: "true"
         mapping:
-          - "lat->lat"
-          - "lon->lon"
-          - "tagkey_is_in->is_in"
+          - "join:laton=${lat},${lon}"
           - "tagkey_place->place"
           - "tagkey_name->name"
   - name: "CSV Writer"
     clazz: "solrcmdutils.CSVWriter"
-    disabled: false
+    disabled: true
     property:
         filename: "osm-output.csv"
+  - name: "Elastic Writer"
+    clazz: "solrcmdutils.ElasticWriter"
+    disabled: false
+    property:
+      type: "elastic"
+      delete: "true"
+      #elasticMappingLocation: "textbot-elastic-mapping.json"
+      #location: "http://elastic:changeme@localhost:9200/quantum/quantum"
+      location: "${variables.elasticIndex}"
+      bufferSize: "50"
