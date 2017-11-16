@@ -89,6 +89,7 @@ public class PipelineExecuter {
         classRegestriy.put("solrcmdutils.ForkDocumentFilter", ForkDocumentFilter.class);
         classRegestriy.put("solrcmdutils.NetbaseReader", NetbaseReader.class);
         classRegestriy.put("solrcmdutils.BlacklistTopicFilter", BlacklistTopicFilter.class);
+        classRegestriy.put("solrcmdutils.WhitelistTopicTermsFilter", WhitelistTopicTermsFilter.class);
 
     }
 
