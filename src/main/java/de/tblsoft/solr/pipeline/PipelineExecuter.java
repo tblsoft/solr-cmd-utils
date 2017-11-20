@@ -82,6 +82,7 @@ public class PipelineExecuter {
         classRegestriy.put("solrcmdutils.SystemOutWriter", SystemOutWriter.class);
         classRegestriy.put("solrcmdutils.NounExtractorFilter", NounExtractorFilter.class);
         classRegestriy.put("solrcmdutils.FileLineWriter", FileLineWriter.class);
+        classRegestriy.put("solrcmdutils.FilelineReader", FilelineReader.class);
         classRegestriy.put("solrcmdutils.CSVWriter", CSVWriter.class);
         classRegestriy.put("solrcmdutils.TestingFilter", TestingFilter.class);
         classRegestriy.put("solrcmdutils.NoopFilter", NoopFilter.class);
@@ -89,6 +90,7 @@ public class PipelineExecuter {
         classRegestriy.put("solrcmdutils.ForkDocumentFilter", ForkDocumentFilter.class);
         classRegestriy.put("solrcmdutils.NetbaseReader", NetbaseReader.class);
         classRegestriy.put("solrcmdutils.BlacklistTopicFilter", BlacklistTopicFilter.class);
+        classRegestriy.put("solrcmdutils.BlacklistFieldFilter", BlacklistFieldFilter.class);
         classRegestriy.put("solrcmdutils.WhitelistTopicTermsFilter", WhitelistTopicTermsFilter.class);
 
     }
