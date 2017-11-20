@@ -1,5 +1,6 @@
 package de.tblsoft.solr.pipeline.filter;
 
+import com.google.api.client.repackaged.com.google.common.base.Strings;
 import de.tblsoft.solr.http.UrlUtil;
 import de.tblsoft.solr.pipeline.bean.Field;
 import de.tblsoft.solr.util.DateUtils;
@@ -55,7 +56,10 @@ public class SimpleMapping {
     }
 
 
-    public String executeFunction(String function, String value) {
+    public static String executeFunction(String function, String value) {
+        if(Strings.isNullOrEmpty(function)) {
+            return value;
+        }
 
         if("md5".equals(function)) {
             return DigestUtils.md5Hex(value);
@@ -78,7 +82,7 @@ public class SimpleMapping {
     }
 
 
-    public void executeFieldFunction(String function, Field field) {
+    public static void executeFieldFunction(String function, Field field) {
 
         if("md5".equals(function)) {
             return;
