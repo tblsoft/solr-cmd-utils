@@ -42,7 +42,9 @@ public class FileLineWriter extends AbstractFilter {
     @Override
     public void document(Document document) {
         for(Field field: document.getFields()) {
-            field(field.getName(),field.getValue());
+            for(String value : field.getValues()) {
+                field(field.getName(),value);
+            }
         }
         super.document(document);
     }
