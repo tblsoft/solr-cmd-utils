@@ -43,7 +43,7 @@ public class BlacklistTopicFilter extends AbstractFilter {
             while(csvIterator.hasNext()) {
                 CSVRecord record = csvIterator.next();
                 String topic = record.get(0);
-                String value = record.get(1);
+                String value = record.get(1).toLowerCase();
 
                 if(!topicValues.containsKey(topic)) {
                     topicValues.put(topic, new HashSet<String>());
@@ -75,7 +75,7 @@ public class BlacklistTopicFilter extends AbstractFilter {
         Field value = document.getField(fieldValue);
         if(topic != null && value != null) {
             if(topicValues.containsKey(topic.getValue())) {
-                blacklist = topicValues.get(topic.getValue()).contains(value.getValue());
+                blacklist = topicValues.get(topic.getValue()).contains(value.getValue().toLowerCase());
             }
         }
 
