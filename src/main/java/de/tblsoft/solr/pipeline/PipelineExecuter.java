@@ -90,6 +90,8 @@ public class PipelineExecuter {
         classRegestriy.put("solrcmdutils.NetbaseReader", NetbaseReader.class);
         classRegestriy.put("solrcmdutils.BlacklistTopicFilter", BlacklistTopicFilter.class);
         classRegestriy.put("solrcmdutils.WhitelistTopicTermsFilter", WhitelistTopicTermsFilter.class);
+        classRegestriy.put("solrcmdutils.TopicMergeFilter", TopicMergeFilter.class);
+        classRegestriy.put("solrcmdutils.TopicAggregationFilter", TopicAggregationFilter.class);
 
     }
 

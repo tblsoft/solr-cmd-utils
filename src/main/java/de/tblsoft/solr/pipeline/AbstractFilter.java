@@ -101,6 +101,14 @@ public abstract class AbstractFilter implements FilterIF {
         }
         return defaultValue;
     }
+
+    public float getPropertyAsFloat(String name, float defaultValue) {
+        String value = getProperty(name,null);
+        if(value != null) {
+            return Float.valueOf(value).intValue();
+        }
+        return defaultValue;
+    }
     
     public Date getPropertyAsDate(String name, Date defaultValue) {
         String value = getProperty(name,null);
