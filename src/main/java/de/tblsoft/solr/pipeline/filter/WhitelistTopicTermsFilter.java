@@ -99,7 +99,10 @@ public class WhitelistTopicTermsFilter extends AbstractFilter {
                 if(topicValues.containsKey(topic.getValue()) &&
                     topicValues.get(topic.getValue()).containsKey(value.getValue())) {
                     Document docOverride = topicValues.get(topic.getValue()).get(value.getValue());
-                    super.document(docOverride);
+                    for (Field field : docOverride.getFields()) {
+                        document.setField(field.getName(), field.getValues());
+                    }
+                    super.document(document);
                     hasOverriden = true;
                     topicsOverriden.get(topic.getValue()).put(value.getValue(), true);
                 }
