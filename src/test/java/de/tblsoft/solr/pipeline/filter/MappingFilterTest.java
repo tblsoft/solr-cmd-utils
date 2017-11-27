@@ -61,6 +61,18 @@ public class MappingFilterTest extends AbstractFilterTest {
 
 
     @Test
+    public void testMappingMapGermanChars() {
+        configure();
+        addProperty("mapping", "firstname->forename|mapGermanChars");
+        createField("foo", "bar");
+        createField("firstname", "Bär");
+        runTest();
+        assertFiled("forename", "Baer");
+        assertNumberOfDocuments(1);
+        assertNumberOfFields(1);
+    }
+
+    @Test
     public void testMappingAddEmptyFieldIfNotExists() {
         configure();
         putProperty("addEmptyFieldIfNotExists", "true");
