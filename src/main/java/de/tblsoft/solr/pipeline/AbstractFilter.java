@@ -105,7 +105,7 @@ public abstract class AbstractFilter implements FilterIF {
     public float getPropertyAsFloat(String name, float defaultValue) {
         String value = getProperty(name,null);
         if(value != null) {
-            return Float.valueOf(value).intValue();
+            return Float.valueOf(value);
         }
         return defaultValue;
     }
