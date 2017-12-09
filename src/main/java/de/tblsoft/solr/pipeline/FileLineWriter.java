@@ -7,6 +7,7 @@ import de.tblsoft.solr.util.OutputStreamStringBuilder;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.List;
 
 /**
  * Created by tblsoft on 23.01.16.
@@ -19,10 +20,16 @@ public class FileLineWriter extends AbstractFilter {
 
     private OutputStream outputStream;
 
+    private List<String> fieldNames;
+    private String fieldSeperator = ",";
+    private String documentSeperator = "\n";
+
+
     @Override
     public void init(){
 
         String relativeFilename = getProperty("filename", null);
+        fieldNames = getPropertyAsList("fieldNames", null);
         filename = IOUtils.getAbsoluteFile(getBaseDir(), relativeFilename);
 
         verify(filename, "For the FileLineWriter a filname must be defined.");
@@ -34,23 +41,42 @@ public class FileLineWriter extends AbstractFilter {
             throw new RuntimeException(e);
         }
 
-
+        super.init();
 
     }
 
 
     @Override
     public void document(Document document) {
-        for(Field field: document.getFields()) {
-            field(field.getName(),field.getValue());
+        if(fieldNames == null) {
+            for (Field field : document.getFields()) {
+                for (String value : field.getValues()) {
+                    field(field.getName(), value);
+                }
+            }
+        } else {
+            for(String fieldName: fieldNames) {
+                Field field = document.getField(fieldName);
+                if(field != null) {
+                    for (String value : field.getValues()) {
+                        field(field.getName(), value);
+                    }
+                }
+            }
         }
+
+        endDocument(document);
+
         super.document(document);
     }
 
     public void field(String name, String value) {
         outputStreamStringBuilder.append(value);
-        outputStreamStringBuilder.append("\n");
+        outputStreamStringBuilder.append(fieldSeperator);
+    }
 
+    public void endDocument(Document document) {
+        outputStreamStringBuilder.append(documentSeperator);
     }
 
     @Override
@@ -60,6 +86,7 @@ public class FileLineWriter extends AbstractFilter {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        super.end();
     }
 
 }

@@ -17,10 +17,12 @@ public class Lookup {
     private Map<String, Document> lookupMap;
     private String pipeline;
 
+    private LookupFilter lookupFilter;
+
     void init() {
         PipelineExecuter pipelineExecuter = new PipelineExecuter(pipeline);
         pipelineExecuter.execute();
-        LookupFilter lookupFilter = (LookupFilter) pipelineExecuter.getFilterById("lookup");
+        lookupFilter = (LookupFilter) pipelineExecuter.getFilterById("lookup");
         lookupMap = lookupFilter.getLookup();
     }
 
@@ -28,6 +30,9 @@ public class Lookup {
         if(lookupMap == null) {
             init();
         }
-        return lookupMap.get(key);
+
+        String normalizedKey = lookupFilter.normalizeKey(key);
+        System.out.println("--------------- " + normalizedKey);
+        return lookupMap.get(normalizedKey);
     }
 }
