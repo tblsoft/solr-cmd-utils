@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
 import com.beust.jcommander.Strings;
@@ -161,6 +162,24 @@ public class ElasticWriter extends AbstractFilter {
 
 	}
 
+	static Map createExpandedValue(String flatName, Object value) {
+		Map<String, Object> last = new HashMap<String, Object>();
+		Map<String, Object> result = last;
+		String[] parts = flatName.split("\\.");
+		for(int i = 1; i < parts.length; i++) {
+			String part = parts[i];
+			if(i == parts.length-1) {
+				last.put(part, value);
+			}
+			else {
+				Map<String, Object> lastMap = new HashMap<String, Object>();
+				last.put(part, lastMap);
+				last = lastMap;
+			}
+		}
+		return result;
+	}
+
 	static Map<String, Object> mapToJson(Document document) {
 		Map<String, Object> jsonDocument = new HashMap<String, Object>();
 		for (Field field : document.getFields()) {
@@ -168,13 +187,21 @@ public class ElasticWriter extends AbstractFilter {
 			if (values == null || values.isEmpty()) {
 				continue;
 			}
+
+			boolean fieldIsFlat= field.getName().contains(".");
+			String fieldName = field.getName();
+			Object fieldValue = field.getValues();
+
 			if (values.size() == 1) {
-				jsonDocument.put(field.getName(),
-						transformDatatype(field.getValue()));
-			} else {
-				jsonDocument.put(field.getName(), field.getValues());
+				fieldValue = transformDatatype(field.getValue());
 			}
 
+			if(fieldIsFlat) {
+				fieldValue = createExpandedValue(fieldName, fieldValue);
+				fieldName = StringUtils.substringBefore(fieldName, ".");
+			}
+
+			jsonDocument.put(fieldName, fieldValue);
 		}
 
 		return jsonDocument;
