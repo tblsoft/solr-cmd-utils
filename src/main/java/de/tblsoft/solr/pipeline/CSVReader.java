@@ -5,11 +5,14 @@ import de.tblsoft.solr.util.IOUtils;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -30,6 +33,7 @@ public class CSVReader extends AbstractReader {
             addMeta = getPropertyAsBoolean("addMeta", false);
             Long maxRows = getPropertyAsInteger("maxRows", Long.MAX_VALUE);
             String delimiter = getProperty("delimiter", ",");
+            String arrayDelimiter = getProperty("arrayDelimiter", null);
             String[] headers = getPropertyAsArray("headers", null);
             InputStream in = IOUtils.getInputStream(absoluteFilename);
             java.io.Reader reader = new InputStreamReader(in,charset);
@@ -58,7 +62,21 @@ public class CSVReader extends AbstractReader {
                     String key = entry.getKey();
                     try {
                         String value = record.get(key);
-                        document.addField(key, value);
+                        if(StringUtils.isEmpty(arrayDelimiter)) {
+                            document.addField(key, value);
+                        }
+                        else {
+                            List<String> valueList = new ArrayList<String>();
+                            String[] values = value.split(arrayDelimiter);
+                            if(values.length > 0) {
+                                for (String val : values) {
+                                    if(StringUtils.isNotEmpty(val)) {
+                                        valueList.add(val);
+                                    }
+                                }
+                            }
+                            document.setField(key, valueList);
+                        }
                     } catch (IllegalArgumentException e) {
 
                     }
