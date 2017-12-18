@@ -7,5 +7,9 @@
 
 jarfiles=$(find $SOLR_CMD_UTILS_HOME/lib -name '*.jar' | xargs echo | tr ' ' ':')
 classpath=":lib/classes:$SOLR_CMD_UTILS_HOME/lib/classes:$jarfiles:"
+if [[ "$(uname)" == "MINGW"* ]]; then
+    jarfiles=$(find $SOLR_CMD_UTILS_HOME/lib -name '*.jar' | xargs echo | tr ' ' ';')
+    classpath=";lib/classes;$SOLR_CMD_UTILS_HOME/lib/classes;$jarfiles;"
+fi
 
 java -cp $classpath $SOLR_CMD_UTILS_JAVA_OPTS de.tblsoft.solr.cmd.Pipeline $@
