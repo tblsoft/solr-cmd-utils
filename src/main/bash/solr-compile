@@ -7,12 +7,12 @@
 
 set -e
 
-if [ -a lib/classes ]
+if [ -d lib/classes ]
     then
        find -L lib/classes -name *.java | xargs javac -classpath $SOLR_CMD_UTILS_HOME/lib/*.jar
 fi
 
-if [ -a $SOLR_CMD_UTILS_HOME/lib/classes ]
+if [ -d $SOLR_CMD_UTILS_HOME/lib/classes ]
     then
        find -L $SOLR_CMD_UTILS_HOME/lib/classes -name *.java | xargs javac -classpath $SOLR_CMD_UTILS_HOME/lib/*.jar
 fi
