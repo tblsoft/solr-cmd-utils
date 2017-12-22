@@ -16,6 +16,9 @@
             <field name="lon">
                 <stx:value-of select="@lon"></stx:value-of>
             </field>
+            <field name="id">
+                <stx:value-of select="@id"></stx:value-of>
+            </field>
             <stx:process-children />
         </document>
     </stx:template>

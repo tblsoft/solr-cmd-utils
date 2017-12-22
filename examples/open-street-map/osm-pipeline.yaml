@@ -1,6 +1,7 @@
 variables:
-  filename: "/Users/oelbaer/Downloads/germany-latest.osm"
-  elasticIndex: "http://localhost:9200/quantum/quantum"
+  filename: "/Users/oelbaer/Downloads/germany-latest.osm.bz2"
+  elasticIndex: "http://localhost:9214/osm/osm"
+  elasticMappingLocation: "osm-elastic-mapping.json"
 name: "xml unit testing pipeline"
 reader:
   name: "XmlReader"
@@ -26,7 +27,7 @@ filter:
     property:
         appendFields: "true"
         mapping:
-          - "join:laton=${lat},${lon}"
+          - "join:latlon=${lat},${lon}"
           - "tagkey_place->place"
           - "tagkey_name->name"
   - name: "CSV Writer"
@@ -40,7 +41,6 @@ filter:
     property:
       type: "elastic"
       delete: "true"
-      #elasticMappingLocation: "textbot-elastic-mapping.json"
-      #location: "http://elastic:changeme@localhost:9200/quantum/quantum"
+      elasticMappingLocation: "${variables.elasticMappingLocation}"
       location: "${variables.elasticIndex}"
       bufferSize: "50"

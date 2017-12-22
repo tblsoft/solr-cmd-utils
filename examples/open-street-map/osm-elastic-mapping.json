@@ -1,0 +1,14 @@
+{
+    "mappings": {
+        "osm": {
+            "dynamic_templates": [{
+                "all": {
+                    "match": "*",
+                    "mapping": {
+                        "type": "string"
+                    }
+                }
+            }]
+        }
+    }
+}
