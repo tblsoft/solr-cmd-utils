@@ -19,12 +19,14 @@ import java.util.Map;
 public class DuplicateRemovalFilter extends AbstractFilter {
 
 	private String fieldName;
+	private boolean passThroughNullValues;
 
 	private Map<String, Document> duplicateRemovalMap = new HashMap<String, Document>();
 
     @Override
     public void init() {
         fieldName = getProperty("fieldName", null);
+        passThroughNullValues = getPropertyAsBoolean("passThroughNullValues", true);
         verify(fieldName, "For the DuplicateRemovalFilter a fieldName property must be defined.");
         super.init();
     }
@@ -33,7 +35,12 @@ public class DuplicateRemovalFilter extends AbstractFilter {
     @Override
     public void document(Document document) {
         String key = document.getFieldValue(fieldName);
-        duplicateRemovalMap.put(key, document);
+        if(key != null) {
+            duplicateRemovalMap.put(key, document);
+        }
+        else if(passThroughNullValues) {
+            super.document(document);
+        }
     }
 
     @Override
