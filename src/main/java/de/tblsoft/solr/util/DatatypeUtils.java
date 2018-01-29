@@ -58,10 +58,14 @@ public class DatatypeUtils {
 		if(!isNumber) {
 			return false;
 		}
-		Double doubleValue = Double.valueOf(value);
-		Integer intValue = doubleValue.intValue();
-		if(doubleValue.doubleValue() == intValue.doubleValue()) {
-			return true;
+		try {
+			Double doubleValue = Double.valueOf(value);
+			Integer intValue = doubleValue.intValue();
+			if (doubleValue.doubleValue() == intValue.doubleValue()) {
+				return true;
+			}
+		} catch (NumberFormatException e) {
+			return false;
 		}
 		return false;
 	}
@@ -71,10 +75,15 @@ public class DatatypeUtils {
 		if(!isNumber) {
 			return false;
 		}
-		Double doubleValue = Double.valueOf(value);
-		Long longValue = doubleValue.longValue();
-		if(doubleValue.doubleValue() == longValue.doubleValue()) {
-			return true;
+
+		try {
+			Double doubleValue = Double.valueOf(value);
+			Long longValue = doubleValue.longValue();
+			if (doubleValue.doubleValue() == longValue.doubleValue()) {
+				return true;
+			}
+		} catch (NumberFormatException e) {
+			return false;
 		}
 		return false;
 	}
