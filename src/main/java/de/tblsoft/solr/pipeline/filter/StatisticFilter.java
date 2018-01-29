@@ -5,12 +5,11 @@ import de.tblsoft.solr.pipeline.bean.Document;
 import de.tblsoft.solr.pipeline.bean.Field;
 import de.tblsoft.solr.schema.SolrSchemaManager;
 import de.tblsoft.solr.util.DatatypeUtils;
+import de.tblsoft.solr.util.PairBuilder;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.Pair;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by tblsoft 18.05.17.
@@ -21,16 +20,33 @@ public class StatisticFilter extends AbstractFilter {
     private long documentCount = 0;
     private Map<String,FieldStatistic> fieldStatisticMap = new HashMap<String, FieldStatistic>();
 
+    private List<Pair<String, String>> dynamicFields = new ArrayList<Pair<String, String>>();
+
 
     @Override
     public void init() {
         super.init();
+        initDynamicFields();
+
     }
 
+
+    private void initDynamicFields() {
+        List<String> dynamicFieldList = getPropertyAsList("dynamicFields", new ArrayList<String>());
+        for (String value: dynamicFieldList) {
+            dynamicFields.add(PairBuilder.createPair(value, "=>"));
+        }
+    }
 
     @Override
     public void document(Document document) {
         for(Field field : document.getFields()) {
+            for(Pair<String, String> dynamicField: dynamicFields) {
+                if(field.getName().matches(dynamicField.getLeft())) {
+                    field.setName(dynamicField.getRight());
+                }
+            }
+
             FieldStatistic fieldStatistic = fieldStatisticMap.get(field.getName());
             if(fieldStatistic == null) {
                 fieldStatistic = new FieldStatistic(field.getName());
@@ -127,7 +143,6 @@ public class StatisticFilter extends AbstractFilter {
                 return;
             }
             String currentDatatype = DatatypeUtils.estimateDatatype(value);
-            System.out.println(currentDatatype + " - " + this.fieldName + " - " + value + " - " + this.dataType);
             if(this.dataType == null) {
                 this.dataType = currentDatatype;
                 return;
