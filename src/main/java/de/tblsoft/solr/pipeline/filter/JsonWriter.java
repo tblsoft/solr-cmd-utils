@@ -39,6 +39,9 @@ public class JsonWriter extends AbstractFilter {
     
     private String idField;
 
+    private String absoluteFilename;
+
+
 
 
 
@@ -47,6 +50,9 @@ public class JsonWriter extends AbstractFilter {
         type = getProperty("type", "file");
         Boolean pretty = getPropertyAsBoolean("pretty", false);
         location = getProperty("location", null);
+        if("file".equals(type)) {
+            absoluteFilename = IOUtils.getAbsoluteFile(getBaseDir(), location);
+        }
         verify(location, "For the JsonWriter a location must be defined.");
 
         delete = getPropertyAsBoolean("delete", Boolean.TRUE);
@@ -59,8 +65,12 @@ public class JsonWriter extends AbstractFilter {
             builder = builder.setPrettyPrinting();
         }
         gson = builder.create();
-        
-        
+
+        if(delete && "file".equals(type)) {
+            FileUtils.deleteQuietly(new File(absoluteFilename));
+
+        } else
+
         if("elastic".equals(type)) {
             if(delete && !"elasticupdate".equals(type)) {
                 try {
@@ -167,7 +177,7 @@ public class JsonWriter extends AbstractFilter {
             }
             else if ("file".equals(type)) {
                 try {
-                    FileUtils.writeStringToFile(new File("foo.txt"), json, true);
+                    FileUtils.writeStringToFile(new File(absoluteFilename), json, true);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
