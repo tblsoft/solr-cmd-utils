@@ -1,14 +1,15 @@
 package de.tblsoft.solr.pipeline;
 
+import com.google.api.client.repackaged.com.google.common.base.Strings;
 import de.tblsoft.solr.http.HTTPHelper;
 import de.tblsoft.solr.pipeline.bean.Document;
-import de.tblsoft.solr.sitemap.bean.Sitemap;
-import de.tblsoft.solr.sitemap.bean.Sitemapindex;
-import de.tblsoft.solr.sitemap.bean.Url;
-import de.tblsoft.solr.sitemap.bean.UrlSet;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -24,7 +25,6 @@ public class XmlSitemapReader extends AbstractReader {
 
     private List<String> sitemapBlacklits;
 
-    @Override
     public void read() {
 
         sitemapBlacklits = getPropertyAsList("sitemapBlacklits", new ArrayList<String>());
@@ -36,23 +36,16 @@ public class XmlSitemapReader extends AbstractReader {
         try {
 
             for(String sitemapUrl: sitemapUrls) {
-                String sitemapContent = HTTPHelper.get(sitemapUrl);
-                InputStream is = org.apache.commons.io.IOUtils.toInputStream(sitemapContent, "UTF-8");
-                UrlSet urlset = parseSitemap(is);
-                is.close();
-
-                if (urlset != null) {
-                    addDocument(urlset, null, sitemapUrl);
-                }
-
+                org.w3c.dom.Document doc = getDomByUrl(sitemapUrl);
+                parseSitemap(doc, null);
             }
 
             for(String url: sitemapIndexUrls) {
                 if (sitemapBlacklits.contains(url)) {
                     continue;
                 }
-                String sitemapIndexContent = HTTPHelper.get(url);;
-                processSitemapIndex(sitemapIndexContent, url);
+                org.w3c.dom.Document doc = getDomByUrl(url);
+                processSitemapIndex(doc, url);
             }
 
             for(String url: urls) {
@@ -61,42 +54,25 @@ public class XmlSitemapReader extends AbstractReader {
                     if (sitemapBlacklits.contains(sitemap)) {
                         continue;
                     }
-                    String sitemapOrSitemapIndexList = HTTPHelper.get(sitemap);
-                    InputStream is = org.apache.commons.io.IOUtils.toInputStream(sitemapOrSitemapIndexList, "UTF-8");
-                    UrlSet urlset = parseSitemap(is);
-                    is.close();
-
-                    // it is not a sitemap, it is a sitemap index
-                    if (urlset == null) {
-                        processSitemapIndex(sitemapOrSitemapIndexList, sitemap);
-                    } else {
-                        addDocument(urlset, null, sitemap);
-                    }
+                    org.w3c.dom.Document doc = getDomByUrl(sitemap);
+                    parseSitemap(doc, null);
+                    processSitemapIndex(doc, sitemap);
                 }
             }
         } catch (Exception e) {
+            e.printStackTrace();
             throw new RuntimeException(e);
         }
     }
 
-    void addDocument(UrlSet urlSet, String sitemapIndexUrl, String sitemapUrl) {
-        if(urlSet == null) {
-            System.out.println("no url set is null: " + sitemapIndexUrl + " sitemap: " + sitemapUrl);
-            return;
-        }
-        if(urlSet.getUrl() == null) {
-            System.out.println("no urls found for: " + sitemapIndexUrl + " sitemap: " + sitemapUrl);
-            return;
-        }
-        for(Url url: urlSet.getUrl()) {
-            Document document = new Document();
-            document.addField("sitemapIndexUrl", sitemapIndexUrl);
-            document.addField("sitemapUrl", sitemapUrl);
-            document.addField("loc", url.getLoc());
-            //document.addField("timestamp", DateUtils.date2String(new Date()));
-            executer.document(document);
-        }
 
+    private org.w3c.dom.Document getDomByUrl(String url) throws IOException, ParserConfigurationException, SAXException {
+        String sitemapContent = HTTPHelper.get(url);
+        InputStream is = org.apache.commons.io.IOUtils.toInputStream(sitemapContent, "UTF-8");
+        DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+        org.w3c.dom.Document doc = dBuilder.parse(is);
+        return doc;
     }
 
     List<String> readSitemapUrlsFromRobotsTxt(String domain) {
@@ -117,45 +93,56 @@ public class XmlSitemapReader extends AbstractReader {
         return sitemapList;
     }
 
-    void processSitemapIndex(String sitemapIndexContent, String sitemapIndexUrl) throws IOException {
+    void processSitemapIndex(org.w3c.dom.Document doc, String sitemapIndexUrl) throws Exception {
+        List<String> sitemapUrls = new ArrayList<String>();
+        try {
+            NodeList locNodes = doc.getElementsByTagName("loc");
+            for (int i = 0; i < locNodes.getLength(); i++) {
+                String loc = locNodes.item(i).getFirstChild().getNodeValue();
+                sitemapUrls.add(loc);
 
-        InputStream is = org.apache.commons.io.IOUtils.toInputStream(sitemapIndexContent, "UTF-8");
-        Sitemapindex sitemapindex = parseSitemapIndex(is);
-        is.close();
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
 
-        for (Sitemap sitemapFromIndex : sitemapindex.getSitemap()) {
-            String loc = sitemapFromIndex.getLoc();
-            String sitemapContent = HTTPHelper.get(loc);
-            is = org.apache.commons.io.IOUtils.toInputStream(sitemapContent, "UTF-8");
-            UrlSet urlSet = parseSitemap(is);
 
-            addDocument(urlSet, loc, sitemapIndexUrl);
+        for (String loc: sitemapUrls) {
+            org.w3c.dom.Document sitemapDoc = getDomByUrl(loc);
+            parseSitemap(sitemapDoc, sitemapIndexUrl);
         }
 
 
     }
 
-    UrlSet parseSitemap(InputStream is) {
+    void parseSitemap(org.w3c.dom.Document doc, String sitemapIndexUrl) {
 
         try {
-            JAXBContext jc = JAXBContext.newInstance(UrlSet.class);
-            UrlSet sitemap =
-                    (UrlSet) jc.createUnmarshaller().unmarshal(is);
-            return sitemap;
-        } catch (JAXBException e) {
-            return null;
+            NodeList urls = doc.getElementsByTagName("url");
+            for (int i = 0; i < urls.getLength(); i++) {
+                Node node = urls.item(i);
+                parseSitemapUrlNode(node.getChildNodes(), sitemapIndexUrl);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 
-    Sitemapindex parseSitemapIndex(InputStream is) {
-        try {
-            JAXBContext jc = JAXBContext.newInstance(Sitemapindex.class);
-            Sitemapindex sitemapIndex =
-                    (Sitemapindex) jc.createUnmarshaller().unmarshal(is);
-            return sitemapIndex;
-        } catch (JAXBException e) {
-            return null;
+    void parseSitemapUrlNode(NodeList url, String sitemapIndexUrl) {
+        Document document = new Document();
+        if(!Strings.isNullOrEmpty(sitemapIndexUrl)) {
+            document.addField("sitemapIndexUrl", sitemapIndexUrl);
         }
+        for (int k = 0; k < url.getLength(); k++) {
+            Node noder = url.item(k);
+            if(1 == noder.getNodeType()) {
+                String name = noder.getNodeName();
+                String value = noder.getFirstChild().getNodeValue();
+                document.addField(name, value);
+            }
+
+        }
+        executer.document(document);
     }
 
 }
