@@ -36,7 +36,7 @@ public class HTTPHelper {
 		}
 	}
 
-	public static String put(String url, String postString) {
+	public static String put(String url, String postString, String contentType) {
 		try {
 			CloseableHttpClient httpclient = HttpClients.createDefault();
 			HttpPut httpPost = new HttpPut(url);
@@ -44,8 +44,11 @@ public class HTTPHelper {
 			if (postString != null) {
 				StringEntity entity = new StringEntity(postString, "UTF-8");
 				httpPost.setEntity(entity);
-				// httpPost.setHeader("Content-Type",contentType);
 			}
+			if(!Strings.isNullOrEmpty(contentType)) {
+				httpPost.setHeader("Content-Type",contentType);
+			}
+
 
 			CloseableHttpResponse response = httpclient.execute(httpPost);
 			StringBuilder responseBuilder = new StringBuilder();
@@ -59,14 +62,19 @@ public class HTTPHelper {
 	}
 
 	public static String post(String url, String postString) {
+		return post(url, postString, null);
+	}
+
+	public static String post(String url, String postString, String contentType) {
 		try {
 			CloseableHttpClient httpclient = HttpClients.createDefault();
 			HttpPost httpPost = new HttpPost(url);
 
 			StringEntity entity = new StringEntity(postString, "UTF-8");
 			httpPost.setEntity(entity);
-			// httpPost.setHeader("Content-Type",contentType);
-
+			if(!Strings.isNullOrEmpty(contentType)) {
+				httpPost.setHeader("Content-Type",contentType);
+			}
 			CloseableHttpResponse response = httpclient.execute(httpPost);
 			StringBuilder responseBuilder = new StringBuilder();
 

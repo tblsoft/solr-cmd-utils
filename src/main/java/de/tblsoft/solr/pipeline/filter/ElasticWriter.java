@@ -1,28 +1,22 @@
 package de.tblsoft.solr.pipeline.filter;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.math.NumberUtils;
-
 import com.beust.jcommander.Strings;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-
 import de.tblsoft.solr.http.ElasticHelper;
 import de.tblsoft.solr.http.HTTPHelper;
 import de.tblsoft.solr.pipeline.AbstractFilter;
 import de.tblsoft.solr.pipeline.bean.Document;
 import de.tblsoft.solr.pipeline.bean.Field;
 import de.tblsoft.solr.util.IOUtils;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
+
+import java.io.File;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.util.*;
 
 public class ElasticWriter extends AbstractFilter {
 
@@ -42,6 +36,8 @@ public class ElasticWriter extends AbstractFilter {
 
 	private int bufferSize = 10000;
 
+	private boolean detectNumberValues = true;
+
 	@Override
 	public void init() {
 
@@ -50,6 +46,7 @@ public class ElasticWriter extends AbstractFilter {
 		verify(location, "For the JsonWriter a location must be defined.");
 
 		delete = getPropertyAsBoolean("delete", Boolean.TRUE);
+		detectNumberValues = getPropertyAsBoolean("detectNumberValues", Boolean.TRUE);
 		elasticMappingLocation = getProperty("elasticMappingLocation", null);
 
 		idField = getProperty("idField", null);
@@ -73,7 +70,7 @@ public class ElasticWriter extends AbstractFilter {
 						getBaseDir(), elasticMappingLocation));
 
 				mappingJson = FileUtils.readFileToString(elasticMappingFile);
-				HTTPHelper.put(indexUrl, mappingJson);
+				HTTPHelper.put(indexUrl, mappingJson, "application/json");
 			} catch (IOException e) {
 				throw new RuntimeException(e);
 			} catch (URISyntaxException e) {
@@ -88,7 +85,7 @@ public class ElasticWriter extends AbstractFilter {
 	Object transformDatatype(List<String> values) {
 		List<Long> longList = new ArrayList<Long>();
 		for (String value : values) {
-			Object transformedValue = transformDatatype(value);
+			Object transformedValue = transformDatatype(value, detectNumberValues);
 			if (transformedValue instanceof Long) {
 				longList.add((Long) transformedValue);
 			} else {
@@ -98,7 +95,10 @@ public class ElasticWriter extends AbstractFilter {
 		return longList;
 	}
 
-	static Object transformDatatype(String value) {
+	static Object transformDatatype(String value, boolean detectNumberValues) {
+		if(!detectNumberValues) {
+			return value;
+		}
 		if (NumberUtils.isNumber(value)) {
 			try {
 				Long intValue = Long.valueOf(value);
@@ -114,7 +114,7 @@ public class ElasticWriter extends AbstractFilter {
 		try {
 			StringBuilder bulkRequest = new StringBuilder();
 			for (Document document : buffer) {
-				Map<String, Object> jsonDocument = mapToJson(document);
+				Map<String, Object> jsonDocument = mapToJson(document, detectNumberValues);
 				if (jsonDocument.isEmpty()) {
 					continue;
 				}
@@ -133,7 +133,7 @@ public class ElasticWriter extends AbstractFilter {
 			}
 
 			String bulkUrl = ElasticHelper.getBulkUrl(location);
-			HTTPHelper.post(bulkUrl, bulkRequest.toString());
+			HTTPHelper.post(bulkUrl, bulkRequest.toString(), "application/json");
 		} catch (URISyntaxException e) {
 			throw new RuntimeException(e);
 		}
@@ -151,10 +151,10 @@ public class ElasticWriter extends AbstractFilter {
 		super.document(document);
 	}
 
-	public static String mapToJsonString(List<Document> documentList) {
+	public static String mapToJsonString(List<Document> documentList, boolean detectNumberValues) {
 		List<Map<String, Object>> documentMap = new ArrayList<Map<String, Object>>();
 		for (Document document : documentList) {
-			documentMap.add(mapToJson(document));
+			documentMap.add(mapToJson(document, detectNumberValues));
 		}
 		Gson gson = new GsonBuilder().setPrettyPrinting().create();
 		String json = gson.toJson(documentMap);
@@ -180,7 +180,7 @@ public class ElasticWriter extends AbstractFilter {
 		return result;
 	}
 
-	static Map<String, Object> mapToJson(Document document) {
+	static Map<String, Object> mapToJson(Document document, boolean detectNumberValues) {
 		Map<String, Object> jsonDocument = new HashMap<String, Object>();
 		for (Field field : document.getFields()) {
 			List<String> values = field.getValues();
@@ -193,7 +193,7 @@ public class ElasticWriter extends AbstractFilter {
 			Object fieldValue = field.getValues();
 
 			if (values.size() == 1) {
-				fieldValue = transformDatatype(field.getValue());
+				fieldValue = transformDatatype(field.getValue(), detectNumberValues);
 			}
 
 			if(fieldIsFlat) {

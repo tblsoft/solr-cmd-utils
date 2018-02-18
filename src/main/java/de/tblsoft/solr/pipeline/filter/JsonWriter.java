@@ -4,20 +4,17 @@ package de.tblsoft.solr.pipeline.filter;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
-
 import de.tblsoft.solr.http.ElasticHelper;
 import de.tblsoft.solr.http.HTTPHelper;
 import de.tblsoft.solr.pipeline.AbstractFilter;
 import de.tblsoft.solr.pipeline.bean.Document;
 import de.tblsoft.solr.pipeline.bean.Field;
 import de.tblsoft.solr.util.IOUtils;
-
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -40,10 +37,6 @@ public class JsonWriter extends AbstractFilter {
     private String idField;
 
     private String absoluteFilename;
-
-
-
-
 
     @Override
     public void init() {
@@ -69,34 +62,7 @@ public class JsonWriter extends AbstractFilter {
         if(delete && "file".equals(type)) {
             FileUtils.deleteQuietly(new File(absoluteFilename));
 
-        } else
-
-        if("elastic".equals(type)) {
-            if(delete && !"elasticupdate".equals(type)) {
-                try {
-                    String indexUrl = ElasticHelper.getIndexUrl(location);
-                    HTTPHelper.delete(indexUrl);
-                } catch (URISyntaxException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        	if(elasticMappingLocation != null) {
-        		String mappingJson;
-				try {
-					String indexUrl = ElasticHelper.getIndexUrl(location);
-                    File elasticMappingFile = new File(IOUtils.getAbsoluteFile(getBaseDir(),elasticMappingLocation));
-
-					mappingJson = FileUtils.readFileToString(elasticMappingFile);
-            		HTTPHelper.put(indexUrl, mappingJson);
-				} catch (IOException e) {
-					throw new RuntimeException(e);
-				} catch (URISyntaxException e) {
-                    throw new RuntimeException(e);
-                }
-
-        	}
-        } 
-
+        }
 
         super.init();
     }
