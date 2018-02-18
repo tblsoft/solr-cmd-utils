@@ -73,6 +73,8 @@ public class SimpleMapping {
             return UrlUtil.decode(value);
         } else if ("trim".equals(function)) {
             return StringUtils.trim(value);
+        }else if ("removeWhitespace".equals(function)) {
+            return value.replaceAll(" ", "");
         } else if ("toSolrDate".equals(function)) {
             return DateUtils.toSolrDate(value);
         } else if ("uniq".equals(function)) {
@@ -97,6 +99,8 @@ public class SimpleMapping {
         } else if ("urldecode".equals(function)) {
             return;
         } else if ("trim".equals(function)) {
+            return;
+        } else if ("removeWhitespace".equals(function)) {
             return;
         } else if ("toSolrDate".equals(function)) {
             return;
