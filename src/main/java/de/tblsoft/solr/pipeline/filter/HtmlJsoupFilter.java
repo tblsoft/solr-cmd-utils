@@ -1,5 +1,6 @@
 package de.tblsoft.solr.pipeline.filter;
 
+import com.google.api.client.repackaged.com.google.common.base.Strings;
 import de.tblsoft.solr.pipeline.AbstractFilter;
 import de.tblsoft.solr.pipeline.bean.Document;
 import org.apache.commons.lang3.StringUtils;
@@ -122,12 +123,22 @@ public class HtmlJsoupFilter extends AbstractFilter {
         }
     }
 
-    public void mapFirstElement(String selector, String fieldName) {
+    public String getFirstElement(String selector) {
         Elements elements = jsoupDocument.select(selector);
         if (elements.size() > 0) {
             String value = elements.get(0).text();
-            document.addField(fieldName, value);
+            return value;
         }
+        return null;
+    }
+
+    public void mapFirstElement(String selector, String fieldName) {
+        String value = getFirstElement(selector);
+        if(!Strings.isNullOrEmpty(value)) {
+            document.addField(fieldName, value);
+
+        }
+
     }
 
     public void mapMeta(String metaName, String fieldName) {
