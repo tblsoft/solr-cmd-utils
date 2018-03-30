@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<stx:transform xmlns:stx="http://stx.sourceforge.net/2002/ns" xmlns:content="http://purl.org/rss/1.0/modules/content/"
+               version="1.0">
+
+
+    <stx:template match="/rss/schannel">
+        <documents>
+            <stx:process-children />
+        </documents>
+    </stx:template>
+    <stx:template match="item">
+        <document>
+            <stx:process-children />
+        </document>
+    </stx:template>
+
+    <stx:template match="link">
+        <field name="link">
+            <stx:value-of select="."></stx:value-of>
+        </field>
+    </stx:template>
+
+</stx:transform>
