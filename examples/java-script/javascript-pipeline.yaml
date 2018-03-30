@@ -1,0 +1,14 @@
+name: "java script example pipeline"
+reader:
+  name: "CsvReader"
+  clazz: "solrcmdutils.CSVReader"
+  property:
+    filename: "example.csv"
+
+filter:
+  - name: "JavaScript Filter"
+    clazz: "solrcmdutils.JavaScriptFilter"
+    property:
+      filename: "transform.js"
+  - name: "Test Filter"
+    clazz: "solrcmdutils.TestFilter"
