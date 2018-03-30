@@ -84,6 +84,7 @@ public class PipelineExecuter {
         classRegestriy.put("solrcmdutils.FileLineWriter", FileLineWriter.class);
         classRegestriy.put("solrcmdutils.FilelineReader", FilelineReader.class);
         classRegestriy.put("solrcmdutils.CSVWriter", CSVWriter.class);
+        classRegestriy.put("solrcmdutils.KafkaWriter", KafkaWriter.class);
         classRegestriy.put("solrcmdutils.TestingFilter", TestingFilter.class);
         classRegestriy.put("solrcmdutils.NoopFilter", NoopFilter.class);
         classRegestriy.put("solrcmdutils.DuplicateRemovalFilter", DuplicateRemovalFilter.class);

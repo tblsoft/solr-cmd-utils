@@ -101,6 +101,19 @@ public class HTTPHelper {
 			throw new RuntimeException(e);
 		}
 	}
+
+
+	public static InputStream getAsInputStream(String url) {
+		try {
+			CloseableHttpClient httpclient = HttpClients.createDefault();
+			HttpGet httpPost = new HttpGet(url);
+
+			CloseableHttpResponse response = httpclient.execute(httpPost);
+			return response.getEntity().getContent();
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
 	
 	/**
 	 * Store the body of the url in the specified fileName.

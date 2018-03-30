@@ -110,6 +110,11 @@
             <artifactId>minio</artifactId>
             <version>3.0.4</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.kafka</groupId>
+            <artifactId>kafka-clients</artifactId>
+            <version>1.0.1</version>
+        </dependency>
 
     </dependencies>
     <build>

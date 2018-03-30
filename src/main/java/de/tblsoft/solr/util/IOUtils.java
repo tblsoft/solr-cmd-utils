@@ -2,6 +2,7 @@ package de.tblsoft.solr.util;
 
 import com.google.common.io.Files;
 
+import de.tblsoft.solr.http.HTTPHelper;
 import org.apache.commons.compress.compressors.bzip2.BZip2CompressorInputStream;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.IOFileFilter;
@@ -20,7 +21,9 @@ import java.util.zip.GZIPOutputStream;
 public class IOUtils {
 
     public static String getAbsoluteFile(String directory, String fileName) {
-    	if(fileName.toLowerCase().startsWith("c:\\")) {
+        if(fileName.toLowerCase().startsWith("http")) {
+            return fileName;
+        } else if(fileName.toLowerCase().startsWith("c:\\")) {
     		return fileName;
     	} else if(fileName.startsWith("/")) {
             return fileName;
@@ -76,6 +79,10 @@ public class IOUtils {
 
 
     public static InputStream getInputStream(String inputFileName) throws IOException {
+        if(inputFileName.startsWith("http")) {
+            return HTTPHelper.getAsInputStream(inputFileName);
+        }
+
         InputStream fileStream = new FileInputStream(inputFileName);
         if (inputFileName.endsWith(".gz")) {
             return new GZIPInputStream(fileStream);
