@@ -120,7 +120,11 @@
             <artifactId>js</artifactId>
             <version>1.7R2</version>
         </dependency>
-
+        <dependency>
+            <groupId>com.github.jsurfer</groupId>
+            <artifactId>jsurfer-gson</artifactId>
+            <version>1.4.2</version>
+        </dependency>
 
     </dependencies>
     <build>

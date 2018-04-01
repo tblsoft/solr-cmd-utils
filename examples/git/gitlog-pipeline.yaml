@@ -1,0 +1,19 @@
+name: "java script example pipeline"
+reader:
+  name: "JsonReader"
+  clazz: "solrcmdutils.JsonReader"
+  property:
+    filename: "gitlog.json"
+    javaScriptFilename: "transform.js"
+    rootPath: "$[*]"
+
+filter:
+  - name: "Elastic Writer"
+    clazz: "solrcmdutils.ElasticWriter"
+    disabled: false
+    property:
+      type: "elastic"
+      delete: "true"
+      #elasticMappingLocation: "textbot-elastic-mapping.json"
+      location: "http://localhost:9200/git/git"
+      bufferSize: "50"
