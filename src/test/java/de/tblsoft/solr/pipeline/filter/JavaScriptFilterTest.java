@@ -20,11 +20,11 @@ public class JavaScriptFilterTest extends AbstractFilterTest {
     public void test() {
         configure();
         document(
-                DocumentBuilder.document().field("foo","bar").create()
+                DocumentBuilder.document().field("alice","bob").create()
         );
 
         assertNumberOfDocuments(2);
-        assertNumberOfFields(2);
+        assertNumberOfFields(3);
         Field tbl =outputDocumentList.get(0).getField("tbl");
         assertFiledList("tbl", "bar", "alice", "bob");
 
