@@ -34,13 +34,26 @@ public class LinkCheckerFilter extends AbstractFilter {
         } else {
             int httpStatusCode = HTTPHelper.getStatusCode(url);
             httpCode = String.valueOf(httpStatusCode);
-            status = "ERROR";
-            if(httpStatusCode == 200) {
+            status = "UNKNOWN";
+            if(httpStatusCode >= 100 && httpStatusCode < 200) {
+                status = "INFORMATION";
+            }
+            if(httpStatusCode >= 200 && httpStatusCode < 300) {
                 status = "OK";
             }
+            if(httpStatusCode >= 300 && httpStatusCode < 400) {
+                status = "REDIRECT";
+            }
+            if(httpStatusCode >= 400 && httpStatusCode < 500) {
+                status = "CLIENT_ERROR";
+            }
+            if(httpStatusCode >= 500 && httpStatusCode < 600) {
+                status = "SERVER_ERROR";
+            }
+            if(httpStatusCode >= 900 && httpStatusCode < 1000) {
+                status = "PROPRIETARY";
+            }
         }
-
-
 
         document.addField(httpCodeFieldName, httpCode);
         document.addField(statusFieldName, status);
