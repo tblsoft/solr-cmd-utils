@@ -10,8 +10,12 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
-	<dependencies>
 
+    <scm>
+        <connection>scm:git:https://github.com/tblsoft/solr-cmd-utils.git</connection>
+        <developerConnection>scm:git:https://github.com/tblsoft/solr-cmd-utils.git</developerConnection>
+    </scm>
+	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
