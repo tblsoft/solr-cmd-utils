@@ -1,0 +1,16 @@
+name: "java script example pipeline"
+reader:
+  name: "DocumentGeneratorReader"
+  clazz: "solrcmdutils.DocumentGeneratorReader"
+  property:
+    count: "100000"
+    fieldCount: "1000"
+
+filter:
+  - name: "JavaScript Filter"
+    clazz: "solrcmdutils.JavaScriptFilter"
+    disabled: false
+    property:
+      filename: "pass-through.js"
+  - name: "Status Filter"
+    clazz: "solrcmdutils.StatusFilter"

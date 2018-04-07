@@ -31,6 +31,9 @@ public class JavaScriptFilter extends AbstractFilter {
 
     private Gson gson = new Gson();
 
+    private Scriptable scope;
+    private Context cx;
+
     @Override
     public void init() {
         String internalFilename = getProperty("filename", null);
@@ -40,23 +43,27 @@ public class JavaScriptFilter extends AbstractFilter {
 
         ScriptEngineManager mgr = new ScriptEngineManager();
         engine = mgr.getEngineByName("JavaScript");
+        cx = Context.enter();
+        scope = cx.initStandardObjects();
+        ScriptableObject.putProperty(scope, "documentBuilder", Context.javaToJS(new DocumentBuilder(), scope));
+
 
         try {
             script = FileUtils.readFileToString(new File(filename));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        super.init();
 
     }
 
     @Override
     public void document(Document document) {
-        Context cx = Context.enter();
-        Scriptable scope = cx.initStandardObjects();
+
+
 
 
         List<Document> output = new ArrayList<Document>();
-        ScriptableObject.putProperty(scope, "documentBuilder", Context.javaToJS(new DocumentBuilder(), scope));
         ScriptableObject.putProperty(scope, "input", Context.javaToJS(document, scope));
         ScriptableObject.putProperty(scope, "output", Context.javaToJS(output, scope));
 
@@ -68,5 +75,8 @@ public class JavaScriptFilter extends AbstractFilter {
         }
     }
 
-
+    @Override
+    public void end() {
+        super.end();
+    }
 }
