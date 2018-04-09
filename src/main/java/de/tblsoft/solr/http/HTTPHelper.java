@@ -139,7 +139,7 @@ public class HTTPHelper {
 
     public static int getStatusCode(String url) {
         try {
-            CloseableHttpClient httpclient = HttpClients.createDefault();
+            CloseableHttpClient httpclient = HttpClients.custom().disableRedirectHandling().build();
             HttpGet httpGet = new HttpGet(url);
             CloseableHttpResponse response = httpclient.execute(httpGet);
             httpclient.close();
