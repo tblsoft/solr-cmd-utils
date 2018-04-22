@@ -82,7 +82,7 @@ public class MappingFilter extends AbstractFilter {
 			}
 			StrSubstitutor sub = new StrSubstitutor(documentMap);
 			String value = sub.replace(entry.getValue());
-			mappedDocument.addField(entry.getKey(), value);
+			mappedDocument.setField(entry.getKey(), value);
 		}
 
 		if (mappedDocument.getFields().size() != 0) {

@@ -1,0 +1,27 @@
+name: "solr compare example"
+reader:
+  name: "CsvReader"
+  clazz: "solrcmdutils.CSVReader"
+  property:
+    filename: "urls.csv"
+
+filter:
+  - name: "Status filter"
+    clazz: "solrcmdutils.StatusTimeFilter"
+    disabled: false
+  - name: "Test Filter"
+    clazz: "solrcmdutils.SystemOutWriter"
+  - name: "Crawler Filter"
+    clazz: "solrcmdutils.HttpFilter"
+    disabled: false
+    property:
+      userAgent: "demo"
+      urlField: "url"
+      threads: "3"
+  - name: "extract information from the html field"
+    clazz: "solrcmdutils.HtmlJsoupFilter"
+    property:
+      htmlField: "http_payload"
+      deleteHtmlField: "true"
+  - name: "Test Filter"
+    clazz: "solrcmdutils.SystemOutWriter"

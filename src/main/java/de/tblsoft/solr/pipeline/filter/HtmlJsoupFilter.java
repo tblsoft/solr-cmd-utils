@@ -1,5 +1,8 @@
 package de.tblsoft.solr.pipeline.filter;
 
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.api.client.repackaged.com.google.common.base.Strings;
 import de.tblsoft.solr.pipeline.AbstractFilter;
 import de.tblsoft.solr.pipeline.bean.Document;
@@ -9,7 +12,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.nodes.TextNode;
 import org.jsoup.select.Elements;
 
-import java.util.Iterator;
+import java.util.*;
 import java.util.regex.Pattern;
 
 public class HtmlJsoupFilter extends AbstractFilter {
@@ -52,6 +55,9 @@ public class HtmlJsoupFilter extends AbstractFilter {
         mapAllElements("h2", "h2");
         mapAllElements("h3", "h3");
         mapAllElements("h4", "h4");
+
+        document.setField("links", getAbsoluteLinks());
+        document.setField("jsonld", getJsonLd());
         mapItempropArticleBody();
         extractAllMeta();
         if(deleteHtmlField) {
@@ -59,6 +65,35 @@ public class HtmlJsoupFilter extends AbstractFilter {
         }
 		super.document(document);
 	}
+
+
+    public Collection<String> getAbsoluteLinks() {
+	    Set<String> absoluteUrls = new HashSet<String>();
+        Elements link = jsoupDocument.select("a");
+        for (int i = 0; i < link.size() ; i++) {
+            String absUrl = link.get(i).absUrl("href");
+            absoluteUrls.add(absUrl);
+        }
+        return absoluteUrls;
+    }
+
+    public Collection<String> getJsonLd() {
+	    List jsonLdList = new ArrayList();
+        Elements jsonLdScripts = jsoupDocument.select("script[type=application/ld+json]");
+        for (int i = 0; i < jsonLdScripts.size() ; i++) {
+            try {
+                String jsonLd = jsonLdScripts.get(i).data();
+                ObjectMapper objectMapper = new ObjectMapper();
+                objectMapper.configure(JsonParser.Feature.ALLOW_COMMENTS, true);
+                JsonNode json = objectMapper.readTree(jsonLd);
+                jsonLdList.add(objectMapper.writeValueAsString(json));
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        return jsonLdList;
+    }
 
 
     public String getCanonical() {
