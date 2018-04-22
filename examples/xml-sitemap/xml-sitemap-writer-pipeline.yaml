@@ -16,3 +16,4 @@ filter:
     property:
         filename: "sitemap_${sitemapCounter}.xml"
         maxEntriesPerFile: "50000"
+        baseUrl: "https://tblsoft.de/"

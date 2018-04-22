@@ -2,6 +2,7 @@ package de.tblsoft.solr.sitemap.bean;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -11,7 +12,7 @@ import java.util.List;
 public class Sitemapindex {
 
 
-    private List<Sitemap> sitemap;
+    private List<Sitemap> sitemap = new ArrayList<Sitemap>();
 
     @XmlElement(name = "sitemap", namespace = "http://www.sitemaps.org/schemas/sitemap/0.9")
     public List<Sitemap> getSitemap() {

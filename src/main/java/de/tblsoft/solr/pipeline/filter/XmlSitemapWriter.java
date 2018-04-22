@@ -2,15 +2,21 @@ package de.tblsoft.solr.pipeline.filter;
 
 import de.tblsoft.solr.pipeline.AbstractFilter;
 import de.tblsoft.solr.pipeline.bean.Document;
+import de.tblsoft.solr.sitemap.bean.Sitemap;
+import de.tblsoft.solr.sitemap.bean.Sitemapindex;
 import de.tblsoft.solr.util.DateUtils;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.Marshaller;
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.regex.Pattern;
 
 /**
@@ -27,12 +33,18 @@ public class XmlSitemapWriter extends AbstractFilter {
     private long sitemapCounter = 0;
 
     private String filename;
+    private String sitemapIndexFilename;
+    private String baseUrl;
+
+    private List<String> sitemapFiles = new ArrayList<String>();
 
     @Override
     public void init() {
 
         try {
             filename = getProperty("filename", null);
+            sitemapIndexFilename = getProperty("sitemapIndexFilename", "sitemap-index.xml");
+            baseUrl = getProperty("baseUrl", null);
             maxEntriesPerFile = getPropertyAsInt("maxEntriesPerFile", 50000);
 
         } catch (Exception e) {
@@ -88,6 +100,7 @@ public class XmlSitemapWriter extends AbstractFilter {
         try {
             XMLOutputFactory output = XMLOutputFactory.newInstance();
             String finalFilename = filename.replaceAll(Pattern.quote("${sitemapCounter}"), String.valueOf(sitemapCounter));
+            sitemapFiles.add(finalFilename);
             OutputStream os = new FileOutputStream(new File(finalFilename));
             writer = output.createXMLStreamWriter(os);
             writer.writeStartDocument();
@@ -117,10 +130,31 @@ public class XmlSitemapWriter extends AbstractFilter {
     @Override
     public void end() {
         finishSitemapFile();
-
+        createSitemapIndex();
 
         super.end();
 
+    }
+
+    private void createSitemapIndex() {
+        try {
+            Sitemapindex sitemapindex = new Sitemapindex();
+
+            for (String sitemapFile : sitemapFiles) {
+                Sitemap sitemap = new Sitemap();
+                sitemap.setLoc(baseUrl + sitemapFile);
+                sitemapindex.getSitemap().add(sitemap);
+            }
+
+
+            File file = new File(sitemapIndexFilename);
+            JAXBContext jaxbContext = JAXBContext.newInstance(Sitemapindex.class);
+            Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
+            jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+            jaxbMarshaller.marshal(sitemapindex, file);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }
