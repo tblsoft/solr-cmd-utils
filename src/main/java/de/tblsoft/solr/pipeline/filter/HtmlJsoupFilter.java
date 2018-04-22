@@ -117,16 +117,19 @@ public class HtmlJsoupFilter extends AbstractFilter {
             String content = element.attr("content");
 
             if(StringUtils.isNotEmpty(name)) {
+                document.addField("metanames", name);
                 document.addField("__meta_" + name, content);
             }
 
             if(StringUtils.isNotEmpty(property)) {
+                document.addField("propertynames", name);
                 property = property.replaceAll(Pattern.quote(":"), "_");
                 document.addField("__property_" + property, content);
             }
 
 
             if(StringUtils.isNotEmpty(itemprop)) {
+                document.addField("itempropnames", name);
                 document.addField("__itemprop_" + itemprop, content);
             }
 
