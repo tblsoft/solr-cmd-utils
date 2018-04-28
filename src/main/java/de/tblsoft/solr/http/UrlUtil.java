@@ -41,6 +41,15 @@ public class UrlUtil {
         }
     }
 
+    public static String getProtocol(String url) {
+        try {
+            URL tempUrl = new URL(url);
+            return tempUrl.getProtocol();
+        } catch (MalformedURLException e) {
+            throw new IllegalArgumentException("The url " + url + " is not valid.");
+        }
+    }
+
     public static List<String> getPathParts(String url) {
         return Arrays.asList(getPath(url).split(Pattern.quote("/")));
 

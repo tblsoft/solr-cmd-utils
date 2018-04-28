@@ -3,6 +3,7 @@ package de.tblsoft.solr.pipeline.bean;
 import com.google.common.base.Strings;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -61,6 +62,9 @@ public class Document {
         this.fields = newFields;
     }
 
+    public void setField(String name, Collection<String> value) {
+        setField(name, new ArrayList<String>(value));
+    }
 
     public void setField(String name, List<String> value) {
         Field field = new Field(name,value);

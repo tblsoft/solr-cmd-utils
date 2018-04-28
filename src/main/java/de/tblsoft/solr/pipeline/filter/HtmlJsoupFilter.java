@@ -122,7 +122,7 @@ public class HtmlJsoupFilter extends AbstractFilter {
             }
 
             if(StringUtils.isNotEmpty(property)) {
-                document.addField("propertynames", name);
+                document.addField("propertynames", property);
                 property = property.replaceAll(Pattern.quote(":"), "_");
                 document.addField("__property_" + property, content);
             }

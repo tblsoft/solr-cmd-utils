@@ -41,7 +41,9 @@ public class HttpFilter extends AbstractFilter {
         cm.setDefaultMaxPerRoute(threads);
 
         httpclient = HttpClients.custom()
-                .setConnectionManager(cm).setMaxConnPerRoute(threads)
+                .setConnectionManager(cm)
+                .setMaxConnPerRoute(threads)
+                .disableRedirectHandling()
                 .build();
 
 

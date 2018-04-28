@@ -50,7 +50,8 @@ public class HttpWorker implements Callable<Document> {
             long duration = System.currentTimeMillis() - start;
 
             for(Header header : response.getAllHeaders()) {
-                document.setField("http_header_" + header.getName(), header.getValue());
+                document.addField("http_header_" + header.getName(), header.getValue());
+                document.addField("headernames", header.getName());
             }
 
             document.setField("http_size", String.valueOf(responseBuilder.length()));
