@@ -23,6 +23,8 @@ public class Field {
 
     private List<String> values;
 
+    private String datatype;
+
     public String getName() {
         return name;
     }
@@ -46,11 +48,20 @@ public class Field {
         return null;
     }
 
+    public String getDatatype() {
+        return datatype;
+    }
+
+    public void setDatatype(String datatype) {
+        this.datatype = datatype;
+    }
+
     @Override
     public String toString() {
         return "Field{" +
                 "name='" + name + '\'' +
                 ", values=" + values +
+                ", datatype='" + datatype + '\'' +
                 '}';
     }
 }

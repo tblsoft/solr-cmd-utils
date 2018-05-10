@@ -82,20 +82,13 @@ public class ElasticWriter extends AbstractFilter {
 		super.init();
 	}
 
-	Object transformDatatype(List<String> values) {
-		List<Long> longList = new ArrayList<Long>();
-		for (String value : values) {
-			Object transformedValue = transformDatatype(value, detectNumberValues);
-			if (transformedValue instanceof Long) {
-				longList.add((Long) transformedValue);
-			} else {
-				return values;
-			}
-		}
-		return longList;
-	}
+	static Object transformDatatype(Field field, boolean detectNumberValues) {
 
-	static Object transformDatatype(String value, boolean detectNumberValues) {
+		String value = field.getValue();
+		if(field.getDatatype() != null && "string".equals(field.getDatatype())) {
+			return  value;
+		}
+
 		if(!detectNumberValues) {
 			return value;
 		}
@@ -193,7 +186,7 @@ public class ElasticWriter extends AbstractFilter {
 			Object fieldValue = field.getValues();
 
 			if (values.size() == 1) {
-				fieldValue = transformDatatype(field.getValue(), detectNumberValues);
+				fieldValue = transformDatatype(field, detectNumberValues);
 			}
 
 			if(fieldIsFlat) {

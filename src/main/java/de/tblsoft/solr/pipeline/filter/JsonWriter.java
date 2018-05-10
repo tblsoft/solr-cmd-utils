@@ -67,21 +67,11 @@ public class JsonWriter extends AbstractFilter {
         super.init();
     }
 
-
-    Object transformDatatype(List<String> values) {
-        List<Long> longList = new ArrayList<Long>();
-        for(String value: values) {
-            Object transformedValue = transformDatatype(value);
-            if(transformedValue instanceof Long) {
-                longList.add((Long) transformedValue);
-            } else {
-                return values;
-            }
+    static Object transformDatatype(Field field) {
+        String value = field.getValue();
+        if(field.getDatatype() != null && "string".equals(field.getDatatype())) {
+            return value;
         }
-        return longList;
-    }
-
-    static Object transformDatatype(String value) {
         if(NumberUtils.isNumber(value)) {
             try {
                 Long intValue = Long.valueOf(value);
@@ -178,7 +168,7 @@ public class JsonWriter extends AbstractFilter {
                 continue;
             }
             if(values.size() == 1){
-                jsonDocument.put(field.getName(), transformDatatype(field.getValue()));
+                jsonDocument.put(field.getName(), transformDatatype(field));
             } else {
                 jsonDocument.put(field.getName(), field.getValues());
             }
