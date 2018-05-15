@@ -94,6 +94,7 @@ public class PipelineExecuter {
         classRegestriy.put("solrcmdutils.WhitelistTopicTermsFilter", WhitelistTopicTermsFilter.class);
         classRegestriy.put("solrcmdutils.TopicMergeFilter", TopicMergeFilter.class);
         classRegestriy.put("solrcmdutils.TopicAggregationFilter", TopicAggregationFilter.class);
+        classRegestriy.put("solrcmdutils.ElasticdumpFileWriter", ElasticdumpFileWriter.class);
 
     }
 
