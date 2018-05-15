@@ -36,7 +36,7 @@ public class HTTPHelper {
 		}
 	}
 
-	public static String put(String url, String postString) {
+	public static String put(String url, String postString, String contentType) {
 		try {
 			CloseableHttpClient httpclient = HttpClients.createDefault();
 			HttpPut httpPost = new HttpPut(url);
@@ -44,8 +44,11 @@ public class HTTPHelper {
 			if (postString != null) {
 				StringEntity entity = new StringEntity(postString, "UTF-8");
 				httpPost.setEntity(entity);
-				// httpPost.setHeader("Content-Type",contentType);
 			}
+			if(!Strings.isNullOrEmpty(contentType)) {
+				httpPost.setHeader("Content-Type",contentType);
+			}
+
 
 			CloseableHttpResponse response = httpclient.execute(httpPost);
 			StringBuilder responseBuilder = new StringBuilder();
@@ -59,14 +62,19 @@ public class HTTPHelper {
 	}
 
 	public static String post(String url, String postString) {
+		return post(url, postString, null);
+	}
+
+	public static String post(String url, String postString, String contentType) {
 		try {
 			CloseableHttpClient httpclient = HttpClients.createDefault();
 			HttpPost httpPost = new HttpPost(url);
 
 			StringEntity entity = new StringEntity(postString, "UTF-8");
 			httpPost.setEntity(entity);
-			// httpPost.setHeader("Content-Type",contentType);
-
+			if(!Strings.isNullOrEmpty(contentType)) {
+				httpPost.setHeader("Content-Type",contentType);
+			}
 			CloseableHttpResponse response = httpclient.execute(httpPost);
 			StringBuilder responseBuilder = new StringBuilder();
 
@@ -89,6 +97,19 @@ public class HTTPHelper {
 			responseBuilder.append(EntityUtils.toString(response.getEntity()));
 			httpclient.close();
 			return responseBuilder.toString();
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+
+	public static InputStream getAsInputStream(String url) {
+		try {
+			CloseableHttpClient httpclient = HttpClients.createDefault();
+			HttpGet httpPost = new HttpGet(url);
+
+			CloseableHttpResponse response = httpclient.execute(httpPost);
+			return response.getEntity().getContent();
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -118,7 +139,7 @@ public class HTTPHelper {
 
     public static int getStatusCode(String url) {
         try {
-            CloseableHttpClient httpclient = HttpClients.createDefault();
+            CloseableHttpClient httpclient = HttpClients.custom().disableRedirectHandling().build();
             HttpGet httpGet = new HttpGet(url);
             CloseableHttpResponse response = httpclient.execute(httpGet);
             httpclient.close();

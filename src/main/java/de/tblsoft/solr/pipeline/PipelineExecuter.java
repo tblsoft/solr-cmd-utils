@@ -40,10 +40,12 @@ public class PipelineExecuter {
         classRegestriy.put("solrcmdutils.GrokReader", GrokReader.class);
         classRegestriy.put("solrcmdutils.GCLogReader", GCLogReader.class);
         classRegestriy.put("solrcmdutils.JsonPathReader", JsonPathReader.class);
+        classRegestriy.put("solrcmdutils.JsonReader", JsonReader.class);
         classRegestriy.put("solrcmdutils.ElasticJsonPathReader", ElasticJsonPathReader.class);
         classRegestriy.put("solrcmdutils.ElasticReader", ElasticReader.class);
         classRegestriy.put("solrcmdutils.XmlReader", XmlReader.class);
         classRegestriy.put("solrcmdutils.XmlSitemapReader", XmlSitemapReader.class);
+        classRegestriy.put("solrcmdutils.XmlSitemapWriter", XmlSitemapWriter.class);
         classRegestriy.put("solrcmdutils.HttpFilter", HttpFilter.class);
         classRegestriy.put("solrcmdutils.HtmlJsoupFilter", HtmlJsoupFilter.class);
         classRegestriy.put("solrcmdutils.EntityExtractionFilter", EntityExtractionFilter.class);
@@ -84,6 +86,7 @@ public class PipelineExecuter {
         classRegestriy.put("solrcmdutils.FileLineWriter", FileLineWriter.class);
         classRegestriy.put("solrcmdutils.FilelineReader", FilelineReader.class);
         classRegestriy.put("solrcmdutils.CSVWriter", CSVWriter.class);
+        classRegestriy.put("solrcmdutils.KafkaWriter", KafkaWriter.class);
         classRegestriy.put("solrcmdutils.TestingFilter", TestingFilter.class);
         classRegestriy.put("solrcmdutils.NoopFilter", NoopFilter.class);
         classRegestriy.put("solrcmdutils.DuplicateRemovalFilter", DuplicateRemovalFilter.class);
@@ -95,6 +98,8 @@ public class PipelineExecuter {
         classRegestriy.put("solrcmdutils.TopicMergeFilter", TopicMergeFilter.class);
         classRegestriy.put("solrcmdutils.TopicAggregationFilter", TopicAggregationFilter.class);
         classRegestriy.put("solrcmdutils.ElasticdumpFileWriter", ElasticdumpFileWriter.class);
+        classRegestriy.put("solrcmdutils.DocumentGeneratorReader", DocumentGeneratorReader.class);
+        classRegestriy.put("solrcmdutils.JavaScriptFilter", JavaScriptFilter.class);
 
     }
 

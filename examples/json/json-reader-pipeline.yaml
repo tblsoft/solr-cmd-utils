@@ -1,0 +1,12 @@
+name: "java script example pipeline"
+reader:
+  name: "JsonReader"
+  clazz: "solrcmdutils.JsonReader"
+  property:
+    filename: "example.json"
+    javaScriptFilename: "transform.js"
+    rootPath: "$.store.book[*]"
+
+filter:
+  - name: "Test Filter"
+    clazz: "solrcmdutils.SystemOutWriter"

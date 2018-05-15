@@ -1,0 +1,3 @@
+# Xml Sitemap Example
+
+## Usage

@@ -1,0 +1,19 @@
+name: "xml sitemap pipeline"
+reader:
+  name: "XmlReader"
+  clazz: "solrcmdutils.CSVReader"
+  property:
+    filename: "test.csv"
+
+filter:
+  - name: "Mapping Filter"
+    clazz: "solrcmdutils.MappingFilter"
+    property:
+        mapping:
+          - "link->loc"
+  - name: "Xml Sitemap Writer"
+    clazz: "solrcmdutils.XmlSitemapWriter"
+    property:
+        filename: "sitemap_${sitemapCounter}.xml"
+        maxEntriesPerFile: "50000"
+        baseUrl: "https://tblsoft.de/"

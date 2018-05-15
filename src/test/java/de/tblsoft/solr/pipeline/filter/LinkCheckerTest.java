@@ -48,6 +48,16 @@ public class LinkCheckerTest extends AbstractFilterTest {
         assertFiled("url", "http://example.org");
         assertFiled("status", "OK");
         assertFiled("httpCode", "200");
+    }
+
+    @org.junit.Test
+    public void testLinkCheckerFilterForRedirect() {
+        configure();
+        createField("url", "https://quasiris.de");
+        runTest();
+        assertFiled("url", "https://quasiris.de");
+        assertFiled("status", "REDIRECT");
+        assertFiled("httpCode", "302");
 
     }
 }

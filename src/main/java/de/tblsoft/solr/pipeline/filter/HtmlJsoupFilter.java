@@ -1,5 +1,9 @@
 package de.tblsoft.solr.pipeline.filter;
 
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.api.client.repackaged.com.google.common.base.Strings;
 import de.tblsoft.solr.pipeline.AbstractFilter;
 import de.tblsoft.solr.pipeline.bean.Document;
 import org.apache.commons.lang3.StringUtils;
@@ -8,7 +12,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.nodes.TextNode;
 import org.jsoup.select.Elements;
 
-import java.util.Iterator;
+import java.util.*;
 import java.util.regex.Pattern;
 
 public class HtmlJsoupFilter extends AbstractFilter {
@@ -51,6 +55,9 @@ public class HtmlJsoupFilter extends AbstractFilter {
         mapAllElements("h2", "h2");
         mapAllElements("h3", "h3");
         mapAllElements("h4", "h4");
+
+        document.setField("links", getAbsoluteLinks());
+        document.setField("jsonld", getJsonLd());
         mapItempropArticleBody();
         extractAllMeta();
         if(deleteHtmlField) {
@@ -58,6 +65,35 @@ public class HtmlJsoupFilter extends AbstractFilter {
         }
 		super.document(document);
 	}
+
+
+    public Collection<String> getAbsoluteLinks() {
+	    Set<String> absoluteUrls = new HashSet<String>();
+        Elements link = jsoupDocument.select("a");
+        for (int i = 0; i < link.size() ; i++) {
+            String absUrl = link.get(i).absUrl("href");
+            absoluteUrls.add(absUrl);
+        }
+        return absoluteUrls;
+    }
+
+    public Collection<String> getJsonLd() {
+	    List jsonLdList = new ArrayList();
+        Elements jsonLdScripts = jsoupDocument.select("script[type=application/ld+json]");
+        for (int i = 0; i < jsonLdScripts.size() ; i++) {
+            try {
+                String jsonLd = jsonLdScripts.get(i).data();
+                ObjectMapper objectMapper = new ObjectMapper();
+                objectMapper.configure(JsonParser.Feature.ALLOW_COMMENTS, true);
+                JsonNode json = objectMapper.readTree(jsonLd);
+                jsonLdList.add(objectMapper.writeValueAsString(json));
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        return jsonLdList;
+    }
 
 
     public String getCanonical() {
@@ -81,16 +117,19 @@ public class HtmlJsoupFilter extends AbstractFilter {
             String content = element.attr("content");
 
             if(StringUtils.isNotEmpty(name)) {
+                document.addField("metanames", name);
                 document.addField("__meta_" + name, content);
             }
 
             if(StringUtils.isNotEmpty(property)) {
+                document.addField("propertynames", property);
                 property = property.replaceAll(Pattern.quote(":"), "_");
                 document.addField("__property_" + property, content);
             }
 
 
             if(StringUtils.isNotEmpty(itemprop)) {
+                document.addField("itempropnames", name);
                 document.addField("__itemprop_" + itemprop, content);
             }
 
@@ -122,12 +161,22 @@ public class HtmlJsoupFilter extends AbstractFilter {
         }
     }
 
-    public void mapFirstElement(String selector, String fieldName) {
+    public String getFirstElement(String selector) {
         Elements elements = jsoupDocument.select(selector);
         if (elements.size() > 0) {
             String value = elements.get(0).text();
-            document.addField(fieldName, value);
+            return value;
         }
+        return null;
+    }
+
+    public void mapFirstElement(String selector, String fieldName) {
+        String value = getFirstElement(selector);
+        if(!Strings.isNullOrEmpty(value)) {
+            document.addField(fieldName, value);
+
+        }
+
     }
 
     public void mapMeta(String metaName, String fieldName) {

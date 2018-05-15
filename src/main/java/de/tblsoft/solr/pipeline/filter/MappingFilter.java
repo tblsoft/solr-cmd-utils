@@ -15,6 +15,8 @@ public class MappingFilter extends AbstractFilter {
 	private Map<String, List<String>> mapping = new HashMap<String, List<String>>();
 	private Map<String, List<String>> mappingFunctions = new HashMap<String, List<String>>();
 	private Map<String, String> joins = new HashMap<String, String>();
+	private Map<String, String> datatypes = new HashMap<String, String>();
+
 
     private boolean sortFieldsByName = false;
     private boolean addEmptyFieldIfNotExists = false;
@@ -33,8 +35,21 @@ public class MappingFilter extends AbstractFilter {
 		mapping = simpleMapping.getMapping();
 		mappingFunctions = simpleMapping.getMappingFunctions();
 		joins = simpleMapping.getJoins();
+		datatypes = initDatatypes(getPropertyAsList("datatypes", new ArrayList<String>()));
 
 		super.init();
+	}
+
+	Map<String, String> initDatatypes(List<String> datatypeConfig) {
+		Map<String, String> datatypes = new HashMap<String, String>();
+		for (String datatypeConfigEntry : datatypeConfig) {
+			String[] s = datatypeConfigEntry.split("->");
+			if(s.length == 2) {
+				datatypes.put(s[0], s[1]);
+			}
+		}
+		return datatypes;
+
 	}
 
 
@@ -68,6 +83,7 @@ public class MappingFilter extends AbstractFilter {
 
 					mappedDocument.addField(mappedName, newValues);
 					Field mappedField = mappedDocument.getField(mappedName);
+					mappedField.setDatatype(datatypes.get(mappedField.getName()));
 					for (String function : mappedFunctions) {
 						simpleMapping.executeFieldFunction(function, mappedField);
 					}
@@ -82,7 +98,7 @@ public class MappingFilter extends AbstractFilter {
 			}
 			StrSubstitutor sub = new StrSubstitutor(documentMap);
 			String value = sub.replace(entry.getValue());
-			mappedDocument.addField(entry.getKey(), value);
+			mappedDocument.setField(entry.getKey(), value);
 		}
 
 		if (mappedDocument.getFields().size() != 0) {

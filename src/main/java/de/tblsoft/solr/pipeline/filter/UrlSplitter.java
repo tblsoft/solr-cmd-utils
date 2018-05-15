@@ -38,16 +38,24 @@ public class UrlSplitter extends AbstractFilter {
             document.addField(fieldPrefix + "_path", path);
 
             String[] pathSplitted = path.split(Pattern.quote("/"));
+            StringBuilder pathParts = new StringBuilder();
             for (int i = 0; i < pathSplitted.length; i++) {
-                document.addField(fieldPrefix + "_path_" + i, pathSplitted[i]);
-                document.addField(fieldPrefix + "_pathall", pathSplitted[i]);
+                String pathPart = pathSplitted[i];
+                document.addField(fieldPrefix + "_path_" + i, pathPart);
+                document.addField(fieldPrefix + "_pathall", pathPart);
+                pathParts.append("/").append(pathPart);
+                document.addField(fieldPrefix + "_pathallparts", pathParts.toString());
             }
 
             document.addField(fieldPrefix + "_pathcount", String.valueOf(pathSplitted.length));
 
 
+
             String host = UrlUtil.getHost(value);
             document.addField(fieldPrefix + "_host",host);
+
+            String protocol = UrlUtil.getProtocol(value);
+            document.addField(fieldPrefix + "_protocol",protocol);
 
 
         } else if(value.contains("?")) {

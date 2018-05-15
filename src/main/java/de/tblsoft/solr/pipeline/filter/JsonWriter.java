@@ -4,20 +4,17 @@ package de.tblsoft.solr.pipeline.filter;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
-
 import de.tblsoft.solr.http.ElasticHelper;
 import de.tblsoft.solr.http.HTTPHelper;
 import de.tblsoft.solr.pipeline.AbstractFilter;
 import de.tblsoft.solr.pipeline.bean.Document;
 import de.tblsoft.solr.pipeline.bean.Field;
 import de.tblsoft.solr.util.IOUtils;
-
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -39,14 +36,16 @@ public class JsonWriter extends AbstractFilter {
     
     private String idField;
 
-
-
+    private String absoluteFilename;
 
     @Override
     public void init() {
         type = getProperty("type", "file");
         Boolean pretty = getPropertyAsBoolean("pretty", false);
         location = getProperty("location", null);
+        if("file".equals(type)) {
+            absoluteFilename = IOUtils.getAbsoluteFile(getBaseDir(), location);
+        }
         verify(location, "For the JsonWriter a location must be defined.");
 
         delete = getPropertyAsBoolean("delete", Boolean.TRUE);
@@ -59,53 +58,20 @@ public class JsonWriter extends AbstractFilter {
             builder = builder.setPrettyPrinting();
         }
         gson = builder.create();
-        
-        
-        if("elastic".equals(type)) {
-            if(delete && !"elasticupdate".equals(type)) {
-                try {
-                    String indexUrl = ElasticHelper.getIndexUrl(location);
-                    HTTPHelper.delete(indexUrl);
-                } catch (URISyntaxException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        	if(elasticMappingLocation != null) {
-        		String mappingJson;
-				try {
-					String indexUrl = ElasticHelper.getIndexUrl(location);
-                    File elasticMappingFile = new File(IOUtils.getAbsoluteFile(getBaseDir(),elasticMappingLocation));
 
-					mappingJson = FileUtils.readFileToString(elasticMappingFile);
-            		HTTPHelper.put(indexUrl, mappingJson);
-				} catch (IOException e) {
-					throw new RuntimeException(e);
-				} catch (URISyntaxException e) {
-                    throw new RuntimeException(e);
-                }
+        if(delete && "file".equals(type)) {
+            FileUtils.deleteQuietly(new File(absoluteFilename));
 
-        	}
-        } 
-
+        }
 
         super.init();
     }
 
-
-    Object transformDatatype(List<String> values) {
-        List<Long> longList = new ArrayList<Long>();
-        for(String value: values) {
-            Object transformedValue = transformDatatype(value);
-            if(transformedValue instanceof Long) {
-                longList.add((Long) transformedValue);
-            } else {
-                return values;
-            }
+    static Object transformDatatype(Field field) {
+        String value = field.getValue();
+        if(field.getDatatype() != null && "string".equals(field.getDatatype())) {
+            return value;
         }
-        return longList;
-    }
-
-    static Object transformDatatype(String value) {
         if(NumberUtils.isNumber(value)) {
             try {
                 Long intValue = Long.valueOf(value);
@@ -167,7 +133,7 @@ public class JsonWriter extends AbstractFilter {
             }
             else if ("file".equals(type)) {
                 try {
-                    FileUtils.writeStringToFile(new File("foo.txt"), json, true);
+                    FileUtils.writeStringToFile(new File(absoluteFilename), json, true);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -202,7 +168,7 @@ public class JsonWriter extends AbstractFilter {
                 continue;
             }
             if(values.size() == 1){
-                jsonDocument.put(field.getName(), transformDatatype(field.getValue()));
+                jsonDocument.put(field.getName(), transformDatatype(field));
             } else {
                 jsonDocument.put(field.getName(), field.getValues());
             }

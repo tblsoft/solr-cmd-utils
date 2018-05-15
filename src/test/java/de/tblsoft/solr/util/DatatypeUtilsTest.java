@@ -9,6 +9,7 @@ import org.junit.Test;
 public class DatatypeUtilsTest {
     @Test
     public void isInteger() {
+        Assert.assertFalse(DatatypeUtils.isInteger("46244L"));
         Assert.assertTrue(DatatypeUtils.isInteger("1"));
         Assert.assertTrue(DatatypeUtils.isInteger("1.0"));
         Assert.assertTrue(DatatypeUtils.isInteger("1.0000"));
