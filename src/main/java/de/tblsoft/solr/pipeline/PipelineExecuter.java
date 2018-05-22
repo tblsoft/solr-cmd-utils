@@ -100,6 +100,7 @@ public class PipelineExecuter {
         classRegestriy.put("solrcmdutils.ElasticdumpFileWriter", ElasticdumpFileWriter.class);
         classRegestriy.put("solrcmdutils.DocumentGeneratorReader", DocumentGeneratorReader.class);
         classRegestriy.put("solrcmdutils.JavaScriptFilter", JavaScriptFilter.class);
+        classRegestriy.put("solrcmdutils.SimpleGenderFilter", SimpleGenderFilter.class);
 
     }
 
