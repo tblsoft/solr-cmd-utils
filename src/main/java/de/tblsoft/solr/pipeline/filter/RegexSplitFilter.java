@@ -20,6 +20,11 @@ public class RegexSplitFilter extends AbstractFilter {
 
     private List<String> notMatchedDestFieldList;
 
+    /**
+     * emit a new doc for each array value if true,
+     * instead of putting all values to list of a single doc field
+     */
+    private boolean splitArray;
 
     @Override
     public void init() {
@@ -35,6 +40,7 @@ public class RegexSplitFilter extends AbstractFilter {
         verify(this.destFieldList, "For the RegexSplitFilter a destFieldList property must be defined as list.");
 
         notMatchedDestFieldList = getPropertyAsList("notMatchedDestFieldList", new ArrayList<String>());
+        splitArray = getPropertyAsBoolean("splitArray", false);
 
         super.init();
     }
@@ -42,7 +48,24 @@ public class RegexSplitFilter extends AbstractFilter {
 
     @Override
     public void document(Document document) {
-        String value = document.getFieldValue(sourceField, "");
+        List<String> fieldValues = document.getFieldValues(sourceField);
+        if (fieldValues != null && splitArray && fieldValues.size() > 1) {
+            for (String value : fieldValues) {
+                Document copy = new Document(document);
+                splitDocument(copy, value);
+
+                super.document(copy);
+            }
+        }
+        else {
+            String value = document.getFieldValue(sourceField, "");
+            splitDocument(document, value);
+
+            super.document(document);
+        }
+    }
+
+    protected void splitDocument(Document document, String value) {
         Matcher m = regex.matcher(value);
         if (m.matches()) {
             for (int i = 0; i < m.groupCount(); i++) {
@@ -55,7 +78,5 @@ public class RegexSplitFilter extends AbstractFilter {
                 document.addField(fieldName,value);
             }
         }
-
-        super.document(document);
     }
 }
