@@ -18,6 +18,15 @@ public class Document {
         return fields;
     }
 
+    public Document() {
+
+    }
+
+    public Document(Document copy) {
+        for (Field field : copy.getFields()) {
+            this.fields.add(new Field(field));
+        }
+    }
 
     public String getFieldValue(String name, String defaultValue) {
        String value = getFieldValue(name);

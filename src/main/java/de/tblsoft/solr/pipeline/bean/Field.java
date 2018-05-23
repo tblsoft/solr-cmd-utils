@@ -19,6 +19,17 @@ public class Field {
         this.values = values;
     }
 
+    public Field(Field copy) {
+        List<String> values = new ArrayList<>();
+        if(copy.getValues() != null) {
+            values = new ArrayList<>(copy.getValues());
+        }
+
+        this.name = copy.getName();
+        this.values = values;
+        this.datatype = copy.getDatatype();
+    }
+
     private String name;
 
     private List<String> values;
