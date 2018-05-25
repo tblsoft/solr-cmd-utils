@@ -101,6 +101,9 @@ public class PipelineExecuter {
         classRegestriy.put("solrcmdutils.DocumentGeneratorReader", DocumentGeneratorReader.class);
         classRegestriy.put("solrcmdutils.JavaScriptFilter", JavaScriptFilter.class);
         classRegestriy.put("solrcmdutils.SimpleGenderFilter", SimpleGenderFilter.class);
+        classRegestriy.put("solrcmdutils.RegexReplaceFilter", RegexReplaceFilter.class);
+        classRegestriy.put("solrcmdutils.EmptyFieldDocumentFilter", EmptyFieldDocumentFilter.class);
+        classRegestriy.put("solrcmdutils.EmptyArrayValuesFilter", EmptyArrayValuesFilter.class);
 
     }
 

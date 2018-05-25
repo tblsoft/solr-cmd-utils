@@ -81,6 +81,11 @@ public class SimpleMapping {
             return DateUtils.toSolrDate(value);
         } else if ("uniq".equals(function)) {
             return value;
+        } else if ("removeSpecialChars".equals(function)) {
+            if(value != null) {
+                value = value.replaceAll("[^a-zA-Z0-9']+", " ");
+            }
+            return value;
         }
 
         throw new IllegalArgumentException("The function: " + function
@@ -112,6 +117,8 @@ public class SimpleMapping {
             Set<String> uniqValues= new HashSet<String>();
             uniqValues.addAll(field.getValues());
             field.setValues(new ArrayList(uniqValues));
+            return;
+        } else if ("removeSpecialChars".equals(function)) {
             return;
         }
         throw new IllegalArgumentException("The function: " + function
