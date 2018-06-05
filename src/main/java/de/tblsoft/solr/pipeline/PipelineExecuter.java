@@ -104,6 +104,7 @@ public class PipelineExecuter {
         classRegestriy.put("solrcmdutils.RegexReplaceFilter", RegexReplaceFilter.class);
         classRegestriy.put("solrcmdutils.EmptyFieldDocumentFilter", EmptyFieldDocumentFilter.class);
         classRegestriy.put("solrcmdutils.EmptyArrayValuesFilter", EmptyArrayValuesFilter.class);
+        classRegestriy.put("solrcmdutils.FileMathFilter", FileMathFilter.class);
 
     }
 
