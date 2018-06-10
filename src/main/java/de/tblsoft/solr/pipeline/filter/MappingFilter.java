@@ -31,7 +31,7 @@ public class MappingFilter extends AbstractFilter {
         sortFieldsByName = getPropertyAsBoolean("sortFieldsByName", false);
         addEmptyFieldIfNotExists = getPropertyAsBoolean("addEmptyFieldIfNotExists", false);
 		appendFields = getPropertyAsBoolean("appendFields", false);
-		simpleMapping = new SimpleMapping(getPropertyAsList("mapping", new ArrayList<String>()));
+		simpleMapping = new SimpleMapping(getPropertyAsList("mapping", new ArrayList<String>()), getPropertyAsList("config", new ArrayList<String>()));
 		mapping = simpleMapping.getMapping();
 		mappingFunctions = simpleMapping.getMappingFunctions();
 		joins = simpleMapping.getJoins();

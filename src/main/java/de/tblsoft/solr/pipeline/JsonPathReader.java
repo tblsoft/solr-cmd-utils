@@ -22,7 +22,7 @@ import java.util.Map;
 public class JsonPathReader extends AbstractReader {
 
     public void read() {
-        SimpleMapping simpleMapping = new SimpleMapping(getPropertyAsList("mapping", new ArrayList<String>()));
+        SimpleMapping simpleMapping = new SimpleMapping(getPropertyAsList("mapping", new ArrayList<String>()), getPropertyAsList("config", new ArrayList<String>()));
         Map<String, List<String>> mapping = simpleMapping.getMapping();
         try {
             String rootPath = getProperty("rootPath", "$");

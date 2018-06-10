@@ -44,8 +44,9 @@ public class LookupFilter extends AbstractFilter {
 
     public String normalizeKey(String key) {
         String normalizedKey = key;
+        SimpleMapping simpleMapping = new SimpleMapping();
         for(String function: keyNormalizationFunctions) {
-            normalizedKey = SimpleMapping.executeFunction(function, normalizedKey);
+            normalizedKey = simpleMapping.executeFunction(function, normalizedKey);
         }
         return normalizedKey;
     }
