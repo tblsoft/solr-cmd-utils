@@ -28,6 +28,8 @@ public class HtmlJsoupFilter extends AbstractFilter {
 
     private boolean deleteHtmlField;
 
+    private Map<String, String> mapping;
+
 
 	@Override
 	public void init() {
@@ -37,8 +39,23 @@ public class HtmlJsoupFilter extends AbstractFilter {
 
         metaPrefix = getProperty("metaPrefix", "__meta_");
 
+        List<String> mappingConfiguration = getPropertyAsList("mapping", new ArrayList<String>());
+
+        mapping = new HashMap<>();
+        readConfig(mappingConfiguration);
+
+
+
 		super.init();
 	}
+
+
+    private void readConfig(List<String> mappingConfiguration) {
+        for (String v : mappingConfiguration) {
+            String[] s = v.split("->");
+            mapping.put(s[0], s[1]);
+        }
+    }
 
 
 
@@ -55,6 +72,11 @@ public class HtmlJsoupFilter extends AbstractFilter {
         mapAllElements("h2", "h2");
         mapAllElements("h3", "h3");
         mapAllElements("h4", "h4");
+
+
+        for(Map.Entry<String, String> mappingEntry: mapping.entrySet()) {
+            mapFirstElement(mappingEntry.getValue(), mappingEntry.getKey());
+        }
 
         document.setField("links", getAbsoluteLinks());
         document.setField("jsonld", getJsonLd());
