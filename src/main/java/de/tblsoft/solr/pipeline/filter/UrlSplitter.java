@@ -5,6 +5,7 @@ import com.google.common.base.Strings;
 import de.tblsoft.solr.http.UrlUtil;
 import de.tblsoft.solr.pipeline.AbstractFilter;
 import de.tblsoft.solr.pipeline.bean.Document;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.http.NameValuePair;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -41,6 +42,9 @@ public class UrlSplitter extends AbstractFilter {
             StringBuilder pathParts = new StringBuilder();
             for (int i = 0; i < pathSplitted.length; i++) {
                 String pathPart = pathSplitted[i];
+                if(StringUtils.isEmpty(pathPart)) {
+                    continue;
+                }
                 document.addField(fieldPrefix + "_path_" + i, pathPart);
                 document.addField(fieldPrefix + "_pathall", pathPart);
                 pathParts.append("/").append(pathPart);
