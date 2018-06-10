@@ -4,8 +4,11 @@ import com.google.api.client.repackaged.com.google.common.base.Strings;
 import de.tblsoft.solr.http.UrlUtil;
 import de.tblsoft.solr.pipeline.bean.Field;
 import de.tblsoft.solr.util.DateUtils;
+import de.tblsoft.solr.util.MapUtils;
+import de.tblsoft.solr.util.PairBuilder;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.*;
 import java.util.regex.Pattern;
@@ -19,18 +22,31 @@ public class SimpleMapping {
     private Map<String, List<String>> mapping = new HashMap<String, List<String>>();
     private Map<String, List<String>> mappingFunctions = new HashMap<String, List<String>>();
     private Map<String, String> joins = new HashMap<String, String>();
+    private Map<String, String> config = new HashMap<>();
+
+
+    private List<String> mappingDefinition;
 
     private List<String> mappingConfiguration;
 
-    public SimpleMapping(List<String> mappingConfiguration) {
+    public SimpleMapping() {
+
+    }
+
+    public SimpleMapping(List<String> mappingDefinition, List<String> mappingConfiguration) {
         this.mappingConfiguration = mappingConfiguration;
+        this.mappingDefinition = mappingDefinition;
         readConfig();
     }
 
     private void readConfig() {
+        for(String configDefinition : mappingConfiguration) {
+            Pair<String, String> p = PairBuilder.createPair(configDefinition, "=");
+            config.put(p.getLeft(), p.getValue());
+        }
 
 
-        for (String v : mappingConfiguration) {
+        for (String v : mappingDefinition) {
             if (v.startsWith("join:")) {
                 v = v.replace("join:", "");
                 String[] s = v.split("=", 2);
@@ -56,7 +72,7 @@ public class SimpleMapping {
     }
 
 
-    public static String executeFunction(String function, String value) {
+    public String executeFunction(String function, String value) {
         if(Strings.isNullOrEmpty(function)) {
             return value;
         }
@@ -82,11 +98,13 @@ public class SimpleMapping {
         } else if ("uniq".equals(function)) {
             return value;
         } else if ("removeSpecialChars".equals(function)) {
-            if(value != null) {
-                value = value.replaceAll("[^a-zA-Z0-9']+", " ");
-            }
+            value = value.replaceAll("[^a-zA-Z0-9']+", " ");
             return value;
-        }
+        } else if ("leftPad".equals(function)) {
+            int size = Integer.valueOf(MapUtils.getOrDefault(config,"leftPad.size", "10" ));
+            String padChar = MapUtils.getOrDefault(config,"leftPad.padChar", "0");
+            return StringUtils.leftPad(value, size, padChar );
+    }
 
         throw new IllegalArgumentException("The function: " + function
                 + " is not implemented.");
@@ -120,7 +138,10 @@ public class SimpleMapping {
             return;
         } else if ("removeSpecialChars".equals(function)) {
             return;
+        } else if ("leftPad".equals(function)) {
+            return;
         }
+
         throw new IllegalArgumentException("The function: " + function
                 + " is not implemented.");
     }
