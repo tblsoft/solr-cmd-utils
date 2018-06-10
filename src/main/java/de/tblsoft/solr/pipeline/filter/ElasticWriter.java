@@ -85,6 +85,11 @@ public class ElasticWriter extends AbstractFilter {
 	static Object transformDatatype(Field field, boolean detectNumberValues) {
 
 		String value = field.getValue();
+
+		if(!detectNumberValues) {
+			return value;
+
+		}
 		if(field.getDatatype() != null && "string".equals(field.getDatatype())) {
 			return  value;
 		}
