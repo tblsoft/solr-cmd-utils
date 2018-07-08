@@ -76,6 +76,18 @@ public class UrlUtil {
         return ret;
     }
 
+
+    public static String getUrlQuery(String url) {
+
+        try {
+            URL tempUrl = new URL(url);
+            String query = tempUrl.getQuery();
+            return query;
+        } catch (MalformedURLException e) {
+            throw new IllegalArgumentException("The url " + url + " is not valid.");
+        }
+    }
+
     public static List<NameValuePair> getUrlParams(String url, String charset) {
 
         try {

@@ -148,6 +148,23 @@ public class HTTPHelper {
             throw new RuntimeException(e);
         }
     }
+
+
+	public static String getRedirectLocation(String url) {
+		try {
+			CloseableHttpClient httpclient = HttpClients.custom().disableRedirectHandling().build();
+			HttpGet httpGet = new HttpGet(url);
+			CloseableHttpResponse response = httpclient.execute(httpGet);
+			httpclient.close();
+			Header location = response.getFirstHeader("Location");
+			if(location == null) {
+				return url;
+			}
+			return location.getValue();
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
     
  
     
