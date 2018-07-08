@@ -18,7 +18,7 @@ public class LinkCheckerTest extends AbstractFilterTest {
         configure();
         runTest();
         assertNumberOfDocuments(1);
-        assertNumberOfFields(2);
+        assertNumberOfFields(3);
         assertFiled("status","NOURL");
         assertFiled("httpCode","0");
 
@@ -35,7 +35,7 @@ public class LinkCheckerTest extends AbstractFilterTest {
         assertFiled("status","NOURL");
         assertFiled("httpCode","0");
         assertNumberOfDocuments(1);
-        assertNumberOfFields(3);
+        assertNumberOfFields(4);
         assertInitWasDelegated();
         assertEndWasDelegated();
     }
