@@ -60,6 +60,7 @@ public class UrlSplitter extends AbstractFilter {
 
             String protocol = UrlUtil.getProtocol(value);
             document.addField(fieldPrefix + "_protocol",protocol);
+            document.addField(fieldPrefix + "_query",UrlUtil.getUrlQuery(value));
 
 
         } else if(value.contains("?")) {
