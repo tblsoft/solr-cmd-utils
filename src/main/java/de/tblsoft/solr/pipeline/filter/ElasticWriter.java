@@ -9,6 +9,7 @@ import de.tblsoft.solr.pipeline.AbstractFilter;
 import de.tblsoft.solr.pipeline.bean.Document;
 import de.tblsoft.solr.pipeline.bean.Field;
 import de.tblsoft.solr.util.IOUtils;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -31,6 +32,7 @@ public class ElasticWriter extends AbstractFilter {
 	private boolean delete;
 
 	private String idField;
+	private Boolean hashId = false;
 
 	private List<Document> buffer = new ArrayList<Document>();
 
@@ -50,6 +52,7 @@ public class ElasticWriter extends AbstractFilter {
 		elasticMappingLocation = getProperty("elasticMappingLocation", null);
 
 		idField = getProperty("idField", null);
+		hashId = getPropertyAsBoolean("hashId", false);
 
 		GsonBuilder builder = new GsonBuilder();
 		gson = builder.create();
@@ -119,6 +122,8 @@ public class ElasticWriter extends AbstractFilter {
 				String id;
 				if (Strings.isStringEmpty(idField)) {
 					id = UUID.randomUUID().toString();
+				} else if(hashId) {
+					id= DigestUtils.md5Hex(document.getFieldValue(idField));
 				} else {
 					id = document.getFieldValue(idField);
 				}
