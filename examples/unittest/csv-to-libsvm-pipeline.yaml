@@ -1,0 +1,26 @@
+name: "csv unit testing pipeline"
+
+reader:
+  name: "CsvReader"
+  clazz: "solrcmdutils.CSVReader"
+  property:
+    filename: "data-1kk-transformed.csv"
+    maxRows: "1000000"
+
+filter:
+  - name: "Testing Filter"
+    id: "testingFilter"
+    clazz: "solrcmdutils.TestingFilter"
+  - name: "LibSVM Serializer"
+    clazz: "solrcmdutils.LibSvmWriter"
+    property:
+      featmapInFilepath: "feature_map.txt"
+      featmapOutFilepath: "feature_map_new.txt"
+      svmFilepath: "svm-data.txt"
+      svmFieldLabel: "price"
+      svmFields:
+        - "manufacturer"
+        - "model"
+        - "km"
+        - "ps"
+        - "initial_registration"

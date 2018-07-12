@@ -107,6 +107,7 @@ public class PipelineExecuter {
         classRegestriy.put("solrcmdutils.EmptyArrayValuesFilter", EmptyArrayValuesFilter.class);
         classRegestriy.put("solrcmdutils.FileMathFilter", FileMathFilter.class);
         classRegestriy.put("solrcmdutils.RoundNumberFilter", RoundNumberFilter.class);
+        classRegestriy.put("solrcmdutils.LibSvmWriter", LibSvmWriter.class);
 
     }
 
