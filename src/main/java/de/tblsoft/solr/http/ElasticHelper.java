@@ -21,6 +21,11 @@ public class ElasticHelper {
 		}
 		return url + "/" + id;
 	}
+
+    public static String getSearchUrl(String url) throws URISyntaxException {
+        String updateUrl = getIndexUrl(url) + "/_search";
+        return updateUrl;
+    }
 	
 	public static String getUpdateUrl(String url, String id) {
 		String updateUrl = getIndexUrlWithId(url, id) + "/_update";
