@@ -31,6 +31,15 @@ public class UrlUtil {
         }
     }
 
+    public static String appendParameter(String url, String parameter) {
+        if(url.contains("?")) {
+            url = url + "&" + parameter;
+        } else {
+            url = url + "?" + parameter;
+        }
+        return url;
+    }
+
 
     public static String getHost(String url) {
         try {
