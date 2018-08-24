@@ -13,6 +13,8 @@ public class Document {
 
     private List<Field> fields = new ArrayList<Field>();
 
+    private Long size;
+
 
     public List<Field> getFields() {
         return fields;
@@ -26,6 +28,7 @@ public class Document {
         for (Field field : copy.getFields()) {
             this.fields.add(new Field(field));
         }
+        fieldChanged();
     }
 
     public String getFieldValue(String name, String defaultValue) {
@@ -69,6 +72,7 @@ public class Document {
             }
         }
         this.fields = newFields;
+        fieldChanged();
     }
 
     public void setField(String name, Collection<String> value) {
@@ -79,6 +83,7 @@ public class Document {
         Field field = new Field(name,value);
         deleteField(name);
         this.fields.add(field);
+        fieldChanged();
     }
 
     public void setField(String name, Object value) {
@@ -106,6 +111,7 @@ public class Document {
         Field field = new Field(name,value);
         deleteField(name);
         this.fields.add(field);
+        fieldChanged();
     }
 
     public Field getField(String name) {
@@ -129,6 +135,7 @@ public class Document {
         } else {
             existingField.getValues().add(value);
         }
+        fieldChanged();
     }
 
     public void addField(String name, List<String> values) {
@@ -139,6 +146,7 @@ public class Document {
         } else {
             existingField.getValues().addAll(values);
         }
+        fieldChanged();
     }
 
     public void addFieldIfNotNullOrEmpty(String name, String value) {
@@ -154,5 +162,20 @@ public class Document {
         return "Document{" +
                 "fields=" + fields +
                 '}';
+    }
+
+    private void fieldChanged() {
+        this.size = null;
+    }
+
+    public long getSize() {
+        if(size == null) {
+            long totalSize = 0;
+            for(Field field: getFields()) {
+                totalSize = totalSize + field.getSize();
+            }
+            size = totalSize;
+        }
+        return size;
     }
 }

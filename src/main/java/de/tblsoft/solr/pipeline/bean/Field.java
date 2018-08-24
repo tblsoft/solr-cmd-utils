@@ -75,4 +75,15 @@ public class Field {
                 ", datatype='" + datatype + '\'' +
                 '}';
     }
+
+    public long getSize() {
+        long totalSize = getName().length();
+        for(String value: getValues()) {
+            if(value != null) {
+                totalSize = totalSize + value.length();
+            }
+        }
+
+        return totalSize;
+    }
 }
