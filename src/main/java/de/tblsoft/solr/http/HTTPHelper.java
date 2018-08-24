@@ -80,6 +80,9 @@ public class HTTPHelper {
 
 			responseBuilder.append(EntityUtils.toString(response.getEntity()));
 			httpclient.close();
+			if(response.getStatusLine().getStatusCode() != 200) {
+				throw new RuntimeException("Problem: " + response.getStatusLine().getStatusCode() + " payload: " + responseBuilder.toString());
+			}
 			return responseBuilder.toString();
 		} catch (Exception e) {
 			throw new RuntimeException(e);
