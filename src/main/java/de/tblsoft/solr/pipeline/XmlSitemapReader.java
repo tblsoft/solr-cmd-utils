@@ -94,6 +94,9 @@ public class XmlSitemapReader extends AbstractReader {
     }
 
     void processSitemapIndex(org.w3c.dom.Document doc, String sitemapIndexUrl) throws Exception {
+        if(doc.getElementsByTagName("sitemap").getLength() == 0) {
+            return;
+        }
         List<String> sitemapUrls = new ArrayList<String>();
         try {
             NodeList locNodes = doc.getElementsByTagName("loc");
