@@ -31,7 +31,27 @@ public class ElasticHelper {
 		String updateUrl = getIndexUrlWithId(url, id) + "/_update";
 		return updateUrl;
 	}
-	
+
+    public static String getCatlUrl(String url) throws URISyntaxException {
+        if(url==null) {
+            throw new URISyntaxException("", "The url is null.");
+        }
+        URI uri = new URI(url);
+        String path = "/_cat/indices";
+        uri = uri.resolve(path);
+        return uri.toString();
+    }
+
+    public static String getAliaslUrl(String url) throws URISyntaxException {
+        if(url==null) {
+            throw new URISyntaxException("", "The url is null.");
+        }
+        URI uri = new URI(url);
+        String path = "/_aliases";
+        uri = uri.resolve(path);
+        return uri.toString();
+    }
+
     public static String getScrollUrl(String url) throws URISyntaxException {
         if(url==null) {
             throw new URISyntaxException("", "The url is null.");
@@ -41,7 +61,20 @@ public class ElasticHelper {
         uri = uri.resolve(path);
         return uri.toString();
     }
-	
+
+    public static String getIndexUrl(String url, String index) throws URISyntaxException {
+        if(url==null) {
+            throw new URISyntaxException("", "The url is null.");
+        }
+        URI uri = new URI(url);
+        String[] parts = uri.getPath().split(Pattern.quote("/"));
+        if(parts.length < 2) {
+            throw new URISyntaxException(url, "The url " + url + " must contain at least one path part.");
+        }
+        uri = uri.resolve("/" + index);
+        return uri.toString();
+    }
+
     public static String getIndexUrl(String url) throws URISyntaxException {
         if(url==null) {
             throw new URISyntaxException("", "The url is null.");

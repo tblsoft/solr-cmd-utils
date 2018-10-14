@@ -24,6 +24,9 @@ public class UrlUtil {
 
     public static String getPath(String url) {
         try {
+            if(!url.startsWith("http")) {
+                url = "http://tblsoft.de" + url;
+            }
             URL tempUrl = new URL(url);
             return tempUrl.getPath();
         } catch (MalformedURLException e) {
