@@ -3,6 +3,7 @@ package de.tblsoft.solr.pipeline.filter;
 import com.beust.jcommander.Strings;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import de.tblsoft.solr.elastic.AliasManager;
 import de.tblsoft.solr.http.ElasticHelper;
 import de.tblsoft.solr.http.HTTPHelper;
 import de.tblsoft.solr.pipeline.AbstractFilter;
@@ -38,15 +39,32 @@ public class ElasticWriter extends AbstractFilter {
 
 	private int bufferSize = 10000;
 
+	private long currentBufferContentSize = 0;
+
+	private long maxBufferContentSize = 3000000L;
+
 	private boolean detectNumberValues = true;
+
+	private boolean failOnError = true;
+
+	private String indexUrl;
+	private Integer housekeepingCount;
+	private String housekeppingStrategy;
+
+	private Boolean housekeepingEnabled = false;
 
 	@Override
 	public void init() {
+
+		housekeepingEnabled = getPropertyAsBoolean("housekeepingEnabled", housekeepingEnabled);
+		housekeepingCount = getPropertyAsInt("housekeepingCount", 5);
+		housekeppingStrategy = getProperty("housekeppingStrategy", "linear");
 
         bufferSize = getPropertyAsInt("bufferSize", 10000);
 		location = getProperty("location", null);
 		verify(location, "For the JsonWriter a location must be defined.");
 
+		failOnError = getPropertyAsBoolean("failOnError", Boolean.TRUE);
 		delete = getPropertyAsBoolean("delete", Boolean.TRUE);
 		detectNumberValues = getPropertyAsBoolean("detectNumberValues", Boolean.TRUE);
 		elasticMappingLocation = getProperty("elasticMappingLocation", null);
@@ -57,18 +75,22 @@ public class ElasticWriter extends AbstractFilter {
 		GsonBuilder builder = new GsonBuilder();
 		gson = builder.create();
 
-		if (delete && !"elasticupdate".equals(type)) {
-			try {
-				String indexUrl = ElasticHelper.getIndexUrl(location);
-				HTTPHelper.delete(indexUrl);
-			} catch (URISyntaxException e) {
-				throw new RuntimeException(e);
+		try {
+			if(housekeepingEnabled) {
+				indexUrl = AliasManager.getElasticUrlWithDatePattern(location);
+			} else {
+				indexUrl = ElasticHelper.getIndexUrl(location);
 			}
+		} catch (URISyntaxException e) {
+			throw new RuntimeException(e);
+		}
+
+		if (delete && !"elasticupdate".equals(type)) {
+				HTTPHelper.delete(indexUrl);
 		}
 		if (elasticMappingLocation != null) {
 			String mappingJson;
 			try {
-				String indexUrl = ElasticHelper.getIndexUrl(location);
 				File elasticMappingFile = new File(IOUtils.getAbsoluteFile(
 						getBaseDir(), elasticMappingLocation));
 
@@ -76,10 +98,7 @@ public class ElasticWriter extends AbstractFilter {
 				HTTPHelper.put(indexUrl, mappingJson, "application/json");
 			} catch (IOException e) {
 				throw new RuntimeException(e);
-			} catch (URISyntaxException e) {
-				throw new RuntimeException(e);
 			}
-
 		}
 
 		super.init();
@@ -112,8 +131,12 @@ public class ElasticWriter extends AbstractFilter {
 	}
 
 	void procesBuffer() {
+		if(buffer.size() == 0) {
+			return;
+		}
+		StringBuilder bulkRequest = new StringBuilder();
 		try {
-			StringBuilder bulkRequest = new StringBuilder();
+
 			for (Document document : buffer) {
 				Map<String, Object> jsonDocument = mapToJson(document, detectNumberValues);
 				if (jsonDocument.isEmpty()) {
@@ -127,30 +150,41 @@ public class ElasticWriter extends AbstractFilter {
 				} else {
 					id = document.getFieldValue(idField);
 				}
-				String index = ElasticHelper.getIndexFromUrl(location);
-				String type = ElasticHelper.getTypeFromUrl(location);
+				String index = ElasticHelper.getIndexFromUrl(indexUrl);
+				String type = ElasticHelper.getTypeFromUrl(indexUrl);
 				String bulkMethod = createBulkMethod("index", index, type, id);
 				String json = gson.toJson(jsonDocument);
 				bulkRequest.append(bulkMethod).append(" \n");
 				bulkRequest.append(json).append(" \n");
 			}
 
-			String bulkUrl = ElasticHelper.getBulkUrl(location);
+			String bulkUrl = ElasticHelper.getBulkUrl(indexUrl);
 			HTTPHelper.post(bulkUrl, bulkRequest.toString(), "application/json");
-		} catch (URISyntaxException e) {
-			throw new RuntimeException(e);
+		} catch (Exception e) {
+			System.out.println("There was an error processing the bulk request: " + e.getMessage());
+			System.out.println(bulkRequest.toString());
+
+			if(failOnError) {
+				throw new RuntimeException(e);
+			} else {
+				System.out.println("Continue processing ... ");
+			}
 		}
 
 	}
 
 	@Override
 	public void document(Document document) {
-		buffer.add(document);
-		if (buffer.size() >= bufferSize) {
-			procesBuffer();
-			buffer = new ArrayList<Document>();
-		}
+		long documentSize = document.getSize();
 
+		if (buffer.size() >= bufferSize || currentBufferContentSize + documentSize > maxBufferContentSize ) {
+			procesBuffer();
+			System.out.println("bufferContentSize: " + currentBufferContentSize + " bufferSize: " + buffer.size());
+			buffer = new ArrayList<>();
+			currentBufferContentSize = 0;
+		}
+		buffer.add(document);
+		currentBufferContentSize = currentBufferContentSize + documentSize;
 		super.document(document);
 	}
 
@@ -211,17 +245,49 @@ public class ElasticWriter extends AbstractFilter {
 
 	}
 
+
 	public String createBulkMethod(String method, String index, String type,
-			String id) {
+								   String id) {
 		String bulkMethod = "{ \"" + method + "\" : { \"_index\" : \"" + index
-				+ "\", \"_type\" : \"" + type + "\", \"_id\" : \"" + id
-				+ "\" } }";
+				+ "\", \"_type\" : \"" + type + "\" } }";
 		return bulkMethod;
+	}
+
+	public void housekeeping() {
+
+
+		String prefix = AliasManager.getIndexPrefixByUrl(indexUrl);
+		List<String> indexes = AliasManager.getIndexesByPrefix(indexUrl,prefix);
+		Collections.sort(indexes);
+
+
+		try {
+			String alias = ElasticHelper.getIndexFromUrl(location);
+			AliasManager.switchAlias(location, alias, indexes, indexes.get(indexes.size()-1));
+
+		} catch (Exception e) {
+			System.out.println("There was an error switching the alias.");
+		}
+		int indexesToDeleteCount = indexes.size() - housekeepingCount;
+		if(indexesToDeleteCount < 0) {
+			indexesToDeleteCount = 0;
+		}
+		List<String> indexToDeleteList = indexes.subList(0,indexesToDeleteCount);
+		for(String indexToDelete: indexToDeleteList) {
+
+			try {
+				String deleteUrl = ElasticHelper.getIndexUrl(location, indexToDelete);
+				HTTPHelper.delete(deleteUrl);
+			} catch (Exception e) {
+				System.out.println("There was an error deleting the index: " + indexToDelete);
+			}
+		}
 	}
 
 	@Override
 	public void end() {
 		procesBuffer();
+		housekeeping();
 		super.end();
 	}
 
