@@ -15,6 +15,10 @@ public class Pipeline {
     private Reader reader;
     private List<Filter> filter;
 
+    private List<Processor> preProcessor;
+
+    private List<Processor> postProcessor;
+
     public String getName() {
         return name;
     }
@@ -45,6 +49,23 @@ public class Pipeline {
 
     public void setVariables(Map<String, String> variables) {
         this.variables = variables;
+    }
+
+
+    public List<Processor> getPreProcessor() {
+        return preProcessor;
+    }
+
+    public void setPreProcessor(List<Processor> preProcessor) {
+        this.preProcessor = preProcessor;
+    }
+
+    public List<Processor> getPostProcessor() {
+        return postProcessor;
+    }
+
+    public void setPostProcessor(List<Processor> postProcessor) {
+        this.postProcessor = postProcessor;
     }
 
     @Override

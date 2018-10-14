@@ -4,8 +4,8 @@ import de.tblsoft.solr.compare.SolrCompareFilter;
 import de.tblsoft.solr.pipeline.bean.Document;
 import de.tblsoft.solr.pipeline.bean.Filter;
 import de.tblsoft.solr.pipeline.bean.Pipeline;
+import de.tblsoft.solr.pipeline.bean.Processor;
 import de.tblsoft.solr.pipeline.filter.*;
-import de.tblsoft.solr.pipeline.filter.hb.AccessLogFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yaml.snakeyaml.Yaml;
@@ -27,7 +27,11 @@ public class PipelineExecuter {
 
     private Pipeline pipeline;
 
+    private List<ProcessorIF> preProcessorList;
+
     private List<FilterIF> filterList;
+
+    private List<ProcessorIF> postProcessorList;
 
     private ReaderIF reader;
 
@@ -109,14 +113,6 @@ public class PipelineExecuter {
         classRegestriy.put("solrcmdutils.FileMathFilter", FileMathFilter.class);
         classRegestriy.put("solrcmdutils.RoundNumberFilter", RoundNumberFilter.class);
         classRegestriy.put("solrcmdutils.LibSvmWriter", LibSvmWriter.class);
-        classRegestriy.put("solrcmdutils.AccessLogFilter", AccessLogFilter.class);
-
-    }
-
-    public static PipelineExecuter  execute(String yamlFileName) {
-        PipelineExecuter pipelineExecuter = new PipelineExecuter(yamlFileName);
-        pipelineExecuter.execute();
-        return pipelineExecuter;
 
     }
 
@@ -140,37 +136,79 @@ public class PipelineExecuter {
             pipeline.getVariables().putAll(pipelineVariables);
             LOG.debug("Effective variables in the pipeline {}", pipeline.getVariables());
 
-            reader = (ReaderIF) getInstance(pipeline.getReader().getClazz());
-            reader.setPipelineExecuter(this);
-            reader.setReader(pipeline.getReader());
-            reader.setBaseDir(getBaseDirFromYamlFile());
-            reader.setVariables(pipeline.getVariables());
+            createReaderInstance();
 
-            filterList = new ArrayList<FilterIF>();
+            preProcessorList = createProcessorInstanceList(pipeline.getPreProcessor());
+            postProcessorList = createProcessorInstanceList(pipeline.getPostProcessor());
 
-            FilterIF lastFilter = null;
-            FilterIF filterInstance = null;
-            for(Filter filter : pipeline.getFilter()) {
-                if(filter.getDisabled() != null && filter.getDisabled()) {
-                    continue;
-                }
-                filterInstance = createFilterInstance(filter);
-                filterInstance.setBaseDir(getBaseDirFromYamlFile());
-                filterInstance.setVariables(pipeline.getVariables());
-                if(lastFilter == null) {
-                    lastFilter = filterInstance;
-                    continue;
-                }
-                lastFilter.setNextFilter(filterInstance);
-                filterList.add(lastFilter);
-                lastFilter = filterInstance;
-            }
-            filterInstance.setNextFilter(new LastFilter());
-            filterList.add(filterInstance);
+            filterList = createFilterInstanceList();
+
+            createFilterInstanceList();
         } catch (Exception e) {
         	e.printStackTrace();
             throw new RuntimeException(e);
         }
+    }
+
+    private  List<FilterIF> createFilterInstanceList() {
+        List<FilterIF> filterInstanceList = new ArrayList<>();
+
+        if(pipeline.getFilter() == null) {
+            return filterInstanceList;
+        }
+        FilterIF lastFilter = null;
+        FilterIF filterInstance = null;
+        for(Filter filter : pipeline.getFilter()) {
+            if(filter.getDisabled() != null && filter.getDisabled()) {
+                continue;
+            }
+            filterInstance = createFilterInstance(filter);
+            filterInstance.setBaseDir(getBaseDirFromYamlFile());
+            filterInstance.setVariables(pipeline.getVariables());
+            if(lastFilter == null) {
+                lastFilter = filterInstance;
+                continue;
+            }
+            lastFilter.setNextFilter(filterInstance);
+            filterInstanceList.add(lastFilter);
+            lastFilter = filterInstance;
+        }
+        filterInstance.setNextFilter(new LastFilter());
+        filterInstanceList.add(filterInstance);
+
+        return filterInstanceList;
+    }
+
+    private void createReaderInstance() throws ClassNotFoundException, IllegalAccessException, InstantiationException {
+        if(pipeline.getReader() == null) {
+            return;
+        }
+
+        reader = (ReaderIF) getInstance(pipeline.getReader().getClazz());
+        reader.setPipelineExecuter(this);
+        reader.setReader(pipeline.getReader());
+        reader.setBaseDir(getBaseDirFromYamlFile());
+        reader.setVariables(pipeline.getVariables());
+    }
+
+    private List<ProcessorIF> createProcessorInstanceList(List<Processor> processorList) throws ClassNotFoundException, IllegalAccessException, InstantiationException {
+        List<ProcessorIF> processorInstanceList = new ArrayList<>();
+        if(processorList == null) {
+            return processorInstanceList;
+        }
+
+        for(Processor processor : processorList) {
+            if(processor.getDisabled()) {
+                continue;
+            }
+            ProcessorIF processorInstance = (ProcessorIF) getInstance(processor.getClazz());
+            processorInstance.setProcessor(processor);
+            processorInstance.setVariables(pipeline.getVariables());
+            processorInstance.setBaseDir(getBaseDirFromYamlFile());
+            processorInstanceList.add(processorInstance);
+
+        }
+        return processorInstanceList;
     }
 
     public static Object getInstance(String clazz) throws ClassNotFoundException, IllegalAccessException, InstantiationException {
@@ -196,12 +234,29 @@ public class PipelineExecuter {
     public void execute() {
         LOG.debug("Start the initialization.");
         init();
-        LOG.debug("Start the initialization for all filters.");
-        filterList.get(0).init();
-        LOG.debug("Read the input from the configured reader.");
-        reader.read();
-        LOG.debug("Finalize the pipeline.");
-        end();
+
+
+        LOG.debug("Process the pre processors.");
+        for(ProcessorIF processorIF: preProcessorList) {
+            processorIF.process();
+        }
+
+        if(reader != null) {
+            LOG.debug("Start the initialization for all filters.");
+            if(filterList.size() > 0 ) {
+                filterList.get(0).init();
+            }
+            LOG.debug("Read the input from the configured reader.");
+            reader.read();
+            LOG.debug("Finalize the pipeline.");
+            end();
+        }
+
+
+        LOG.debug("Process the pst processors.");
+        for(ProcessorIF processorIF: postProcessorList) {
+            processorIF.process();
+        }
     }
 
 
