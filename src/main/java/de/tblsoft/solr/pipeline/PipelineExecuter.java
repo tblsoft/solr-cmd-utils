@@ -5,6 +5,7 @@ import de.tblsoft.solr.pipeline.bean.Document;
 import de.tblsoft.solr.pipeline.bean.Filter;
 import de.tblsoft.solr.pipeline.bean.Pipeline;
 import de.tblsoft.solr.pipeline.filter.*;
+import de.tblsoft.solr.pipeline.filter.hb.AccessLogFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yaml.snakeyaml.Yaml;
@@ -108,6 +109,14 @@ public class PipelineExecuter {
         classRegestriy.put("solrcmdutils.FileMathFilter", FileMathFilter.class);
         classRegestriy.put("solrcmdutils.RoundNumberFilter", RoundNumberFilter.class);
         classRegestriy.put("solrcmdutils.LibSvmWriter", LibSvmWriter.class);
+        classRegestriy.put("solrcmdutils.AccessLogFilter", AccessLogFilter.class);
+
+    }
+
+    public static PipelineExecuter  execute(String yamlFileName) {
+        PipelineExecuter pipelineExecuter = new PipelineExecuter(yamlFileName);
+        pipelineExecuter.execute();
+        return pipelineExecuter;
 
     }
 
