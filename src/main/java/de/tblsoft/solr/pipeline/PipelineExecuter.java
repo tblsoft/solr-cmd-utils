@@ -113,7 +113,7 @@ public class PipelineExecuter {
         classRegestriy.put("solrcmdutils.FileMathFilter", FileMathFilter.class);
         classRegestriy.put("solrcmdutils.RoundNumberFilter", RoundNumberFilter.class);
         classRegestriy.put("solrcmdutils.LibSvmWriter", LibSvmWriter.class);
-
+        classRegestriy.put("solrcmdutils.ElasticdumpJsonReader", ElasticdumpJsonReader.class);
     }
 
     public PipelineExecuter(String yamlFileName) {
