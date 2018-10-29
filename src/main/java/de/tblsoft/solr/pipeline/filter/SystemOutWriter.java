@@ -38,7 +38,7 @@ public class SystemOutWriter extends AbstractFilter {
                 fieldCounter++;
                 System.out.print(prefix+"name: " + f.getName());
 
-                String out = Joiner.on(", ").skipNulls().join(f.getValues());
+                String out = f.getValues() != null ? Joiner.on(", ").skipNulls().join(f.getValues()) : null;
                 System.out.println(prefix+" -- value: " + out );
             }
         }
