@@ -114,6 +114,7 @@ public class PipelineExecuter {
         classRegestriy.put("solrcmdutils.RoundNumberFilter", RoundNumberFilter.class);
         classRegestriy.put("solrcmdutils.LibSvmWriter", LibSvmWriter.class);
         classRegestriy.put("solrcmdutils.ElasticdumpJsonReader", ElasticdumpJsonReader.class);
+        classRegestriy.put("solrcmdutils.RemoveFieldFilter", RemoveFieldFilter.class);
     }
 
     public PipelineExecuter(String yamlFileName) {
