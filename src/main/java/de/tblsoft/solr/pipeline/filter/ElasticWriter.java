@@ -151,7 +151,7 @@ public class ElasticWriter extends AbstractFilter {
 					id = document.getFieldValue(idField);
 				}
 				String index = ElasticHelper.getIndexFromUrl(indexUrl);
-				String type = ElasticHelper.getTypeFromUrl(indexUrl);
+				String type = ElasticHelper.getTypeFromUrl(location);
 				String bulkMethod = createBulkMethod("index", index, type, id);
 				String json = gson.toJson(jsonDocument);
 				bulkRequest.append(bulkMethod).append(" \n");
