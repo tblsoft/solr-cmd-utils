@@ -116,6 +116,7 @@ public class PipelineExecuter {
         classRegestriy.put("solrcmdutils.ElasticdumpJsonReader", ElasticdumpJsonReader.class);
         classRegestriy.put("solrcmdutils.RemoveFieldFilter", RemoveFieldFilter.class);
         classRegestriy.put("solrcmdutils.MessageDigestFilter", MessageDigestFilter.class);
+        classRegestriy.put("solrcmdutils.RandomStaticValueFilter", RandomStaticValueFilter.class);
     }
 
     public PipelineExecuter(String yamlFileName) {
