@@ -7,6 +7,7 @@ import de.tblsoft.solr.pipeline.bean.Document;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -86,8 +87,9 @@ public class ElasticdumpJsonReader extends AbstractReader {
         doc.setField("_id", (String) readJsonValueOrNull(context, "$['_id']"));
 
         Map<String, Object> source = readJsonValueOrNull(context, "$['_source']");
-        if(source != null) {
-            for (Map.Entry<String, Object> entry : source.entrySet()) {
+        Map<String, Object> flatSource = flatSourceToDocument(source);
+        if(flatSource != null) {
+            for (Map.Entry<String, Object> entry : flatSource.entrySet()) {
                 doc.addField(entry.getKey(), entry.getValue());
             }
         }
@@ -105,5 +107,35 @@ public class ElasticdumpJsonReader extends AbstractReader {
         }
 
         return result;
+    }
+
+    protected static Map<String, Object> flatSourceToDocument(Map<String, Object> source) {
+        Map<String, Object> document = new HashMap<>();
+
+        if(source != null) {
+            document = new HashMap<>();
+            for (Map.Entry<String, Object> entry : source.entrySet()) {
+                Map<String, Object> fields = flatValueToFields(entry.getKey(), entry.getValue());
+                document.putAll(fields);
+            }
+        }
+
+        return document;
+    }
+
+    protected static Map<String, Object> flatValueToFields(String field, Object value) {
+        Map<String, Object> fields = new HashMap<>();
+
+        if(value instanceof Map) {
+            for (Map.Entry<String, Object> entry : ((Map<String, Object>) value).entrySet()) {
+                String key = field+"."+entry.getKey();
+                Map<String, Object> map = flatValueToFields(key, entry.getValue());
+                fields.putAll(map);
+            }
+        } else {
+            fields.put(field, value);
+        }
+
+        return fields;
     }
 }
