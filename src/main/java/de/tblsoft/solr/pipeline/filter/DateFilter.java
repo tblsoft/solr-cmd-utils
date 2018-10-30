@@ -7,6 +7,7 @@ import de.tblsoft.solr.pipeline.bean.Document;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * Created by tblsoft 17.03.16.
@@ -24,12 +25,12 @@ public class DateFilter extends AbstractFilter {
         String inputDateFormatString = getProperty("inputDateFormat", null);
         verify(inputDateFormatString, "For the DateFilter a inputDateFormat must be defined.");
 
-        inputDateFormat = new SimpleDateFormat(inputDateFormatString);
+        inputDateFormat = new SimpleDateFormat(inputDateFormatString, Locale.ENGLISH);
 
         String outputDateFormatString = getProperty("outputDateFormat", null);
         verify(outputDateFormatString, "For the DateFilter a outputDateFormat must be defined.");
 
-        outputDateFormat = new SimpleDateFormat(outputDateFormatString);
+        outputDateFormat = new SimpleDateFormat(outputDateFormatString, Locale.ENGLISH);
 
         this.dateField = getProperty("dateField", null);
         verify(this.dateField, "For the DateFilter a dateField must be defined.");
