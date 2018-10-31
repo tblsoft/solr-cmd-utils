@@ -117,6 +117,7 @@ public class PipelineExecuter {
         classRegestriy.put("solrcmdutils.RemoveFieldFilter", RemoveFieldFilter.class);
         classRegestriy.put("solrcmdutils.MessageDigestFilter", MessageDigestFilter.class);
         classRegestriy.put("solrcmdutils.RandomStaticValueFilter", RandomStaticValueFilter.class);
+        classRegestriy.put("solrcmdutils.SleepFilter", SleepFilter.class);
     }
 
     public PipelineExecuter(String yamlFileName) {
