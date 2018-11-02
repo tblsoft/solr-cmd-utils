@@ -119,6 +119,7 @@ public class PipelineExecuter {
         classRegestriy.put("solrcmdutils.RandomStaticValueFilter", RandomStaticValueFilter.class);
         classRegestriy.put("solrcmdutils.SleepFilter", SleepFilter.class);
         classRegestriy.put("solrcmdutils.OffsetPermutationFilter", OffsetPermutationFilter.class);
+        classRegestriy.put("solrcmdutils.TokenPermutationFilter", TokenPermutationFilter.class);
         classRegestriy.put("solrcmdutils.RestFilter", RestFilter.class);
     }
 
