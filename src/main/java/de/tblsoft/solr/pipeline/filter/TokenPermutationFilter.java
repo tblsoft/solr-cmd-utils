@@ -77,7 +77,7 @@ public class TokenPermutationFilter extends AbstractFilter {
     }
 
     protected static String getRandomToken(String text) {
-        String token = null;
+        String token = "";
 
         if(StringUtils.isNotEmpty(text)) {
             String[] tokens = text.split("\\s+");
