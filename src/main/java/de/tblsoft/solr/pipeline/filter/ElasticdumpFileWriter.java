@@ -170,9 +170,17 @@ public class ElasticdumpFileWriter extends AbstractFilter {
 			if(fieldIsFlat) {
 				fieldValue = createExpandedValue(fieldName, fieldValue);
 				fieldName = StringUtils.substringBefore(fieldName, ".");
-			}
 
-			jsonDocument.put(fieldName, fieldValue);
+				if(jsonDocument.containsKey(fieldName)) {
+					Map existingValue = (Map) jsonDocument.get(fieldName);
+					Map newValue = deepMerge(existingValue, (Map) fieldValue);
+					jsonDocument.put(fieldName, newValue);
+				} else {
+					jsonDocument.put(fieldName, fieldValue);
+				}
+			} else {
+				jsonDocument.put(fieldName, fieldValue);
+			}
 		}
 
 		return jsonDocument;
@@ -201,5 +209,26 @@ public class ElasticdumpFileWriter extends AbstractFilter {
 		}
 
 		super.end();
+	}
+
+	private static Map deepMerge(Map original, Map newMap) {
+		for (Object key : newMap.keySet()) {
+			if (newMap.get(key) instanceof Map && original.get(key) instanceof Map) {
+				Map originalChild = (Map) original.get(key);
+				Map newChild = (Map) newMap.get(key);
+				original.put(key, deepMerge(originalChild, newChild));
+			} else if (newMap.get(key) instanceof List && original.get(key) instanceof List) {
+				List originalChild = (List) original.get(key);
+				List newChild = (List) newMap.get(key);
+				for (Object each : newChild) {
+					if (!originalChild.contains(each)) {
+						originalChild.add(each);
+					}
+				}
+			} else {
+				original.put(key, newMap.get(key));
+			}
+		}
+		return original;
 	}
 }
