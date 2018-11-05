@@ -11,19 +11,6 @@ import static org.junit.Assert.*;
 
 public class ElasticdumpJsonReaderTest {
     @Test
-    public void parseJsonFile() throws Exception {
-        // given
-        String filepath = "examples/unittest/elasticdump_export.txt";
-
-        // when
-        List<Document> docs = ElasticdumpJsonReader.parseJsonFile(filepath);
-
-        // then
-        assertNotNull(docs);
-        assertEquals(3, docs.size());
-    }
-
-    @Test
     public void readFileAsLines() throws Exception {
         // given
         String filepath = "examples/unittest/elasticdump_export.txt";

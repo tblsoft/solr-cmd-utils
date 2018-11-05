@@ -25,25 +25,18 @@ public class ElasticdumpJsonReader extends AbstractReader {
         }
 
         try {
-            List<Document> docs = parseJsonFile(filepath);
-            for (Document doc : docs) {
-                executer.document(doc);
-            }
+            parseJsonFile(filepath);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    protected static List<Document> parseJsonFile(String filepath) throws IOException {
-        List<Document> docs = new ArrayList<Document>();
-
+    protected void parseJsonFile(String filepath) throws IOException {
         List<String> jsonLines = readFileAsLines(filepath);
         for (String jsonLine : jsonLines) {
             Document doc = parseJsonLineAsDoc(jsonLine);
-            docs.add(doc);
+            executer.document(doc);
         }
-
-        return docs;
     }
 
     protected static List<String> readFileAsLines(String filepath) throws IOException {
