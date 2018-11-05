@@ -6,9 +6,7 @@ import com.jayway.jsonpath.JsonPath;
 import de.tblsoft.solr.pipeline.bean.Document;
 
 import java.io.*;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 
@@ -25,23 +23,13 @@ public class ElasticdumpJsonReader extends AbstractReader {
         }
 
         try {
-            parseJsonFile(filepath);
+            readFileAsLines(filepath);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    protected void parseJsonFile(String filepath) throws IOException {
-        List<String> jsonLines = readFileAsLines(filepath);
-        for (String jsonLine : jsonLines) {
-            Document doc = parseJsonLineAsDoc(jsonLine);
-            executer.document(doc);
-        }
-    }
-
-    protected static List<String> readFileAsLines(String filepath) throws IOException {
-        List<String> jsonLines = new ArrayList<String>();
-
+    protected void readFileAsLines(String filepath) throws IOException {
         BufferedReader br = null;
         FileReader fr = null;
         try {
@@ -50,7 +38,8 @@ public class ElasticdumpJsonReader extends AbstractReader {
 
             String line;
             while ((line = br.readLine()) != null) {
-                jsonLines.add(line);
+                Document doc = parseJsonLineAsDoc(line);
+                executer.document(doc);
             }
         } catch (FileNotFoundException e) {
             throw new IOException(e);
@@ -67,8 +56,6 @@ public class ElasticdumpJsonReader extends AbstractReader {
             } catch (IOException ignored) {
             }
         }
-
-        return jsonLines;
     }
 
     protected static Document parseJsonLineAsDoc(String jsonLine) {

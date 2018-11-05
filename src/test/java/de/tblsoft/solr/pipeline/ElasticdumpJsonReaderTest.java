@@ -11,18 +11,6 @@ import static org.junit.Assert.*;
 
 public class ElasticdumpJsonReaderTest {
     @Test
-    public void readFileAsLines() throws Exception {
-        // given
-        String filepath = "examples/unittest/elasticdump_export.txt";
-
-        // when
-        List<String> jsonLines = ElasticdumpJsonReader.readFileAsLines(filepath);
-
-        // then
-        assertEquals(3, jsonLines.size());
-    }
-
-    @Test
     public void parseJsonLineAsDoc() throws Exception {
         // given
         String jsonLine = "{\"_index\":\"example\",\"_type\":\"doc\",\"_id\":\"123-456-789\",\"_score\":1,\"_source\":{\"title\":\"Hello World!\",\"tags\":[\"tag1\", \"tag2\"],\"weight\":10.5}}";
