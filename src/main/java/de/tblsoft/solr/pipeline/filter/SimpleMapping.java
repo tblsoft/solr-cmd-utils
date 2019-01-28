@@ -160,7 +160,7 @@ public class SimpleMapping {
     }
 
 
-    static String mapGermanChars(String value) {
+    public static String mapGermanChars(String value) {
         value = value.replaceAll("\u00c4", "Ae");
         value = value.replaceAll("\u00d6", "Oe");
         value = value.replaceAll("\u00dc", "Ue");
@@ -171,7 +171,7 @@ public class SimpleMapping {
         return value;
     }
 
-    static String mapFranceChars(String value) {
+    public static String mapFranceChars(String value) {
         value = value.replaceAll("\u00c8", "E"); // È
         value = value.replaceAll("\u00e8", "e"); // è
         value = value.replaceAll("\u00c9", "E"); // É
