@@ -8,10 +8,7 @@ import de.tblsoft.solr.util.DateUtils;
 
 import org.apache.commons.lang3.text.StrSubstitutor;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by tblsoft on 23.01.16.
@@ -92,6 +89,31 @@ public abstract class AbstractFilter implements FilterIF {
             return value;
         }
         return defaultValue;
+    }
+
+
+    public Map<String, String> getPropertyAsMapping(String name) {
+        return getPropertyAsMapping(name, new HashMap<>(), "->");
+    }
+
+    public Map<String, String> getPropertyAsMapping(String name,  Map<String, String> defaultValue) {
+        return getPropertyAsMapping(name,defaultValue, "->");
+    }
+
+    public Map<String, String> getPropertyAsMapping(String name,  Map<String, String> defaultValue, String splitter) {
+        if(filter.getProperty() == null) {
+            return defaultValue;
+        }
+        Map<String, String> mapping = new HashMap<>();
+        List<String> rawValues = getPropertyAsList(name, new ArrayList<>());
+        for (String rawValue : rawValues) {
+            String[] splittedValue = rawValue.split(splitter);
+            if(splittedValue.length < 2) {
+                throw new RuntimeException("The mapping is not correct configured: " + rawValue);
+            }
+            mapping.put(splittedValue[0], splittedValue[1]);
+        }
+        return mapping;
     }
 
     public int getPropertyAsInt(String name, int defaultValue) {
