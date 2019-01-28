@@ -67,12 +67,14 @@ public class PipelineExecuter {
         classRegestriy.put("solrcmdutils.JsonWriter", JsonWriter.class);
         classRegestriy.put("solrcmdutils.ElasticWriter", ElasticWriter.class);
         classRegestriy.put("solrcmdutils.CSVReader", CSVReader.class);
+        classRegestriy.put("solrcmdutils.JdbcReader", JdbcReader.class);
         classRegestriy.put("solrcmdutils.SolrQueryLogReader", SolrQueryLogReader.class);
         classRegestriy.put("solrcmdutils.SpyFilter", SpyFilter.class);
         classRegestriy.put("solrcmdutils.StatusFilter", StatusFilter.class);
         classRegestriy.put("solrcmdutils.StatusTimeFilter", StatusTimeFilter.class);
         classRegestriy.put("solrcmdutils.StatisticFilter", StatisticFilter.class);
         classRegestriy.put("solrcmdutils.MappingFilter", MappingFilter.class);
+        classRegestriy.put("solrcmdutils.ValueMappingFilter", ValueMappingFilter.class);
         classRegestriy.put("solrcmdutils.EncodingCorrectionFilter", EncodingCorrectionFilter.class);
         classRegestriy.put("solrcmdutils.RegexSplitFilter", RegexSplitFilter.class);
         classRegestriy.put("solrcmdutils.FieldSplitter", FieldSplitter.class);
@@ -92,6 +94,7 @@ public class PipelineExecuter {
         classRegestriy.put("solrcmdutils.FileLineWriter", FileLineWriter.class);
         classRegestriy.put("solrcmdutils.FilelineReader", FilelineReader.class);
         classRegestriy.put("solrcmdutils.CSVWriter", CSVWriter.class);
+        classRegestriy.put("solrcmdutils.N3Writer", N3Writer.class);
         classRegestriy.put("solrcmdutils.KafkaWriter", KafkaWriter.class);
         classRegestriy.put("solrcmdutils.TestingFilter", TestingFilter.class);
         classRegestriy.put("solrcmdutils.NoopFilter", NoopFilter.class);

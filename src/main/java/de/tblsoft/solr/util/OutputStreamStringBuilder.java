@@ -15,9 +15,10 @@ public class OutputStreamStringBuilder {
         this.out = out;
     }
 
-    public void append(String value) {
+    public OutputStreamStringBuilder append(String value) {
         try {
             out.write(value.getBytes("UTF-8"));
+            return this;
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
