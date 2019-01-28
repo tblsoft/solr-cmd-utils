@@ -1,0 +1,11 @@
+name: "list diff processor"
+preProcessor:
+  - name: "XmlReader"
+    clazz: "de.tblsoft.solr.pipeline.processor.ListDiffProcessor"
+    property:
+      mode: "disjunction"
+      outputFilename: "result.txt"
+      inputFiles:
+        - "one.txt"
+        - "two.txt"
+        - "three.txt"
