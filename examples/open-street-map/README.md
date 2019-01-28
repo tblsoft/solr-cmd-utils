@@ -37,3 +37,20 @@ Bliederstedt:
 
 ## Nominatim
 http://wiki.openstreetmap.org/wiki/Nominatim
+
+https://nominatim.openstreetmap.org/reverse?format=json&osm_type=W&osm_id=478814183
+
+## Administrative Boundaries
+https://wiki.openstreetmap.org/wiki/Tag:boundary=administrative
+
+## Streets
+https://help.openstreetmap.org/questions/9816/the-best-way-to-extract-street-list
+
+## Postal Codes
+https://wiki.openstreetmap.org/wiki/DE:Key:postal%20code?uselang=de
+    type=boundary
+    boundary=postal_code
+    postal_code=Zahl
+    
+## Elastic Polygon API
+https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-geo-polygon-query.html
