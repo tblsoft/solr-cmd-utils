@@ -5,6 +5,7 @@ import de.tblsoft.solr.pipeline.bean.Document;
 import de.tblsoft.solr.pipeline.bean.Field;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrServerException;
+import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.apache.solr.common.SolrInputDocument;
 
 import java.io.IOException;
@@ -50,6 +51,11 @@ public class SolrFeeder extends AbstractFilter {
         BasicAuthConcurrentUpdateSolrClient basicAuthserver = new BasicAuthConcurrentUpdateSolrClient(serverUrl, queueSize, threads);
         basicAuthserver.setBasicAuthCredentials(user,password);
         this.server = basicAuthserver;
+
+
+        if(threads==1 && queueSize == 1 && user == null) {
+            this.server = new HttpSolrClient(serverUrl);
+        }
         try {
             if(deleteIndex) {
                 System.out.println("Delete the index.");
