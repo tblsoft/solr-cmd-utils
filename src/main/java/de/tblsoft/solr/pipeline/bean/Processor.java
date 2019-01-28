@@ -1,5 +1,7 @@
 package de.tblsoft.solr.pipeline.bean;
 
+import org.apache.commons.lang3.BooleanUtils;
+
 import java.util.Map;
 
 /**
@@ -13,7 +15,7 @@ public class Processor {
 
     private Map<String,?> property;
 
-    private Boolean disabled;
+    private Boolean disabled = Boolean.FALSE;
 
     public String getName() {
         return name;
