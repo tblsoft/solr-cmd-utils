@@ -43,6 +43,9 @@ public class AliasManager {
         try {
             String index = ElasticHelper.getIndexFromUrl(elasticUrl);
             int lastIndexOfSeperator = index.lastIndexOf(separator);
+            if(lastIndexOfSeperator <0) {
+                return null;
+            }
             return index.substring(0, lastIndexOfSeperator);
         } catch (Exception e) {
             throw new RuntimeException(e);
