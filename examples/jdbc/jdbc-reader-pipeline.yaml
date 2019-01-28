@@ -1,0 +1,14 @@
+name: "jdbc example pipeline"
+reader:
+  name: "JdbcReader"
+  clazz: "solrcmdutils.JdbcReader"
+  property:
+    sql: "SELECT id AS id FROM Users"
+    jdbcUrl: "jdbc:mysql://127.0.0.1:3306/backoffice"
+    jdbcDriver: "com.mysql.jdbc.Driver"
+    user: "user"
+    password: "xxxx"
+
+filter:
+  - name: "Test Filter"
+    clazz: "solrcmdutils.SystemOutWriter"
