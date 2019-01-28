@@ -54,6 +54,10 @@ public class HTTPHelper {
 			StringBuilder responseBuilder = new StringBuilder();
 
 			responseBuilder.append(EntityUtils.toString(response.getEntity()));
+
+			if(response.getStatusLine().getStatusCode() != 200) {
+				System.out.println(responseBuilder.toString());
+			}
 			httpclient.close();
 			return responseBuilder.toString();
 		} catch (Exception e) {
@@ -117,10 +121,10 @@ public class HTTPHelper {
 			throw new RuntimeException(e);
 		}
 	}
-	
+
 	/**
 	 * Store the body of the url in the specified fileName.
-	 * 
+	 *
 	 * @param url The url where the content is fetched.
 	 * @param fileName The fileName where the content is stored.
 	 */
@@ -140,17 +144,17 @@ public class HTTPHelper {
 		}
 	}
 
-    public static int getStatusCode(String url) {
-        try {
-            CloseableHttpClient httpclient = HttpClients.custom().disableRedirectHandling().build();
-            HttpGet httpGet = new HttpGet(url);
-            CloseableHttpResponse response = httpclient.execute(httpGet);
-            httpclient.close();
-            return response.getStatusLine().getStatusCode();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
+	public static int getStatusCode(String url) {
+		try {
+			CloseableHttpClient httpclient = HttpClients.custom().disableRedirectHandling().build();
+			HttpGet httpGet = new HttpGet(url);
+			CloseableHttpResponse response = httpclient.execute(httpGet);
+			httpclient.close();
+			return response.getStatusLine().getStatusCode();
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
 
 
 	public static String getRedirectLocation(String url) {
@@ -168,30 +172,30 @@ public class HTTPHelper {
 			throw new RuntimeException(e);
 		}
 	}
-    
- 
-    
-    public static String getCookieValueFromHeader(String cookieName, HttpResponse response) {
-    	Header[] headers = response.getHeaders("Set-Cookie");
-    	if(headers == null) {
-    		return null;
-    	}
-    	
-    	for (int i = 0; i < headers.length; i++) {
-    		Header header = headers[i];
-        	List<HttpCookie> cookies = HttpCookie.parse(header.getValue());
-        	for(HttpCookie cookie : cookies) {
-        		if(cookie.getName().equals(cookieName)) {
-        			return cookie.getValue();
-        		}
-        	}
+
+
+
+	public static String getCookieValueFromHeader(String cookieName, HttpResponse response) {
+		Header[] headers = response.getHeaders("Set-Cookie");
+		if(headers == null) {
+			return null;
 		}
 
-    	return null;
+		for (int i = 0; i < headers.length; i++) {
+			Header header = headers[i];
+			List<HttpCookie> cookies = HttpCookie.parse(header.getValue());
+			for(HttpCookie cookie : cookies) {
+				if(cookie.getName().equals(cookieName)) {
+					return cookie.getValue();
+				}
+			}
+		}
 
-    }
+		return null;
 
-    public static String removeQueryParameter(String url) {
+	}
+
+	public static String removeQueryParameter(String url) {
 		if(Strings.isNullOrEmpty(url)) {
 			return url;
 		}
