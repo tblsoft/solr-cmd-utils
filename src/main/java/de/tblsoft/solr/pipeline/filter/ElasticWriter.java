@@ -287,7 +287,9 @@ public class ElasticWriter extends AbstractFilter {
 	@Override
 	public void end() {
 		procesBuffer();
-		housekeeping();
+		if(housekeepingEnabled) {
+			housekeeping();
+		}
 		super.end();
 	}
 
