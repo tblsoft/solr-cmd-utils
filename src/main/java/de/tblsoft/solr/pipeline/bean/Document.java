@@ -2,9 +2,7 @@ package de.tblsoft.solr.pipeline.bean;
 
 import com.google.common.base.Strings;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by tblsoft on 21.04.16.
@@ -32,7 +30,7 @@ public class Document {
     }
 
     public String getFieldValue(String name, String defaultValue) {
-       String value = getFieldValue(name);
+        String value = getFieldValue(name);
         if(value != null) {
             return value;
         }
@@ -154,6 +152,15 @@ public class Document {
             return;
         }
         addField(name,value);
+    }
+
+    public void uniqueFieldValues(String name) {
+        List<String> values = getFieldValues(name);
+        if(values == null) {
+            return;
+        }
+        Set<String> uniqueValues = new HashSet<>(values);
+        setField(name, uniqueValues);
     }
 
 
