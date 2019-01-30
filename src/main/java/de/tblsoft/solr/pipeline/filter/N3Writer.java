@@ -46,6 +46,7 @@ public class N3Writer extends AbstractFilter {
 			String object = document.getFieldValue("object");
 			subject=subject.replaceAll(" ", "_");
 			predicate=predicate.replaceAll(" ", "_");
+			object=object.replaceAll("\n", " ");// todo: filter or cut long text?
 
 			outputStreamStringBuilder.append("<").append(subject).append(">").append("\t");
 			outputStreamStringBuilder.append("<").append(predicate).append(">").append("\t");
