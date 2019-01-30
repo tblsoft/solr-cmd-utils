@@ -49,9 +49,9 @@ public class N3Writer extends AbstractFilter {
             String predicate = document.getFieldValue("predicate");
             String object = document.getFieldValue("object");
 
-            outputStreamStringBuilder.append("<").append(subject).append(">");
-            outputStreamStringBuilder.append("<").append(predicate).append(">");
-            outputStreamStringBuilder.append("<").append(object).append(">");
+            outputStreamStringBuilder.append("<").append(subject).append(">").append("\t");
+            outputStreamStringBuilder.append("<").append(predicate).append(">").append("\t");
+            outputStreamStringBuilder.append("\"").append(object).append("\"");
             outputStreamStringBuilder.append("\n");
 
         } catch (Exception e) {
