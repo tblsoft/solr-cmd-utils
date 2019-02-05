@@ -6,6 +6,7 @@ import de.tblsoft.solr.pipeline.bean.Filter;
 import de.tblsoft.solr.pipeline.bean.Pipeline;
 import de.tblsoft.solr.pipeline.bean.Processor;
 import de.tblsoft.solr.pipeline.filter.*;
+import de.tblsoft.solr.pipeline.processor.Json2SingleDocumentsProcessor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yaml.snakeyaml.Yaml;
@@ -124,6 +125,7 @@ public class PipelineExecuter {
         classRegestriy.put("solrcmdutils.OffsetPermutationFilter", OffsetPermutationFilter.class);
         classRegestriy.put("solrcmdutils.TokenPermutationFilter", TokenPermutationFilter.class);
         classRegestriy.put("solrcmdutils.RestFilter", RestFilter.class);
+        classRegestriy.put("solrcmdutils.Json2SingleDocumentsProcessor", Json2SingleDocumentsProcessor.class);
     }
 
     public PipelineExecuter(String yamlFileName) {
