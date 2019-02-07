@@ -1,0 +1,9 @@
+name: "json to single documents processor"
+preProcessor:
+  - name: "Json2SingleDocumentsProcessor"
+    clazz: "solrcmdutils.Json2SingleDocumentsProcessor"
+    property:
+      documentSelector: "$"
+      idSelector: "header.id"
+      filenames:
+        - "input.json"
