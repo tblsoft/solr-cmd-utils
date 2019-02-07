@@ -71,5 +71,6 @@ public abstract class AbstractStatusFilter extends AbstractFilter {
     void printEnd() {
     	long duration = System.currentTimeMillis() - start;
     	System.out.println("End. processed all " + documentCounter + " in " + getFormattedDuration(duration) + ".");
+		System.out.println(new Date());
     }
 }
