@@ -3,6 +3,8 @@ package de.tblsoft.solr.pipeline.filter;
 import de.tblsoft.solr.pipeline.AbstractFilter;
 import de.tblsoft.solr.pipeline.bean.Document;
 
+import java.util.Date;
+
 /**
  * Created by tblsoft on 26.11.16.
  * 
