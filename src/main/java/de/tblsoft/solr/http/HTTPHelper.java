@@ -109,6 +109,18 @@ public class HTTPHelper {
 		}
 	}
 
+	public static InputStream getInputStream(String url) {
+		try {
+			CloseableHttpClient httpclient = HttpClients.createDefault();
+			HttpGet httpPost = new HttpGet(url);
+
+			CloseableHttpResponse response = httpclient.execute(httpPost);
+			return response.getEntity().getContent();
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
 
 	public static InputStream getAsInputStream(String url) {
 		try {

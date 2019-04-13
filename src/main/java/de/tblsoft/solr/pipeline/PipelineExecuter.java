@@ -1,6 +1,7 @@
 package de.tblsoft.solr.pipeline;
 
 import de.tblsoft.solr.compare.SolrCompareFilter;
+import de.tblsoft.solr.http.HTTPHelper;
 import de.tblsoft.solr.pipeline.bean.Document;
 import de.tblsoft.solr.pipeline.bean.Filter;
 import de.tblsoft.solr.pipeline.bean.Pipeline;
@@ -15,6 +16,8 @@ import org.yaml.snakeyaml.constructor.Constructor;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.*;
 
 /**
@@ -133,6 +136,14 @@ public class PipelineExecuter {
     }
 
     private String getBaseDirFromYamlFile() {
+        if(yamlFileName.startsWith("http")) {
+            try {
+                URI uri = new URI(yamlFileName);
+                return uri.resolve(".").toString();
+            } catch (URISyntaxException e) {
+                throw new RuntimeException(e);
+            }
+        }
         File f = new File(yamlFileName).getAbsoluteFile();
         return f.getParentFile().getAbsoluteFile().toString();
 
@@ -243,6 +254,11 @@ public class PipelineExecuter {
 
     }
 
+    public static void execute(String yamlFileName) {
+        PipelineExecuter pipelineExecuter = new PipelineExecuter(yamlFileName);
+        pipelineExecuter.execute();
+    }
+
     public void execute() {
         LOG.debug("Start the initialization.");
         init();
@@ -289,8 +305,14 @@ public class PipelineExecuter {
 
     Pipeline readPipelineFromYamlFile(String fileName) {
         try {
-            InputStream input = new FileInputStream(new File(
-                    fileName));
+            InputStream input;
+            if(fileName.startsWith("http")) {
+                input = HTTPHelper.getAsInputStream(fileName);
+            } else {
+                input = new FileInputStream(new File(
+                        fileName));
+            }
+
             Yaml yaml = new Yaml(new Constructor(Pipeline.class));
             Pipeline pipeline = (Pipeline) yaml.load(input);
 
