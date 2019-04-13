@@ -14,6 +14,7 @@ import javax.xml.transform.sax.TransformerHandler;
 import javax.xml.transform.stream.StreamSource;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -23,20 +24,22 @@ public class XmlReader extends AbstractReader {
 
     @Override
     public void read() {
+
         try {
             String filename = getProperty("filename", null);
-            String absoluteFilename = IOUtils.getAbsoluteFile(getBaseDir(),filename);
-            InputStream in = IOUtils.getInputStream(absoluteFilename);
 
-            List<String> transformationFiles = getPropertyAsList("transformations", new ArrayList<String>());
+
+            String absoluteFilename = IOUtils.getAbsoluteFile(getBaseDir(), filename);
+            List<String> fileList = IOUtils.getFiles(absoluteFilename);
 
             XMLReader myReader = XMLReaderFactory.createXMLReader();
             ContentHandler mySerializer = new PipelineSaxContentHandler(executer);
             boolean firstFile = true;
             TransformerHandler lastHandler = null;
-            for(String file: transformationFiles) {
+            List<String> transformationFiles = getPropertyAsList("transformations", new ArrayList<>());
+            for (String file : transformationFiles) {
                 TransformerHandler currentHandler = getTransformerHandler(file);
-                if(firstFile) {
+                if (firstFile) {
                     firstFile = false;
                     myReader.setContentHandler(currentHandler);
                     lastHandler = currentHandler;
@@ -46,23 +49,21 @@ public class XmlReader extends AbstractReader {
                 lastHandler = currentHandler;
 
             }
-            if(lastHandler == null) {
+            if (lastHandler == null) {
                 myReader.setContentHandler(mySerializer);
             } else {
                 lastHandler.setResult(new SAXResult(mySerializer));
             }
 
-            myReader.parse(new InputSource(in));
+            for (String sourceFile : fileList) {
+                InputStream in = IOUtils.getInputStream(sourceFile);
+                myReader.parse(new InputSource(in));
+                in.close();
 
-
-
-            in.close();
-        } catch (Exception e) {
+            }
+        } catch(Exception e){
             throw new RuntimeException(e);
         }
-
-
-        //executer.document(document);
     }
 
 
