@@ -1,9 +1,13 @@
 package de.tblsoft.solr.pipeline.filter;
 
+import de.tblsoft.solr.http.HTTPHelper;
 import de.tblsoft.solr.pipeline.AbstractFilter;
 import de.tblsoft.solr.pipeline.bean.Document;
+import org.apache.commons.lang3.text.StrSubstitutor;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by tblsoft on 26.11.16.
@@ -18,11 +22,19 @@ public abstract class AbstractStatusFilter extends AbstractFilter {
 	protected int lapCount = 0;
 	
 	protected long start = 0;
+
+	protected String webHook;
 	
     @Override
     public void init() {
     	lapStart = System.currentTimeMillis();
     	start = System.currentTimeMillis();
+    	webHook = getProperty("webHook", null);
+
+        if(webHook != null) {
+            HTTPHelper.webHook(webHook, "status", "start", "documentCounter", String.valueOf(documentCounter));
+        }
+
         super.init();
     }
     
@@ -67,12 +79,19 @@ public abstract class AbstractStatusFilter extends AbstractFilter {
     
     void printStatus(long duration, long lapDuration) {
     	System.out.println("processed all " + documentCounter + " in " + getFormattedDuration(duration) + ". - processed the last " + lapCount + " documents in " + getFormattedDuration(lapDuration) + ".");
-        
+
+        if(webHook != null) {
+            HTTPHelper.webHook(webHook, "status", "progress", "documentCounter", String.valueOf(documentCounter));
+        }
     }
     
     void printEnd() {
     	long duration = System.currentTimeMillis() - start;
     	System.out.println("End. processed all " + documentCounter + " in " + getFormattedDuration(duration) + ".");
 		System.out.println(new Date());
+
+		if(webHook != null) {
+            HTTPHelper.webHook(webHook, "status", "end", "documentCounter", String.valueOf(documentCounter));
+		}
     }
 }

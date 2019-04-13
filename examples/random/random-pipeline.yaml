@@ -1,0 +1,15 @@
+name: "random rader pipeline"
+reader:
+  name: "RandomReader"
+  clazz: "solrcmdutils.RandomReader"
+  property:
+    docCount: "100"
+    fields:
+      - "foo"
+      - "bar"
+
+filter:
+  - name: "SystemOutWriter"
+    disabled: true
+    clazz: "solrcmdutils.SystemOutWriter"
+

@@ -1,6 +1,7 @@
 package de.tblsoft.solr.http;
 
 import com.google.common.base.Strings;
+import org.apache.commons.lang3.text.StrSubstitutor;
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.*;
@@ -13,7 +14,9 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.net.HttpCookie;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by tblsoft on 18.03.16.
@@ -92,6 +95,18 @@ public class HTTPHelper {
 			throw new RuntimeException(e);
 		}
 	}
+
+    public static void webHook(String url, String... parameters) {
+        Map<String, String> parametersMap = new HashMap<>();
+        for (int i = 0; i < parameters.length; i=i+2) {
+            parametersMap.put(parameters[i], parameters[i+1]);
+        }
+        StrSubstitutor strSubstitutor = new StrSubstitutor(parametersMap);
+        String webhook = strSubstitutor.replace(url);
+        // TODO this should be async
+        get(webhook);
+
+    }
 
 	public static String get(String url) {
 		try {

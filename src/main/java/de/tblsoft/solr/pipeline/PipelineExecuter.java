@@ -27,8 +27,6 @@ public class PipelineExecuter {
 
     private static Logger LOG = LoggerFactory.getLogger(PipelineExecuter.class);
 
-
-
     private Pipeline pipeline;
 
     private List<ProcessorIF> preProcessorList;
@@ -46,6 +44,7 @@ public class PipelineExecuter {
     private static Map<String, Class> classRegestriy = new HashMap<String, Class>();
     static {
         classRegestriy.put("solrcmdutils.StandardReader", StandardReader.class);
+        classRegestriy.put("solrcmdutils.RandomReader", RandomReader.class);
         classRegestriy.put("solrcmdutils.GrokReader", GrokReader.class);
         classRegestriy.put("solrcmdutils.GCLogReader", GCLogReader.class);
         classRegestriy.put("solrcmdutils.JsonPathReader", JsonPathReader.class);
