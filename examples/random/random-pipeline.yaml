@@ -10,6 +10,6 @@ reader:
 
 filter:
   - name: "SystemOutWriter"
-    disabled: true
+    disabled: false
     clazz: "solrcmdutils.SystemOutWriter"
 

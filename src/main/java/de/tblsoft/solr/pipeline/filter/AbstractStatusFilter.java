@@ -32,7 +32,10 @@ public abstract class AbstractStatusFilter extends AbstractFilter {
     	webHook = getProperty("webHook", null);
 
         if(webHook != null) {
-            HTTPHelper.webHook(webHook, "status", "start", "documentCounter", String.valueOf(documentCounter));
+            HTTPHelper.webHook(webHook,
+                    "status", "start",
+                    "documentCounter", String.valueOf(documentCounter),
+                    "processId", getPipelineExecuter().getProcessId());
         }
 
         super.init();
@@ -81,7 +84,10 @@ public abstract class AbstractStatusFilter extends AbstractFilter {
     	System.out.println("processed all " + documentCounter + " in " + getFormattedDuration(duration) + ". - processed the last " + lapCount + " documents in " + getFormattedDuration(lapDuration) + ".");
 
         if(webHook != null) {
-            HTTPHelper.webHook(webHook, "status", "progress", "documentCounter", String.valueOf(documentCounter));
+            HTTPHelper.webHook(webHook,
+                    "status", "progress",
+                    "documentCounter", String.valueOf(documentCounter),
+                    "processId", getPipelineExecuter().getProcessId());
         }
     }
     
@@ -91,7 +97,10 @@ public abstract class AbstractStatusFilter extends AbstractFilter {
 		System.out.println(new Date());
 
 		if(webHook != null) {
-            HTTPHelper.webHook(webHook, "status", "end", "documentCounter", String.valueOf(documentCounter));
+            HTTPHelper.webHook(webHook,
+                    "status", "end",
+                    "documentCounter", String.valueOf(documentCounter),
+                    "processId", getPipelineExecuter().getProcessId());
 		}
     }
 }

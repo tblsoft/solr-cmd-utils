@@ -23,6 +23,8 @@ public abstract class AbstractFilter implements FilterIF {
 
     protected Map<String,String> variables = new HashMap<String, String>();
 
+    protected PipelineExecuter pipelineExecuter;
+
     @Override
     public void setVariables(Map<String,String> variables) {
         if(variables == null) {
@@ -172,5 +174,14 @@ public abstract class AbstractFilter implements FilterIF {
 
     public String getId() {
         return this.filter.getId();
+    }
+
+    @Override
+    public void setPipelineExecuter(PipelineExecuter pipelineExecuter) {
+        this.pipelineExecuter = pipelineExecuter;
+    }
+
+    public PipelineExecuter getPipelineExecuter() {
+        return pipelineExecuter;
     }
 }

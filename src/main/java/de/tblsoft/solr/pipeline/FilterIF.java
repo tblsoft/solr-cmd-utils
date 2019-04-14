@@ -25,4 +25,6 @@ public interface FilterIF {
     public String getId();
 
     public void setVariables(Map<String,String> variables);
+
+    void setPipelineExecuter(PipelineExecuter pipelineExecuter);
 }

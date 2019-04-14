@@ -41,6 +41,8 @@ public class PipelineExecuter {
     
     private Map<String, String> pipelineVariables = new HashMap<String, String>();
 
+    private String processId;
+
     private static Map<String, Class> classRegestriy = new HashMap<String, Class>();
     static {
         classRegestriy.put("solrcmdutils.StandardReader", StandardReader.class);
@@ -152,6 +154,7 @@ public class PipelineExecuter {
         LOG.debug("Read the pipeline configuration from the yaml file: {}", yamlFileName);
         try {
             pipeline = readPipelineFromYamlFile(yamlFileName);
+            processId = UUID.randomUUID().toString();
 
             LOG.debug("Default variables in the pipeline {}", pipeline.getVariables());
             LOG.debug("Configured variables in the pipeline {}", pipelineVariables);
@@ -187,6 +190,7 @@ public class PipelineExecuter {
             filterInstance = createFilterInstance(filter);
             filterInstance.setBaseDir(getBaseDirFromYamlFile());
             filterInstance.setVariables(pipeline.getVariables());
+            filterInstance.setPipelineExecuter(this);
             if(lastFilter == null) {
                 lastFilter = filterInstance;
                 continue;
@@ -350,6 +354,12 @@ public class PipelineExecuter {
 	public void addPipelineVariable(String name, String value) {
 		this.pipelineVariables.put(name, value);
 	}
-    
-    
+
+    public String getProcessId() {
+        return processId;
+    }
+
+    public void setProcessId(String processId) {
+        this.processId = processId;
+    }
 }
