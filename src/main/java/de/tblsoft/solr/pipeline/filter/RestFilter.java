@@ -118,8 +118,6 @@ public class RestFilter extends AbstractFilter {
 
     /**
      * Build url with params and path params
-     * @param doc
-     * @return
      */
     protected String buildUrlWithParams(Document doc) {
         String url = getUrl(doc);

@@ -10,7 +10,7 @@ import java.util.List;
 
 
 /**
- * Gender Filter generates separate male/female tokens from a shorthand token like Chirurg/-in -> [Chirurg, Chirurgin]
+ * Gender Filter generates separate male/female tokens from a shorthand token like Chirurg/-in - [Chirurg, Chirurgin]
  * Where the first token is the male and the second the female token.
  * The female token is always created from the male and the female token.
  * Tested with German language other languages can work.
