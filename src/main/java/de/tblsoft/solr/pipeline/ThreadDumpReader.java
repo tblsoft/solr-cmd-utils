@@ -7,6 +7,8 @@ import oi.thekraken.grok.api.Match;
 import oi.thekraken.grok.api.exception.GrokException;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -19,6 +21,9 @@ import java.util.Map;
 import java.util.UUID;
 
 public class ThreadDumpReader extends AbstractReader {
+
+	private static Logger LOG = LoggerFactory.getLogger(ThreadDumpReader.class);
+
 
 	private boolean isTrace = false;
 
@@ -119,27 +124,27 @@ public class ThreadDumpReader extends AbstractReader {
     }
 
     void problem(String value) {
-        System.out.println("problem: " + isLockedOwnableSynchronizers + " " + value);
+        LOG.info("problem: " + isLockedOwnableSynchronizers + " " + value);
 
     }
 
 	void jniReferences(String jniReferences) {
-		//System.out.println(jniReferences);
+		//LOG.info(jniReferences);
 
 	}
 
     void locked(String value) {
-        //System.out.println("locked: " + value);
+        //LOG.info("locked: " + value);
 
     }
 
     void waitingOn(String value) {
-        //System.out.println("watingOn: " + value);
+        //LOG.info("watingOn: " + value);
 
     }
 
     void parkingToWaitingFor(String value) {
-        //System.out.println("parkingToWaitingFor: " + value);
+        //LOG.info("parkingToWaitingFor: " + value);
 
     }
 

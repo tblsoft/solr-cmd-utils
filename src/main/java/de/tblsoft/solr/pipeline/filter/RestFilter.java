@@ -12,16 +12,23 @@ import org.apache.http.client.config.RequestConfig;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.ThreadFactory;
 
 
 public class RestFilter extends AbstractFilter {
+
+    private static Logger LOG = LoggerFactory.getLogger(RestFilter.class);
 
     private String url;
     private String method;
@@ -75,7 +82,7 @@ public class RestFilter extends AbstractFilter {
                 .setNameFormat("tblsoft-rest-filter-thread-%d").build();
         executor  = Executors.newFixedThreadPool(threads, namedThreadFactory);
 
-        System.out.println("start http filter with threads: " + threads);
+        LOG.info("start http filter with threads: " + threads);
 
         gson = new GsonBuilder().create();
 
@@ -165,7 +172,7 @@ public class RestFilter extends AbstractFilter {
         try {
             httpclient.close();
         } catch (IOException e) {
-            System.out.println(e.getMessage());
+            LOG.info(e.getMessage());
         }
 
         executor.shutdown();

@@ -1,11 +1,16 @@
 package de.tblsoft.solr.perf;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.Date;
 
 /**
  * Created by oelbaer on 18.06.16.
  */
 public class RequestExecuter implements Runnable{
+
+    private static Logger LOG = LoggerFactory.getLogger(RequestExecuter.class);
 
     private Request request;
 
@@ -23,10 +28,10 @@ public class RequestExecuter implements Runnable{
                 throw new RuntimeException(e);
             }
         } else {
-            System.out.println("mmmmmm");
+            LOG.info("mmmmmm");
         }
         Date d = new Date(request.getExecutionTime());
-        System.out.println(request.getOut() + d);
+        LOG.info(request.getOut() + d);
 
 
 

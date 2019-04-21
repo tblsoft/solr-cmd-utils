@@ -8,6 +8,8 @@ import de.tblsoft.solr.util.DatatypeUtils;
 import de.tblsoft.solr.util.PairBuilder;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
@@ -15,6 +17,8 @@ import java.util.*;
  * Created by tblsoft 18.05.17.
  */
 public class StatisticFilter extends AbstractFilter {
+
+    private static Logger LOG = LoggerFactory.getLogger(StatisticFilter.class);
 
 
     private long documentCount = 0;
@@ -65,14 +69,14 @@ public class StatisticFilter extends AbstractFilter {
 
     @Override
     public void end() {
-        System.out.println("number of docs: " + documentCount);
-        System.out.println("number of fields: " + fieldStatisticMap.size());
-        System.out.println();
-        System.out.println();
+        LOG.info("number of docs: " + documentCount);
+        LOG.info("number of fields: " + fieldStatisticMap.size());
+        LOG.info("");
+        LOG.info("");
 
 
         System.out.printf("%40s %5s %5s %10s %100s", "field name", "mv", "count", "type", "example values");
-        System.out.println();
+        LOG.info("");
         SolrSchemaManager solrSchemaManager = new SolrSchemaManager("http://localhost:8983/solr/bar");
         try {
 
@@ -95,7 +99,7 @@ public class StatisticFilter extends AbstractFilter {
                         fieldStatistic.getDataType(),
                         exampleValueBuilder.toString()
                 );
-                System.out.println( );
+                LOG.info("");
             }
 
         } catch (Exception e) {

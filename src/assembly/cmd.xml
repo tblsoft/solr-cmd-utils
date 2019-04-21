@@ -32,5 +32,9 @@
                 <include>*jar-with-dependencies.jar</include>
             </includes>
         </fileSet>
+        <fileSet>
+            <directory>src/main/logging</directory>
+            <outputDirectory>solr-cmd-utils/lib/classes</outputDirectory>
+        </fileSet>
     </fileSets>
 </assembly>

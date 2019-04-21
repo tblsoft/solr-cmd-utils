@@ -4,7 +4,8 @@ import com.google.common.base.Joiner;
 import de.tblsoft.solr.pipeline.AbstractFilter;
 import de.tblsoft.solr.pipeline.bean.Document;
 import de.tblsoft.solr.pipeline.bean.Field;
-import de.tblsoft.solr.util.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
@@ -12,6 +13,8 @@ import java.util.List;
  * Created by tblsoft on 23.01.16.
  */
 public class SystemOutWriter extends AbstractFilter {
+
+    private static Logger LOG = LoggerFactory.getLogger(SystemOutWriter.class);
 
     private String prefix;
 
@@ -36,10 +39,10 @@ public class SystemOutWriter extends AbstractFilter {
         if(values != null) {
             for(Field f :values) {
                 fieldCounter++;
-                System.out.print(prefix+"name: " + f.getName());
+                LOG.info(prefix+"name: " + f.getName());
 
                 String out = f.getValues() != null ? Joiner.on(", ").skipNulls().join(f.getValues()) : null;
-                System.out.println(prefix+" -- value: " + out );
+                LOG.info(prefix+" -- value: " + out );
             }
         }
 
@@ -48,9 +51,9 @@ public class SystemOutWriter extends AbstractFilter {
 
     @Override
     public void end() {
-        System.out.println("end");
-        System.out.println("fields: " + fieldCounter);
-        System.out.println("documents: " + documentCounter);
+        LOG.info("end");
+        LOG.info("fields: " + fieldCounter);
+        LOG.info("documents: " + documentCounter);
         super.end();
     }
 

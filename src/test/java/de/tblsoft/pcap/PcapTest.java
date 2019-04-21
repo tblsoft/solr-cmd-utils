@@ -2,6 +2,8 @@ package de.tblsoft.pcap;
 
 import com.google.common.io.ByteStreams;
 import org.junit.Ignore;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
@@ -12,6 +14,9 @@ import java.io.InputStream;
  * Created by oelbaer on 01.05.16.
  */
 public class PcapTest {
+    private static Logger LOG = LoggerFactory.getLogger(PcapTest.class);
+
+
     @org.junit.Test
     @Ignore
     public void test() throws Exception {
@@ -44,7 +49,7 @@ public class PcapTest {
     void printHex(byte[] b) {
         for (int i = 0; i < b.length; i++) {
             String p = String.format("%02X ", b[i]);
-            System.out.print(p + " ");
+            LOG.info(p + " ");
 
         }
 

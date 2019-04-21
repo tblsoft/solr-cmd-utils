@@ -5,6 +5,8 @@ import de.tblsoft.solr.pipeline.bean.Reader;
 import de.tblsoft.solr.util.IOUtils;
 import oi.thekraken.grok.api.Grok;
 import oi.thekraken.grok.api.Match;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -16,6 +18,10 @@ import java.util.Map;
  * Created by tblsoft on 07.02.16.
  */
 public class GCLogReader extends AbstractReader {
+
+    private static Logger LOG = LoggerFactory.getLogger(GCLogReader.class);
+
+
 
 
     private Grok grok;
@@ -73,7 +79,7 @@ public class GCLogReader extends AbstractReader {
         //executer.field("raw", line);
 
 
-        System.out.println(line);
+        LOG.info(line);
         Match gm = grok.match(line);
 
         gm.captures();

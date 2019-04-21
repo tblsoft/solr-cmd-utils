@@ -2,11 +2,15 @@ package de.tblsoft.solr.log.parser;
 
 import com.google.common.base.Strings;
 import com.google.common.util.concurrent.AtomicLongMap;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class SolrRequestCounter extends SolrQueryLogParser {
+
+    private static Logger LOG = LoggerFactory.getLogger(SolrRequestCounter.class);
 
     private AtomicLongMap<String> count = AtomicLongMap.create();
 
@@ -44,19 +48,19 @@ public class SolrRequestCounter extends SolrQueryLogParser {
 
     @Override
     protected void logRowError(SolrLogRow solrLogRow, Exception e) {
-        System.out.println("error");
+        LOG.error("error");
     }
 
     public void print() {
         SortedSet<String> keys = new TreeSet<String>(count.asMap().keySet());
 
         long maxValue = Collections.max(count.asMap().values());
-        System.out.println("max: " + maxValue);
+        LOG.info("max: " + maxValue);
 
         for (String key : keys) {
             long value = count.get(key);
             long scaledValue = scale(value,maxOutput, maxValue);
-            System.out.println(key + " : " + value + print(scaledValue));
+            LOG.info(key + " : " + value + print(scaledValue));
 
         }
     }

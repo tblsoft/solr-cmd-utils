@@ -2,13 +2,19 @@ package de.tblsoft.solr.perf;
 
 import de.tblsoft.solr.log.parser.SolrLogRow;
 import de.tblsoft.solr.log.parser.SolrQueryLogParser;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.util.concurrent.*;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadPoolExecutor;
 
 /**
  * Created by tblsoft on 18.06.16.
  */
 public class PerformanceTester extends SolrQueryLogParser {
+
+    private static Logger LOG = LoggerFactory.getLogger(PerformanceTester.class);
+
 
     private ThreadPoolExecutor executor;
 
@@ -38,7 +44,6 @@ public class PerformanceTester extends SolrQueryLogParser {
         }
 
 
-            //System.out.println(executor.getActiveCount());
             try {
                     long diff = solrLogRow.getTimestamp().getTime() - referenceTime;
                     executor.execute(new RequestExecuter(Request.create().executionTime(startTime + diff). out("foo " + solrLogRow.getTimestamp())));

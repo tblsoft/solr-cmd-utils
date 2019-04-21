@@ -14,6 +14,8 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -21,6 +23,8 @@ import java.net.URISyntaxException;
 import java.util.*;
 
 public class ElasticWriter extends AbstractFilter {
+
+    private static Logger LOG = LoggerFactory.getLogger(ElasticWriter.class);
 
     private Gson gson;
 
@@ -163,13 +167,13 @@ public class ElasticWriter extends AbstractFilter {
             String bulkUrl = ElasticHelper.getBulkUrl(indexUrl);
             HTTPHelper.post(bulkUrl, bulkRequest.toString(), "application/json");
         } catch (Exception e) {
-            System.out.println("There was an error processing the bulk request: " + e.getMessage());
-            System.out.println(bulkRequest.toString());
+            LOG.info("There was an error processing the bulk request: " + e.getMessage());
+            LOG.info(bulkRequest.toString());
 
             if(failOnError) {
                 throw new RuntimeException(e);
             } else {
-                System.out.println("Continue processing ... ");
+                LOG.info("Continue processing ... ");
             }
         }
 
@@ -181,7 +185,7 @@ public class ElasticWriter extends AbstractFilter {
 
         if (buffer.size() >= bufferSize || currentBufferContentSize + documentSize > maxBufferContentSize ) {
             procesBuffer();
-            System.out.println("bufferContentSize: " + currentBufferContentSize + " bufferSize: " + buffer.size());
+            LOG.info("bufferContentSize: " + currentBufferContentSize + " bufferSize: " + buffer.size());
             buffer = new ArrayList<>();
             currentBufferContentSize = 0;
         }
@@ -271,7 +275,7 @@ public class ElasticWriter extends AbstractFilter {
             AliasManager.switchAlias(location, alias, indexes, indexes.get(indexes.size()-1));
 
         } catch (Exception e) {
-            System.out.println("There was an error switching the alias.");
+            LOG.info("There was an error switching the alias.");
         }
         int indexesToDeleteCount = indexes.size() - housekeepingCount;
         if(indexesToDeleteCount < 0) {
@@ -284,7 +288,7 @@ public class ElasticWriter extends AbstractFilter {
                 String deleteUrl = ElasticHelper.getIndexUrl(location, indexToDelete);
                 HTTPHelper.delete(deleteUrl);
             } catch (Exception e) {
-                System.out.println("There was an error deleting the index: " + indexToDelete);
+                LOG.info("There was an error deleting the index: " + indexToDelete);
             }
         }
     }
@@ -301,7 +305,7 @@ public class ElasticWriter extends AbstractFilter {
                 String index = ElasticHelper.getIndexFromUrl(indexUrl);
                 AliasManager.switchAlias(indexUrl, alias, new ArrayList<>(), index);
             } catch (Exception e) {
-                System.out.println("Error switching alias, because: " + e.getMessage());
+                LOG.info("Error switching alias, because: " + e.getMessage());
             }
         }
 

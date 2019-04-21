@@ -1,6 +1,8 @@
 package de.tblsoft.solr.log.parser;
 
 import de.tblsoft.solr.util.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -13,6 +15,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class LogParser {
+
+    private static Logger LOG = LoggerFactory.getLogger(LogParser.class);
 
 
     public LogParser(String file) {
@@ -51,7 +55,7 @@ public class LogParser {
             if (m.matches()) {
                 try {
                     currentCount++;
-                    System.out.println(m.group(1));
+                    LOG.info(m.group(1));
                     Date date = parseDate( m.group(1));
                     line(date, line);
                 } catch (Exception e) {

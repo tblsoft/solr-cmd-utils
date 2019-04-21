@@ -6,6 +6,8 @@ import de.tblsoft.solr.pipeline.filter.JsonWriter;
 import de.tblsoft.solr.pipeline.filter.TestingFilter;
 import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,13 +17,15 @@ import java.util.List;
  */
 public abstract class AbstractBaseTest {
 
+    private static Logger LOG = LoggerFactory.getLogger(AbstractBaseTest.class);
+
     protected List<Document> outputDocumentList = new ArrayList<Document>();
     protected TestingFilter testingFilter;
 
 
     public void print(List<Document> documentList) {
         String json = JsonWriter.mapToJsonString(documentList);
-        System.out.println(json);
+        LOG.info(json);
     }
 
     public void print() {

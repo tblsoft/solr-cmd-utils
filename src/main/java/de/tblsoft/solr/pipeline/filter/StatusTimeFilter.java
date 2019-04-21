@@ -1,12 +1,17 @@
 package de.tblsoft.solr.pipeline.filter;
 
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Created by tblsoft on 26.11.16
  * 
  * print a status after a defined time interval. The default is 10 seconds.
  */
 public class StatusTimeFilter extends AbstractStatusFilter {
+
+	private static Logger LOG = LoggerFactory.getLogger(StatusTimeFilter.class);
 
 	
 	int timeInterval = 10;

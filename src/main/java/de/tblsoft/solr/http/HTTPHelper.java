@@ -9,6 +9,8 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -22,6 +24,9 @@ import java.util.Map;
  * Created by tblsoft on 18.03.16.
  */
 public class HTTPHelper {
+
+	private static Logger LOG = LoggerFactory.getLogger(HTTPHelper.class);
+
 
 	public static String delete(String url) {
 		try {
@@ -59,7 +64,7 @@ public class HTTPHelper {
 			responseBuilder.append(EntityUtils.toString(response.getEntity()));
 
 			if(response.getStatusLine().getStatusCode() != 200) {
-				System.out.println(responseBuilder.toString());
+				LOG.info(responseBuilder.toString());
 			}
 			httpclient.close();
 			return responseBuilder.toString();

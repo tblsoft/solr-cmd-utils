@@ -15,11 +15,16 @@ import java.util.Map;
 import org.apache.commons.lang3.text.StrSubstitutor;
 
 import com.google.common.base.Strings;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Created by tblsoft on 23.01.16.
  */
 public class StandardReader extends SolrXmlParser implements ReaderIF {
+
+    private static Logger LOG = LoggerFactory.getLogger(StandardReader.class);
+
 
     private PipelineExecuter executer;
 
@@ -54,7 +59,7 @@ public class StandardReader extends SolrXmlParser implements ReaderIF {
         	String url = getProperty("url", null);
         	if(!Strings.isNullOrEmpty(url)) {
         		tempFile = File.createTempFile("solr-reader-temp-file", ".xml");
-        		System.out.println("Store temporary file to " + tempFile.getAbsolutePath());
+        		LOG.info("Store temporary file to " + tempFile.getAbsolutePath());
         		HTTPHelper.get2File(url, tempFile);
         		filename = tempFile.getAbsolutePath();
         	}

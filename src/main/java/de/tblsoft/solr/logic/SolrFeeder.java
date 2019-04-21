@@ -6,6 +6,8 @@ import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.ConcurrentUpdateSolrClient;
 import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.apache.solr.common.SolrInputDocument;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -16,6 +18,9 @@ import java.util.List;
  */
 @Deprecated
 public class SolrFeeder extends SolrXmlParser {
+
+    private static Logger LOG = LoggerFactory.getLogger(SolrFeeder.class);
+
 
 
     private List<String> ignoreFields = new ArrayList<String>();
@@ -45,7 +50,7 @@ public class SolrFeeder extends SolrXmlParser {
         }
 
         if(deleteIndex) {
-            System.out.println("Delete the index.");
+            LOG.info("Delete the index.");
             server.deleteByQuery("*:*");
         }
 

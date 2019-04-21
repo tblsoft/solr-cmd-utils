@@ -7,6 +7,8 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -19,6 +21,9 @@ import java.util.*;
  * Normalize synonym to main word
  */
 public class SynonymNormalizationFilter extends AbstractFilter {
+
+    private static Logger LOG = LoggerFactory.getLogger(SynonymNormalizationFilter.class);
+
     Map<String, String> synonymLookup; // synonym : main word
     Set<String> mainWordLookup; // main word
     String fieldSynonym;
@@ -93,7 +98,7 @@ public class SynonymNormalizationFilter extends AbstractFilter {
                     exist = true;
                 }
                 else if(mustExist) {
-                    System.out.println("SynonymNormalizationFilter: Omit non existing word -> "+word);
+                    LOG.info("SynonymNormalizationFilter: Omit non existing word -> "+word);
                 }
             }
         }

@@ -2,6 +2,8 @@ package de.tblsoft.solr.pipeline.filter;
 
 import de.tblsoft.solr.pipeline.AbstractFilter;
 import de.tblsoft.solr.pipeline.bean.Document;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -13,6 +15,8 @@ import java.util.regex.Pattern;
  * Created by tblsoft 17.03.16.
  */
 public class LookupFilter extends AbstractFilter {
+
+    private static Logger LOG = LoggerFactory.getLogger(LookupFilter.class);
 
     private Map<String, Document> lookup = new HashMap<String, Document>();
 
@@ -34,7 +38,7 @@ public class LookupFilter extends AbstractFilter {
         for(String key: keyList) {
             String normalizedKey = normalizeKey(key);
 
-            System.out.println("############ " + normalizedKey);
+            LOG.info("############ " + normalizedKey);
             lookup.put(normalizedKey,document);
         }
 

@@ -6,6 +6,8 @@ import de.tblsoft.solr.pipeline.bean.Document;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -16,6 +18,9 @@ import java.util.concurrent.*;
  * Created by tblsoft 25.12.16.
  */
 public class HttpFilter extends AbstractFilter {
+
+    private static Logger LOG = LoggerFactory.getLogger(HttpFilter.class);
+
 
     private String urlField;
 
@@ -52,7 +57,7 @@ public class HttpFilter extends AbstractFilter {
         executor  = Executors.newFixedThreadPool(threads,namedThreadFactory);
 
 
-        System.out.println("start http filter with threads: " + threads);
+        LOG.info("start http filter with threads: " + threads);
 
         super.init();
 
@@ -98,11 +103,11 @@ public class HttpFilter extends AbstractFilter {
     @Override
     public void end() {
         processQueue();
-        System.out.println("end HttpFilter");
+        LOG.info("end HttpFilter");
         try {
             httpclient.close();
         } catch (IOException e) {
-            System.out.println(e.getMessage());
+            LOG.info(e.getMessage());
         }
 
         executor.shutdown();

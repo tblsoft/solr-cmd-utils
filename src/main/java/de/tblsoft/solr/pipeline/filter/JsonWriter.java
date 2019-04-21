@@ -12,6 +12,8 @@ import de.tblsoft.solr.pipeline.bean.Field;
 import de.tblsoft.solr.util.IOUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.math.NumberUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -23,6 +25,8 @@ import java.util.Map;
 
 public class JsonWriter extends AbstractFilter {
 
+
+    private static Logger LOG = LoggerFactory.getLogger(JsonWriter.class);
 
     private Gson gson;
 
@@ -138,7 +142,7 @@ public class JsonWriter extends AbstractFilter {
                     e.printStackTrace();
                 }
             } else if ("stdout".equals(type)) {
-                System.out.println(json);
+                LOG.info(json);
             }
 
 

@@ -4,6 +4,8 @@ import de.tblsoft.solr.pipeline.AbstractFilter;
 import de.tblsoft.solr.pipeline.bean.Document;
 import oi.thekraken.grok.api.Grok;
 import oi.thekraken.grok.api.Match;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 
@@ -11,6 +13,9 @@ import java.util.Map;
  * Created by tblsoft 11.05.16.
  */
 public class GrokFilter extends AbstractFilter {
+
+    private static Logger LOG = LoggerFactory.getLogger(GrokFilter.class);
+
 
     private String fieldName;
     private Boolean keepRaw;
@@ -39,7 +44,6 @@ public class GrokFilter extends AbstractFilter {
 
     void processLine(String line) {
         //executer.field("raw", line);
-        //System.out.println(line);
         Match gm = grok.match(line);
         gm.captures();
         Map<String, Object> m = gm.toMap();

@@ -3,11 +3,8 @@ package de.tblsoft.solr.pipeline.filter;
 import de.tblsoft.solr.http.HTTPHelper;
 import de.tblsoft.solr.pipeline.AbstractFilter;
 import de.tblsoft.solr.pipeline.bean.Document;
-import org.apache.commons.lang3.text.StrSubstitutor;
-
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Created by tblsoft on 26.11.16.
@@ -15,6 +12,8 @@ import java.util.Map;
  * abstract class to implement multiple status filter.
  */
 public abstract class AbstractStatusFilter extends AbstractFilter {
+
+    private static Logger LOG = LoggerFactory.getLogger(AbstractStatusFilter.class);
 
     protected int documentCounter = 0;
 	protected long lapStart = 0;
@@ -27,6 +26,7 @@ public abstract class AbstractStatusFilter extends AbstractFilter {
 	
     @Override
     public void init() {
+        LOG.info("start processing");
     	lapStart = System.currentTimeMillis();
     	start = System.currentTimeMillis();
     	webHook = getProperty("webHook", null);
@@ -81,7 +81,7 @@ public abstract class AbstractStatusFilter extends AbstractFilter {
     }
     
     void printStatus(long duration, long lapDuration) {
-    	System.out.println("processed all " + documentCounter + " in " + getFormattedDuration(duration) + ". - processed the last " + lapCount + " documents in " + getFormattedDuration(lapDuration) + ".");
+    	LOG.info("processed all " + documentCounter + " in " + getFormattedDuration(duration) + ". - processed the last " + lapCount + " documents in " + getFormattedDuration(lapDuration) + ".");
 
         if(webHook != null) {
             HTTPHelper.webHook(webHook,
@@ -93,8 +93,7 @@ public abstract class AbstractStatusFilter extends AbstractFilter {
     
     void printEnd() {
     	long duration = System.currentTimeMillis() - start;
-    	System.out.println("End. processed all " + documentCounter + " in " + getFormattedDuration(duration) + ".");
-		System.out.println(new Date());
+        LOG.info("End. processed all " + documentCounter + " in " + getFormattedDuration(duration) + ".");
 
 		if(webHook != null) {
             HTTPHelper.webHook(webHook,
