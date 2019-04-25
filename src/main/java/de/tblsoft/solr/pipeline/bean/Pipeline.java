@@ -10,6 +10,8 @@ import java.util.Map;
 public class Pipeline {
     private String name;
 
+    private String processId;
+
     private Map<String,String> variables = new HashMap<String, String>();
 
     private Reader reader;
@@ -66,6 +68,14 @@ public class Pipeline {
 
     public void setPostProcessor(List<Processor> postProcessor) {
         this.postProcessor = postProcessor;
+    }
+
+    public String getProcessId() {
+        return processId;
+    }
+
+    public void setProcessId(String processId) {
+        this.processId = processId;
     }
 
     @Override

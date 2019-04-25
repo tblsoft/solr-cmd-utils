@@ -1,5 +1,6 @@
 package de.tblsoft.solr.pipeline;
 
+import com.google.common.base.Strings;
 import de.tblsoft.solr.compare.SolrCompareFilter;
 import de.tblsoft.solr.http.HTTPHelper;
 import de.tblsoft.solr.pipeline.bean.Document;
@@ -154,7 +155,12 @@ public class PipelineExecuter {
         LOG.debug("Read the pipeline configuration from the yaml file: {}", yamlFileName);
         try {
             pipeline = readPipelineFromYamlFile(yamlFileName);
-            processId = UUID.randomUUID().toString();
+            processId = pipeline.getProcessId();
+            if(Strings.isNullOrEmpty(processId)) {
+                processId = UUID.randomUUID().toString();
+            }
+
+            LOG.debug("processId {}", processId);
 
             LOG.debug("Default variables in the pipeline {}", pipeline.getVariables());
             LOG.debug("Configured variables in the pipeline {}", pipelineVariables);
@@ -284,7 +290,7 @@ public class PipelineExecuter {
         }
 
 
-        LOG.debug("Process the pst processors.");
+        LOG.debug("Process the post processors.");
         for(ProcessorIF processorIF: postProcessorList) {
             processorIF.process();
         }
