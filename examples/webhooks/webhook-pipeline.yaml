@@ -1,0 +1,20 @@
+name: "webhook example pipeline"
+processId: "123456789"
+webHookStart: "http://localhost:8080/webhook/${status}/${processId}/0"
+webHookEnd: "http://localhost:8080/webhook/${status}/${processId}/0"
+reader:
+  name: "RandomReader"
+  clazz: "solrcmdutils.RandomReader"
+  property:
+    docCount: "100"
+    fields:
+      - "foo"
+      - "bar"
+
+filter:
+  - name: "status filter"
+    disabled: false
+    clazz: "solrcmdutils.StatusFilter"
+    property:
+      webHook: "http://localhost:8080/webhook/${status}/${processId}/${documentCounter}"
+

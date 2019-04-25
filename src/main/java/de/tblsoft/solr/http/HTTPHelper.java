@@ -102,6 +102,9 @@ public class HTTPHelper {
 	}
 
     public static void webHook(String url, String... parameters) {
+		if(Strings.isNullOrEmpty(url)) {
+			return;
+		}
         Map<String, String> parametersMap = new HashMap<>();
         for (int i = 0; i < parameters.length; i=i+2) {
             parametersMap.put(parameters[i], parameters[i+1]);

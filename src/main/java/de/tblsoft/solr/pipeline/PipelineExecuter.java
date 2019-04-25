@@ -30,6 +30,10 @@ public class PipelineExecuter {
 
     private Pipeline pipeline;
 
+    private String webHookStart;
+
+    private String webHookEnd;
+
     private List<ProcessorIF> preProcessorList;
 
     private List<FilterIF> filterList;
@@ -159,6 +163,13 @@ public class PipelineExecuter {
             if(Strings.isNullOrEmpty(processId)) {
                 processId = UUID.randomUUID().toString();
             }
+
+            webHookStart = pipeline.getWebHookStart();
+            webHookEnd = pipeline.getWebHookEnd();
+
+            HTTPHelper.webHook(webHookStart,
+                    "status", "start",
+                    "processId", processId);
 
             LOG.debug("processId {}", processId);
 
@@ -294,6 +305,11 @@ public class PipelineExecuter {
         for(ProcessorIF processorIF: postProcessorList) {
             processorIF.process();
         }
+
+
+        HTTPHelper.webHook(webHookEnd,
+                "status", "end",
+                "processId", processId);
     }
 
 
@@ -309,7 +325,6 @@ public class PipelineExecuter {
     public void end() {
         reader.end();
         filterList.get(0).end();
-
     }
 
     Pipeline readPipelineFromYamlFile(String fileName) {

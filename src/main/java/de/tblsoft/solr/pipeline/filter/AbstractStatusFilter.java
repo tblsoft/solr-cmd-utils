@@ -33,7 +33,7 @@ public abstract class AbstractStatusFilter extends AbstractFilter {
 
         if(webHook != null) {
             HTTPHelper.webHook(webHook,
-                    "status", "start",
+                    "status", "progress.start",
                     "documentCounter", String.valueOf(documentCounter),
                     "processId", getPipelineExecuter().getProcessId());
         }
@@ -97,7 +97,7 @@ public abstract class AbstractStatusFilter extends AbstractFilter {
 
 		if(webHook != null) {
             HTTPHelper.webHook(webHook,
-                    "status", "end",
+                    "status", "progress.end",
                     "documentCounter", String.valueOf(documentCounter),
                     "processId", getPipelineExecuter().getProcessId());
 		}

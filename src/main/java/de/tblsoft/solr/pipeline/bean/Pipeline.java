@@ -12,6 +12,10 @@ public class Pipeline {
 
     private String processId;
 
+    private String webHookStart;
+
+    private String webHookEnd;
+
     private Map<String,String> variables = new HashMap<String, String>();
 
     private Reader reader;
@@ -76,6 +80,22 @@ public class Pipeline {
 
     public void setProcessId(String processId) {
         this.processId = processId;
+    }
+
+    public String getWebHookStart() {
+        return webHookStart;
+    }
+
+    public void setWebHookStart(String webHookStart) {
+        this.webHookStart = webHookStart;
+    }
+
+    public String getWebHookEnd() {
+        return webHookEnd;
+    }
+
+    public void setWebHookEnd(String webHookEnd) {
+        this.webHookEnd = webHookEnd;
     }
 
     @Override
