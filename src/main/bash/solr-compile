@@ -9,10 +9,10 @@ set -e
 
 if [ -d lib/classes ]
     then
-       find -L lib/classes -name *.java | xargs javac -classpath $SOLR_CMD_UTILS_HOME/lib/*.jar
+       find -L lib/classes -name *.java | xargs javac -classpath "$SOLR_CMD_UTILS_HOME/lib/*"
 fi
 
 if [ -d $SOLR_CMD_UTILS_HOME/lib/classes ]
     then
-       find -L $SOLR_CMD_UTILS_HOME/lib/classes -name *.java | xargs javac -classpath $SOLR_CMD_UTILS_HOME/lib/*.jar
+       find -L $SOLR_CMD_UTILS_HOME/lib/classes -name *.java | xargs javac -classpath "$SOLR_CMD_UTILS_HOME/lib/*"
 fi
