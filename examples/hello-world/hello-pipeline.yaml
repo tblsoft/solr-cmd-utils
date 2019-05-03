@@ -1,4 +1,7 @@
 name: "random rader pipeline"
+processId: "tblfoo"
+webHookStart: "http://localhost:8080/hook/${status}/${processId}/0"
+webHookEnd: "http://localhost:8080/hook/${status}/${processId}/0"
 reader:
   name: "RandomReader"
   clazz: "solrcmdutils.RandomReader"
@@ -12,6 +15,8 @@ filter:
   - name: "status filter"
     disabled: false
     clazz: "solrcmdutils.StatusFilter"
+    property:
+      webHook: "http://localhost:8080/hook/${status}/${processId}/${documentCounter}"
   - name: "SystemOutWriter"
     disabled: false
     clazz: "solrcmdutils.SystemOutWriter"
