@@ -3,7 +3,7 @@
 	<groupId>de.tblsoft.solr</groupId>
 	<artifactId>solr-cmd-utils</artifactId>
 	<packaging>jar</packaging>
-	<version>3.2-SNAPSHOT</version>
+	<version>3.2</version>
 	<name>solr-cmd-utils</name>
 	<url>http://maven.apache.org</url>
     <properties>
@@ -13,7 +13,7 @@
     <scm>
         <connection>scm:git:https://github.com/tblsoft/solr-cmd-utils.git</connection>
         <developerConnection>scm:git:https://github.com/tblsoft/solr-cmd-utils.git</developerConnection>
-    <tag>HEAD</tag>
+    <tag>solr-cmd-utils-3.2</tag>
   </scm>
 	<dependencies>
 		<dependency>
