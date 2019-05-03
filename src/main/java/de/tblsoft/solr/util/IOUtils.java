@@ -93,6 +93,13 @@ public class IOUtils {
         return fileStream;
     }
 
+    public static String getString(String location) throws IOException {
+        if(location.startsWith("http")) {
+            return HTTPHelper.get(location);
+        }
+        return FileUtils.readFileToString(new File(location));
+    }
+
 
     public static OutputStream getOutputStream(String outputFileName) throws IOException {
         if("stdout".equals(outputFileName)) {

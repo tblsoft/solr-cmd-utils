@@ -115,10 +115,12 @@ public class ElasticHelper {
     }
     
     public static String getMappingUrl(String url) throws URISyntaxException {
-    	if(!url.endsWith("/")) {
-    		url = url + "/";
+	    String indexUrl = getIndexUrl(url);
+
+    	if(!indexUrl.endsWith("/")) {
+            indexUrl = indexUrl + "/";
     	}
-    	return url + "_mapping";
+    	return indexUrl + "_mapping";
     }
     
     public static String getBulkUrl(String url) throws URISyntaxException {

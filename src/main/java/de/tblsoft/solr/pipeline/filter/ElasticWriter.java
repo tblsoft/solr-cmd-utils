@@ -11,13 +11,11 @@ import de.tblsoft.solr.pipeline.bean.Document;
 import de.tblsoft.solr.pipeline.bean.Field;
 import de.tblsoft.solr.util.IOUtils;
 import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.*;
@@ -95,13 +93,15 @@ public class ElasticWriter extends AbstractFilter {
             HTTPHelper.delete(indexUrl);
         }
         if (elasticMappingLocation != null) {
-            String mappingJson;
             try {
-                File elasticMappingFile = new File(IOUtils.getAbsoluteFile(
-                        getBaseDir(), elasticMappingLocation));
-
-                mappingJson = FileUtils.readFileToString(elasticMappingFile);
-                HTTPHelper.put(indexUrl, mappingJson, "application/json");
+                String absoluteElasticMappingLocation = IOUtils.getAbsoluteFile(
+                        getBaseDir(), elasticMappingLocation);
+                String mappingJson = IOUtils.getString(absoluteElasticMappingLocation);
+                String mappingUrl = ElasticHelper.getIndexUrl(indexUrl);
+                LOG.debug("mapping url: {} mappingJson: {}", mappingUrl, mappingJson );
+                HTTPHelper.put(mappingUrl, mappingJson, "application/json");
+            } catch (URISyntaxException e) {
+                throw new RuntimeException(e);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -185,7 +185,7 @@ public class ElasticWriter extends AbstractFilter {
 
         if (buffer.size() >= bufferSize || currentBufferContentSize + documentSize > maxBufferContentSize ) {
             procesBuffer();
-            LOG.info("bufferContentSize: " + currentBufferContentSize + " bufferSize: " + buffer.size());
+            LOG.debug("bufferContentSize: " + currentBufferContentSize + " bufferSize: " + buffer.size());
             buffer = new ArrayList<>();
             currentBufferContentSize = 0;
         }
