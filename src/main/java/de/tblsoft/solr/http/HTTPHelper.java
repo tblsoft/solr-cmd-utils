@@ -92,7 +92,7 @@ public class HTTPHelper {
 
 			responseBuilder.append(EntityUtils.toString(response.getEntity()));
 			httpclient.close();
-			if(response.getStatusLine().getStatusCode() != 200) {
+			if(response.getStatusLine().getStatusCode() >= 300) {
 				throw new RuntimeException("Problem: " + response.getStatusLine().getStatusCode() + " payload: " + responseBuilder.toString());
 			}
 			return responseBuilder.toString();
