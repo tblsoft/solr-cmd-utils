@@ -66,7 +66,7 @@ public class IOUtils {
         }
 
         if(root.isDirectory()) {
-            for (File file : Files.fileTreeTraverser().preOrderTraversal(root)) {
+            for (File file : Files.fileTraverser().breadthFirst(root)) {
                 if (file.isFile()) {
                     fileList.add(file.getAbsolutePath());
                 }

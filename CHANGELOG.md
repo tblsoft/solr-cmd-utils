@@ -11,6 +11,7 @@ All notable changes for the solr-cmd-utils project will be documented in this fi
 - remove minio dependency
 - increase version of jsoup
 - increase version of guava
+- increase version of httpclient
 
 ### Fixed
 
