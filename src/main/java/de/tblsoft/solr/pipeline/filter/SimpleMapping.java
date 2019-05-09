@@ -1,6 +1,6 @@
 package de.tblsoft.solr.pipeline.filter;
 
-import com.google.api.client.repackaged.com.google.common.base.Strings;
+import com.google.common.base.Strings;
 import de.tblsoft.solr.http.UrlUtil;
 import de.tblsoft.solr.pipeline.bean.Field;
 import de.tblsoft.solr.util.DateUtils;

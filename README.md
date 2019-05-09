@@ -5,7 +5,6 @@
 [![MIT License](https://img.shields.io/npm/l/check-dependencies.svg?style=flat-square)](http://opensource.org/licenses/MIT)
 [![Documentation Status](http://readthedocs.org/projects/solr-cmd-utils/badge/?version=latest)](http://solr-cmd-utils.readthedocs.io/en/latest/?badge=latest)
 [![Join the chat at https://gitter.im/solr-cmd-utils/Lobby](https://badges.gitter.im/solr-cmd-utils/Lobby.svg)](https://gitter.im/solr-cmd-utils/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-[![Dependencies](https://www.versioneye.com/user/projects/594d7a58368b0800675fd1c7/badge.svg?style=flat)](https://www.versioneye.com/user/projects/594d7a58368b0800675fd1c7)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/478cf34208e148e78e862f233f2a7cd5)](https://www.codacy.com/app/tbl/solr-cmd-utils?utm_source=github.com&utm_medium=referral&utm_content=tblsoft/solr-cmd-utils&utm_campaign=badger)
 [![codebeat badge](https://codebeat.co/badges/d9a8307b-c8e9-4a70-9ba5-e05eb1ca1a43)](https://codebeat.co/projects/github-com-tblsoft-solr-cmd-utils-master)
 [![Stories in Ready](https://badge.waffle.io/tblsoft/solr-cmd-utils.svg?label=ready&title=Ready)](http://waffle.io/tblsoft/solr-cmd-utils) 

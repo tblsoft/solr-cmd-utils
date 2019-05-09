@@ -1,7 +1,7 @@
 package de.tblsoft.solr.pipeline;
 
-import com.google.api.client.repackaged.com.google.common.base.Strings;
 import com.google.common.base.Splitter;
+import com.google.common.base.Strings;
 import com.google.common.io.Files;
 import de.tblsoft.solr.pipeline.bean.Document;
 import de.tblsoft.solr.util.IOUtils;

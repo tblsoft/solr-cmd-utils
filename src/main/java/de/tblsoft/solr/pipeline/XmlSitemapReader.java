@@ -1,6 +1,6 @@
 package de.tblsoft.solr.pipeline;
 
-import com.google.api.client.repackaged.com.google.common.base.Strings;
+import com.google.common.base.Strings;
 import de.tblsoft.solr.http.HTTPHelper;
 import de.tblsoft.solr.pipeline.bean.Document;
 import org.w3c.dom.Node;

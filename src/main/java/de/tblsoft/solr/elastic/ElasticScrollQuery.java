@@ -1,27 +1,18 @@
 package de.tblsoft.solr.elastic;
 
-import com.google.api.client.json.Json;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import de.tblsoft.solr.http.ElasticHelper;
 import de.tblsoft.solr.http.HTTPHelper;
 import de.tblsoft.solr.http.UrlUtil;
-import de.tblsoft.solr.pipeline.PipelineExecuter;
 import de.tblsoft.solr.pipeline.bean.Document;
-import org.apache.commons.io.FileUtils;
-import org.asynchttpclient.AsyncHttpClient;
 
-import java.io.File;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import static org.asynchttpclient.Dsl.asyncHttpClient;
 
 /**
  * Created by oelbaer on 21.08.18.
