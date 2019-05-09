@@ -9,7 +9,8 @@ All notable changes for the solr-cmd-utils project will be documented in this fi
 - significantly improved performacne for JavaScriptFilter
 - remove versioneye.com badge
 - remove minio dependency
-- icrease version of jsoup
+- increase version of jsoup
+- increase version of guava
 
 ### Fixed
 
