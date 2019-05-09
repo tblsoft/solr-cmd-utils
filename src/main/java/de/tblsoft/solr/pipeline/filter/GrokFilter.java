@@ -2,8 +2,8 @@ package de.tblsoft.solr.pipeline.filter;
 
 import de.tblsoft.solr.pipeline.AbstractFilter;
 import de.tblsoft.solr.pipeline.bean.Document;
-import oi.thekraken.grok.api.Grok;
-import oi.thekraken.grok.api.Match;
+import io.thekraken.grok.api.Grok;
+import io.thekraken.grok.api.Match;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

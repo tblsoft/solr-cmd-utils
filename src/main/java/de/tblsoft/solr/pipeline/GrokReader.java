@@ -4,8 +4,8 @@ import com.google.common.base.Strings;
 import de.tblsoft.solr.pipeline.bean.Document;
 import de.tblsoft.solr.pipeline.bean.Reader;
 import de.tblsoft.solr.util.IOUtils;
-import oi.thekraken.grok.api.Grok;
-import oi.thekraken.grok.api.Match;
+import io.thekraken.grok.api.Grok;
+import io.thekraken.grok.api.Match;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
