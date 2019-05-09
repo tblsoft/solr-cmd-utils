@@ -3,6 +3,7 @@ All notable changes for the solr-cmd-utils project will be documented in this fi
 
 ## [Unreleased]
 ### Added
+- add snyk.io badge
 
 ### Changed
 - significantly improved performacne for JavaScriptFilter
