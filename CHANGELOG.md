@@ -22,6 +22,7 @@ All notable changes for the solr-cmd-utils project will be documented in this fi
 - increase version of json-path
 - increase version of slf4j-simple
 - increase version of rhino
+- remove async-http-client dependency
 
 ### Fixed
 
