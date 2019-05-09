@@ -19,6 +19,7 @@ All notable changes for the solr-cmd-utils project will be documented in this fi
 - increase version of snakeyaml
 - remove commons-math3 dependency
 - increase version of grok
+- increase version of json-path
 
 ### Fixed
 
