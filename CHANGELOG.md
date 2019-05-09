@@ -13,6 +13,7 @@ All notable changes for the solr-cmd-utils project will be documented in this fi
 - increase version of guava
 - increase version of httpclient
 - increase version of solrj
+- increase version of junit
 
 ### Fixed
 
