@@ -1,19 +1,16 @@
 package de.tblsoft.solr.pipeline.filter;
 
-import com.google.gson.Gson;
 import de.tblsoft.solr.pipeline.AbstractFilter;
 import de.tblsoft.solr.pipeline.bean.Document;
 import de.tblsoft.solr.pipeline.bean.DocumentBuilder;
 import de.tblsoft.solr.util.IOUtils;
 import org.apache.commons.io.FileUtils;
-import org.mozilla.javascript.Context;
-import org.mozilla.javascript.Scriptable;
-import org.mozilla.javascript.ScriptableObject;
 
+import javax.script.Compilable;
+import javax.script.CompiledScript;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,10 +26,7 @@ public class JavaScriptFilter extends AbstractFilter {
 
     private ScriptEngine engine;
 
-    private Gson gson = new Gson();
-
-    private Scriptable scope;
-    private Context cx;
+    private CompiledScript compiledScript;
 
     @Override
     public void init() {
@@ -43,14 +37,15 @@ public class JavaScriptFilter extends AbstractFilter {
 
         ScriptEngineManager mgr = new ScriptEngineManager();
         engine = mgr.getEngineByName("JavaScript");
-        cx = Context.enter();
-        scope = cx.initStandardObjects();
-        ScriptableObject.putProperty(scope, "documentBuilder", Context.javaToJS(new DocumentBuilder(), scope));
 
 
         try {
             script = FileUtils.readFileToString(new File(filename));
-        } catch (IOException e) {
+
+            Compilable compEngine = (Compilable) engine;
+            compiledScript = compEngine.compile(script);
+
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
         super.init();
@@ -59,20 +54,23 @@ public class JavaScriptFilter extends AbstractFilter {
 
     @Override
     public void document(Document document) {
+        try {
+            engine.put("input", document);
+            DocumentBuilder documentBuilder = new DocumentBuilder();
+            engine.put("documentBuilder", documentBuilder);
 
+            List<Document> output = new ArrayList<>();
+            engine.put("output", output);
+            compiledScript.eval();
 
-
-
-        List<Document> output = new ArrayList<Document>();
-        ScriptableObject.putProperty(scope, "input", Context.javaToJS(document, scope));
-        ScriptableObject.putProperty(scope, "output", Context.javaToJS(output, scope));
-
-        cx.evaluateString(scope, script, filename, 1, null);
-
-
-        for(Document out:output) {
-            super.document(out);
+            for(Document d : output) {
+                super.document(d);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
+
+
     }
 
     @Override

@@ -10,5 +10,5 @@ filter:
     clazz: "solrcmdutils.JavaScriptFilter"
     property:
       filename: "transform.js"
-  - name: "Test Filter"
-    clazz: "solrcmdutils.TestFilter"
+  - name: "System Out"
+    clazz: "solrcmdutils.SystemOutWriter"
