@@ -14,6 +14,7 @@ All notable changes for the solr-cmd-utils project will be documented in this fi
 - increase version of httpclient
 - increase version of solrj
 - increase version of junit
+- increase version of jcommander
 
 ### Fixed
 
