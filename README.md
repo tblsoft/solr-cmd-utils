@@ -23,7 +23,7 @@ To call the util function from every location, you have to add the following exp
     
 ### Prerequisites
 * Linux, OS X, or Unix
-* Java 7
+* Java 8
 
 ## solr-pipeline
 The following command executes the pipeline csv-writer-pipeline.yaml and set the variable filename. The file will be written to the location test.csv.
