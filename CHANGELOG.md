@@ -24,6 +24,7 @@ All notable changes for the solr-cmd-utils project will be documented in this fi
 - increase version of rhino
 - remove async-http-client dependency
 - remove mustache dependency
+- increase version of coveralls-maven-plugin
 
 ### Fixed
 
