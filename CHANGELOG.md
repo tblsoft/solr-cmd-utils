@@ -27,6 +27,7 @@ All notable changes for the solr-cmd-utils project will be documented in this fi
 - remove mustache dependency
 - increase version of coveralls-maven-plugin
 - increase version of maven-compiler-plugin
+- increase version of maven-assembly-plugin
 
 ### Fixed
 
