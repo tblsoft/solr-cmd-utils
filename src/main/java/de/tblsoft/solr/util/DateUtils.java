@@ -4,7 +4,6 @@ import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
-import sun.text.resources.cldr.ti.FormatData_ti_ER;
 
 import java.sql.Timestamp;
 import java.text.ParseException;
