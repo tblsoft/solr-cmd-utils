@@ -20,6 +20,7 @@ All notable changes for the solr-cmd-utils project will be documented in this fi
 - remove commons-math3 dependency
 - increase version of grok
 - increase version of json-path
+- increase version of slf4j-simple
 
 ### Fixed
 
