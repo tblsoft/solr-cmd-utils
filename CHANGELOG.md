@@ -15,6 +15,7 @@ All notable changes for the solr-cmd-utils project will be documented in this fi
 - increase version of solrj
 - increase version of junit
 - increase version of jcommander
+- remove google-collections dependency
 
 ### Fixed
 
