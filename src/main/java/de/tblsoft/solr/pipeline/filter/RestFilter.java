@@ -125,6 +125,8 @@ public class RestFilter extends AbstractFilter {
 
     /**
      * Build url with params and path params
+     * @param doc with contain url
+     * @return url from doc or config
      */
     protected String buildUrlWithParams(Document doc) {
         String url = getUrl(doc);
