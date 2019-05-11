@@ -5,7 +5,8 @@
 	<packaging>jar</packaging>
 	<version>3.3-SNAPSHOT</version>
 	<name>solr-cmd-utils</name>
-	<url>http://maven.apache.org</url>
+	<description>A command line util for solr.</description>
+	<url>https://github.com/tblsoft/solr-cmd-utils</url>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
@@ -258,5 +259,13 @@
             <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
         </repository>
     </distributionManagement>
+    <licenses>
+        <license>
+            <name>MIT License</name>
+            <url>http://www.opensource.org/licenses/mit-license.php</url>
+        </license>
+    </licenses>
+
+    Developer
 
 </project>
