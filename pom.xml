@@ -266,6 +266,13 @@
         </license>
     </licenses>
 
-    Developer
+    <developers>
+        <developer>
+            <name>Thomas Bärwinkel</name>
+            <email>thomas.baerwinkel@quasiris.de</email>
+            <organization>Quasiris GmbH</organization>
+            <organizationUrl>https://www.quasiris.com</organizationUrl>
+        </developer>
+    </developers>
 
 </project>
