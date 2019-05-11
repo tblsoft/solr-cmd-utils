@@ -208,16 +208,14 @@
     </build>
 
     <distributionManagement>
-        <repository>
-            <id>quasiris-releases</id>
-            <name>quasiris Release Repository</name>
-            <url>${nexus.base.url}/repository/maven-releases/</url>
-        </repository>
         <snapshotRepository>
-            <id>quasiris-snapshots</id>
-            <name>Quasiris Snapshot Repository</name>
-            <url>${nexus.base.url}/repository/maven-snapshots/</url>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
         </snapshotRepository>
+        <repository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
     </distributionManagement>
 
 </project>
