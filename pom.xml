@@ -9,6 +9,7 @@
 	<url>https://github.com/tblsoft/solr-cmd-utils</url>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.gpg.skip>true</maven.gpg.skip>
     </properties>
 
     <scm>
@@ -218,7 +219,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <skip>true</skip>
+                    <skip>${maven.gpg.skip}</skip>
                 </configuration>
             </plugin>
             <plugin>
