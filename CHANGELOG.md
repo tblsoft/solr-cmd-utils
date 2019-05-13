@@ -1,7 +1,19 @@
 # Changelog
 All notable changes for the solr-cmd-utils project will be documented in this file.
 
+
 ## [Unreleased]
+### Added
+- add maven central badge
+
+### Changed
+
+
+### Fixed
+
+
+
+## [3.9]
 ### Added
 - add snyk.io badge
 - add some new travis jdk's
