@@ -2,6 +2,7 @@
 
 [![Build Status](https://travis-ci.org/tblsoft/solr-cmd-utils.svg?branch=master)](https://travis-ci.org/tblsoft/solr-cmd-utils)
 [![Coverage Status](https://coveralls.io/repos/github/tblsoft/solr-cmd-utils/badge.svg?branch=master)](https://coveralls.io/github/tblsoft/solr-cmd-utils?branch=master)
+[![Maven Centeral](https://img.shields.io/maven-central/v/io.github.tblsoft.solr/solr-cmd-utils.svg)](https://repo.maven.apache.org/maven2/io/github/tblsoft/solr/solr-cmd-utils)
 [![MIT License](https://img.shields.io/npm/l/check-dependencies.svg?style=flat-square)](http://opensource.org/licenses/MIT)
 [![Documentation Status](http://readthedocs.org/projects/solr-cmd-utils/badge/?version=latest)](http://solr-cmd-utils.readthedocs.io/en/latest/?badge=latest)
 [![Join the chat at https://gitter.im/solr-cmd-utils/Lobby](https://badges.gitter.im/solr-cmd-utils/Lobby.svg)](https://gitter.im/solr-cmd-utils/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
