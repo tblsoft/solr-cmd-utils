@@ -79,18 +79,20 @@ public class IOUtils {
 
 
     public static InputStream getInputStream(String inputFileName) throws IOException {
+        InputStream inputStream;
         if(inputFileName.startsWith("http")) {
-            return HTTPHelper.getAsInputStream(inputFileName);
+            inputStream =  HTTPHelper.getAsInputStream(inputFileName);
+        } else {
+            inputStream = new FileInputStream(inputFileName);
         }
 
-        InputStream fileStream = new FileInputStream(inputFileName);
         if (inputFileName.endsWith(".gz")) {
-            return new GZIPInputStream(fileStream);
+            return new GZIPInputStream(inputStream);
         }
         if(inputFileName.endsWith(".bz2")) {
-            return new BZip2CompressorInputStream(fileStream);
+            return new BZip2CompressorInputStream(inputStream);
         }
-        return fileStream;
+        return inputStream;
     }
 
     public static String getString(String location) throws IOException {
