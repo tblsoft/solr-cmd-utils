@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 set -e
 
 cp ../../../target/solr-cmd-utils-3.10-SNAPSHOT-cmd.tar.gz .
