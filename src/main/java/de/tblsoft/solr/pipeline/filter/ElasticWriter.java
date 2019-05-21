@@ -275,7 +275,7 @@ public class ElasticWriter extends AbstractFilter {
             AliasManager.switchAlias(location, alias, indexes, indexes.get(indexes.size()-1));
 
         } catch (Exception e) {
-            LOG.info("There was an error switching the alias.");
+            LOG.info("There was an error switching the alias: " + e.getMessage());
         }
         int indexesToDeleteCount = indexes.size() - housekeepingCount;
         if(indexesToDeleteCount < 0) {
