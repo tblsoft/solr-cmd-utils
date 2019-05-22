@@ -275,7 +275,7 @@ public class ElasticWriter extends AbstractFilter {
             AliasManager.switchAlias(location, alias, indexes, indexes.get(indexes.size()-1));
 
         } catch (Exception e) {
-            LOG.info("There was an error switching the alias: " + e.getMessage());
+            LOG.error("There was an error switching the alias: " + e.getMessage(), e);
         }
         int indexesToDeleteCount = indexes.size() - housekeepingCount;
         if(indexesToDeleteCount < 0) {
@@ -288,7 +288,7 @@ public class ElasticWriter extends AbstractFilter {
                 String deleteUrl = ElasticHelper.getIndexUrl(location, indexToDelete);
                 HTTPHelper.delete(deleteUrl);
             } catch (Exception e) {
-                LOG.info("There was an error deleting the index: " + indexToDelete);
+                LOG.error("There was an error deleting the index: " + indexToDelete, e);
             }
         }
     }
