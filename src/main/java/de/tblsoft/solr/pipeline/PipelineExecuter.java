@@ -71,6 +71,7 @@ public class PipelineExecuter {
         classRegestriy.put("solrcmdutils.DictionaryNormalizationFilter", DictionaryNormalizationFilter.class);
         classRegestriy.put("solrcmdutils.ThreadDumpReader", ThreadDumpReader.class);
         classRegestriy.put("solrcmdutils.DateFilter", DateFilter.class);
+        classRegestriy.put("solrcmdutils.ProcessingTimeFilter", ProcessingTimeFilter.class);
         classRegestriy.put("solrcmdutils.UrlSplitter", UrlSplitter.class);
         classRegestriy.put("solrcmdutils.GrepFilter", GrepFilter.class);
         classRegestriy.put("solrcmdutils.KeyValueSplitterFilter", KeyValueSplitterFilter.class);

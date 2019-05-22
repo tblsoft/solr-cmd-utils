@@ -5,6 +5,7 @@ All notable changes for the solr-cmd-utils project will be documented in this fi
 ## [Unreleased]
 ### Added
 - add maven central badge
+- add processing time filter
 
 ### Changed
 
