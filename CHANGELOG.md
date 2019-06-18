@@ -6,6 +6,8 @@ All notable changes for the solr-cmd-utils project will be documented in this fi
 ### Added
 - add maven central badge
 - add processing time filter
+- ElasticWriter - check if the index exists before creating a new one
+- ElasticWriter - implement delete for bulk methods
 
 ### Changed
 

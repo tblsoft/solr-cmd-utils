@@ -56,9 +56,12 @@ public class ElasticWriter extends AbstractFilter {
     private Boolean housekeepingEnabled = false;
     private String alias;
 
+    private String bulkMethodFieldName;
+
     @Override
     public void init() {
 
+        bulkMethodFieldName = getProperty("bulkMethodFieldName", null);
         alias = getProperty("alias", null);
         housekeepingEnabled = getPropertyAsBoolean("housekeepingEnabled", housekeepingEnabled);
         housekeepingCount = getPropertyAsInt("housekeepingCount", 5);
@@ -99,7 +102,9 @@ public class ElasticWriter extends AbstractFilter {
                 String mappingJson = IOUtils.getString(absoluteElasticMappingLocation);
                 String mappingUrl = ElasticHelper.getIndexUrl(indexUrl);
                 LOG.debug("mapping url: {} mappingJson: {}", mappingUrl, mappingJson );
-                HTTPHelper.put(mappingUrl, mappingJson, "application/json");
+                if(HTTPHelper.getStatusCode(mappingUrl) == 404) {
+                    HTTPHelper.put(mappingUrl, mappingJson, "application/json");
+                }
             } catch (URISyntaxException e) {
                 throw new RuntimeException(e);
             } catch (IOException e) {
@@ -158,13 +163,22 @@ public class ElasticWriter extends AbstractFilter {
                 }
                 String index = ElasticHelper.getIndexFromUrl(indexUrl);
                 String type = ElasticHelper.getTypeFromUrl(location);
-                String bulkMethod = createBulkMethod("index", index, type, id);
-                String json = gson.toJson(jsonDocument);
-                bulkRequest.append(bulkMethod).append(" \n");
-                bulkRequest.append(json).append(" \n");
+
+                if(isDeleteBulkMethod(document)) {
+                    String bulkMethod = createBulkMethod("delete", index, type, id);
+                    bulkRequest.append(bulkMethod).append(" \n");
+                } else {
+                    String bulkMethod = createBulkMethod("index", index, type, id);
+                    String json = gson.toJson(jsonDocument);
+                    bulkRequest.append(bulkMethod).append(" \n");
+                    bulkRequest.append(json).append(" \n");
+                }
+
+
             }
 
             String bulkUrl = ElasticHelper.getBulkUrl(indexUrl);
+            LOG.debug("bulk url: {} bulkRequest: {}", bulkUrl, bulkRequest);
             HTTPHelper.post(bulkUrl, bulkRequest.toString(), "application/json");
         } catch (Exception e) {
             LOG.info("There was an error processing the bulk request: " + e.getMessage());
@@ -177,6 +191,17 @@ public class ElasticWriter extends AbstractFilter {
             }
         }
 
+    }
+
+    private boolean isDeleteBulkMethod(Document document) {
+        if(Strings.isNullOrEmpty(bulkMethodFieldName)) {
+            return false;
+        }
+        String bulkMethod = document.getFieldValue(bulkMethodFieldName);
+        if("delete".equals(bulkMethod)) {
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -255,7 +280,7 @@ public class ElasticWriter extends AbstractFilter {
     public String createBulkMethod(String method, String index, String type,
                                    String id) {
         String bulkMethod = "{ \"" + method + "\" : { \"_index\" : \"" + index
-                + "\", \"_type\" : \"" + type + "\" } }";
+                + "\", \"_type\" : \"" + type + "\", \"_id\" : \"" + id + "\"} }";
         return bulkMethod;
     }
 
