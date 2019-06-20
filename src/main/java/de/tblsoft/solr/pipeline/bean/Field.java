@@ -8,6 +8,10 @@ import java.util.List;
  */
 public class Field {
 
+    public Field() {
+
+    }
+
     public Field(String name, String value) {
         this.name = name;
         this.values = new ArrayList<String>();

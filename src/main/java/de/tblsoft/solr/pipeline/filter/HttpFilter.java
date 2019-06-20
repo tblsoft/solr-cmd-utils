@@ -27,6 +27,7 @@ public class HttpFilter extends AbstractFilter {
     private CloseableHttpClient httpclient;
 
     private String userAgent;
+    private String cacheBasePath;
 
     private int threads = 1;
 
@@ -38,6 +39,7 @@ public class HttpFilter extends AbstractFilter {
     public void init() {
         urlField = getProperty("urlField", "url");
         userAgent = getProperty("userAgent", "Solr Cmd Utils Http Agent/1.0");
+        cacheBasePath = getProperty("cacheBasePath", null);
         //httpclient = HttpClients.createDefault();
         threads = getPropertyAsInt("threads", 1);
 
@@ -79,7 +81,7 @@ public class HttpFilter extends AbstractFilter {
 
         for(Document documentFromQueue: documentQueue) {
 
-            HttpWorker worker = new HttpWorker(documentFromQueue, httpclient, urlField, userAgent);
+            HttpWorker worker = new HttpWorker(documentFromQueue, httpclient, urlField, userAgent, cacheBasePath);
             Future<Document> future = executor.submit(worker);
             documentFutures.add(future);
 
