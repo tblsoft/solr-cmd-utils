@@ -9,9 +9,10 @@ import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.util.EntityUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
@@ -23,6 +24,8 @@ import java.util.concurrent.Callable;
  * Created by tblsoft on 25.12.16.
  */
 public class HttpWorker implements Callable<Document> {
+
+    private static Logger LOG = LoggerFactory.getLogger(HttpWorker.class);
 
     private CloseableHttpClient httpclient;
 
@@ -58,8 +61,6 @@ public class HttpWorker implements Callable<Document> {
             HttpGet httpGet = new HttpGet(url);
             httpGet.setHeader("User-Agent",userAgent);
             long start = System.currentTimeMillis();
-            //CloseableHttpClient client = HttpClients.createDefault();
-            //response = client.execute(httpGet);
             response = httpclient.execute(httpGet);
             StringBuilder responseBuilder = new StringBuilder();
             responseBuilder.append(EntityUtils.toString(response.getEntity()));
@@ -95,7 +96,7 @@ public class HttpWorker implements Callable<Document> {
             }
             return DocumentUtils.readFromFile(target);
         } catch (Exception e) {
-            System.out.println("error " + e.getMessage() + " reading from cache for url: " + url);
+            LOG.error("error " + e.getMessage() + " reading from cache for url: " + url, e);
             return null;
         }
     }
