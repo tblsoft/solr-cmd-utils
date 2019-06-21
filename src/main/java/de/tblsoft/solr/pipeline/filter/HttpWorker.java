@@ -74,7 +74,7 @@ public class HttpWorker implements Callable<Document> {
             document.setField("http_code", String.valueOf(response.getStatusLine().getStatusCode()));
             document.setField("http_payload", responseBuilder.toString());
             document.setField("http_time", DateUtils.date2String(new Date()));
-        } catch (IOException e) {
+        } catch (Exception e) {
             document.addField("errormessage", e.getMessage());
         }
         writeToCache(url,document);
