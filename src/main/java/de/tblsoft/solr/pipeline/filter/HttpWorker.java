@@ -45,16 +45,18 @@ public class HttpWorker implements Callable<Document> {
     public Document call() throws Exception {
         String url = document.getFieldValue(urlField);
 
-        Document cachedDocument = readFromCache(url);
-        if(cachedDocument != null) {
-            return cachedDocument;
-        }
-        HttpGet httpGet = new HttpGet(url);
-        httpGet.setHeader("User-Agent",userAgent);
+
+
 
 
         CloseableHttpResponse response = null;
         try {
+            Document cachedDocument = readFromCache(url);
+            if(cachedDocument != null) {
+                return cachedDocument;
+            }
+            HttpGet httpGet = new HttpGet(url);
+            httpGet.setHeader("User-Agent",userAgent);
             long start = System.currentTimeMillis();
             //CloseableHttpClient client = HttpClients.createDefault();
             //response = client.execute(httpGet);
