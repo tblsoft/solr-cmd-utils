@@ -11,11 +11,15 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.TextNode;
 import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 import java.util.regex.Pattern;
 
 public class HtmlJsoupFilter extends AbstractFilter {
+
+    private static Logger LOG = LoggerFactory.getLogger(HttpWorker.class);
 
     protected org.jsoup.nodes.Document jsoupDocument;
     protected String html;
@@ -62,28 +66,38 @@ public class HtmlJsoupFilter extends AbstractFilter {
 	@Override
 	public void document(Document document) {
         this.document = document;
-        html = document.getFieldValue(htmlField);
-        jsoupDocument = Jsoup.parse(html);
 
-        document.addField("canonical", getCanonical());
-        mapFirstElement("title", "title");
-        mapMeta("description", "description");
-        mapAllElements("h1", "h1");
-        mapAllElements("h2", "h2");
-        mapAllElements("h3", "h3");
-        mapAllElements("h4", "h4");
+        try {
+            html = document.getFieldValue(htmlField);
+            if (html == null) {
+                super.document(document);
+                return;
+            }
+            jsoupDocument = Jsoup.parse(html);
+
+            document.addField("canonical", getCanonical());
+            mapFirstElement("title", "title");
+            mapMeta("description", "description");
+            mapAllElements("h1", "h1");
+            mapAllElements("h2", "h2");
+            mapAllElements("h3", "h3");
+            mapAllElements("h4", "h4");
 
 
-        for(Map.Entry<String, String> mappingEntry: mapping.entrySet()) {
-            mapFirstElement(mappingEntry.getValue(), mappingEntry.getKey());
-        }
+            for (Map.Entry<String, String> mappingEntry : mapping.entrySet()) {
+                mapFirstElement(mappingEntry.getValue(), mappingEntry.getKey());
+            }
 
-        document.setField("links", getAbsoluteLinks());
-        document.setField("jsonld", getJsonLd());
-        mapItempropArticleBody();
-        extractAllMeta();
-        if(deleteHtmlField) {
-            document.deleteField(htmlField);
+            document.setField("links", getAbsoluteLinks());
+            document.setField("jsonld", getJsonLd());
+            mapItempropArticleBody();
+            extractAllMeta();
+            if (deleteHtmlField) {
+                document.deleteField(htmlField);
+            }
+        } catch (Exception e) {
+            String url = document.getFieldValue("loc");
+            LOG.error("There was an error processing the html for url: " + url + " Error: ", e);
         }
 		super.document(document);
 	}
@@ -107,6 +121,7 @@ public class HtmlJsoupFilter extends AbstractFilter {
                 String jsonLd = jsonLdScripts.get(i).data();
                 ObjectMapper objectMapper = new ObjectMapper();
                 objectMapper.configure(JsonParser.Feature.ALLOW_COMMENTS, true);
+                objectMapper.configure(JsonParser.Feature.ALLOW_UNQUOTED_CONTROL_CHARS, true);
                 JsonNode json = objectMapper.readTree(jsonLd);
                 jsonLdList.add(objectMapper.writeValueAsString(json));
             } catch (Exception e) {

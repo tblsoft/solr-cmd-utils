@@ -101,7 +101,7 @@ public class XmlSitemapReader extends AbstractReader {
         try {
             NodeList locNodes = doc.getElementsByTagName("loc");
             for (int i = 0; i < locNodes.getLength(); i++) {
-                String loc = locNodes.item(i).getFirstChild().getNodeValue();
+                String loc = locNodes.item(i).getFirstChild().getNodeValue().trim();
                 sitemapUrls.add(loc);
 
             }

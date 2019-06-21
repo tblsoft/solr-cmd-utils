@@ -47,6 +47,7 @@ public class HttpWorker implements Callable<Document> {
 
     public Document call() throws Exception {
         String url = document.getFieldValue(urlField);
+        url = url.trim();
 
 
 
