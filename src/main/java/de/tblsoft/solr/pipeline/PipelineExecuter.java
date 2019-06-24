@@ -65,6 +65,7 @@ public class PipelineExecuter {
         classRegestriy.put("solrcmdutils.HttpFilter", HttpFilter.class);
         classRegestriy.put("solrcmdutils.SplashFilter", SplashFilter.class);
         classRegestriy.put("solrcmdutils.HtmlJsoupFilter", HtmlJsoupFilter.class);
+        classRegestriy.put("solrcmdutils.HtmlFilter", HtmlFilter.class);
         classRegestriy.put("solrcmdutils.EntityExtractionFilter", EntityExtractionFilter.class);
         classRegestriy.put("solrcmdutils.ValidationFilter", ValidationFilter.class);
         classRegestriy.put("solrcmdutils.OpenThesaurusReader", OpenThesaurusReader.class);

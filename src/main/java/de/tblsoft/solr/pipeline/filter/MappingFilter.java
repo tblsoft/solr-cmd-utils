@@ -12,6 +12,7 @@ import java.util.Map.Entry;
 
 public class MappingFilter extends AbstractFilter {
 
+	private List<String> prefixMapping = new ArrayList<>();
 	private Map<String, List<String>> mapping = new HashMap<String, List<String>>();
 	private Map<String, List<String>> mappingFunctions = new HashMap<String, List<String>>();
 	private Map<String, String> joins = new HashMap<String, String>();
@@ -33,6 +34,7 @@ public class MappingFilter extends AbstractFilter {
 		appendFields = getPropertyAsBoolean("appendFields", false);
 		simpleMapping = new SimpleMapping(getPropertyAsList("mapping", new ArrayList<String>()), getPropertyAsList("config", new ArrayList<String>()));
 		mapping = simpleMapping.getMapping();
+		prefixMapping = getPropertyAsList("prefixMapping", new ArrayList<>());
 		mappingFunctions = simpleMapping.getMappingFunctions();
 		joins = simpleMapping.getJoins();
 		datatypes = initDatatypes(getPropertyAsList("datatypes", new ArrayList<String>()));
@@ -64,6 +66,12 @@ public class MappingFilter extends AbstractFilter {
 		}
 
 		for (Field f : document.getFields()) {
+			for(String prefix: prefixMapping) {
+				if(f.getName().startsWith(prefix)) {
+					mappedDocument.addField(f);
+				}
+			}
+
 			List<String> mappedNameList = mapping.get(f.getName());
 			if(mappedNameList == null) {
 				continue;

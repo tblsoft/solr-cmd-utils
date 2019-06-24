@@ -5,6 +5,7 @@ import java.net.URISyntaxException;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 
 /**
  * Created by tblsoft on 18.03.16.
@@ -131,6 +132,37 @@ public class ElasticHelper {
         String path = "/_bulk";
         uri = uri.resolve(path);
         return uri.toString();
+    }
+
+
+    public static String normalizeKey(String key) {
+        if(key == null) {
+            return null;
+        }
+        key = key.toLowerCase();
+        key = key.replaceAll("ä", "ae");
+        key = key.replaceAll("ö", "oe");
+        key = key.replaceAll("ü", "ue");
+        key = key.replaceAll("ß", "ss");
+        key = key.replaceAll("[^a-z0-9_-]", "_");
+
+        if(key.length() > 30) {
+            key = key.substring(0, 30);
+        }
+        return key;
+    }
+
+
+    public static String guessDatatype(String value) {
+        if (NumberUtils.isNumber(value)) {
+            try {
+                Long intValue = Long.valueOf(value);
+                return "long";
+            } catch (NumberFormatException e) {
+                return "double";
+            }
+        }
+        return "string";
     }
 
 
