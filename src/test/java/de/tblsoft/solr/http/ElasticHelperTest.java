@@ -10,7 +10,32 @@ import java.net.URISyntaxException;
  */
 public class ElasticHelperTest {
 
-	
+    @Test
+    public void guessLongTest() {
+        String dataType = ElasticHelper.guessDatatype("100");
+        Assert.assertEquals("long", dataType);
+    }
+
+    @Test
+    public void guessDoubleTest() {
+        String dataType = ElasticHelper.guessDatatype("100.1");
+        Assert.assertEquals("double", dataType);
+    }
+
+    @Test
+    public void guessDataTypeNullInputTest() {
+        String dataType = ElasticHelper.guessDatatype(null);
+        Assert.assertEquals("string", dataType);
+
+        dataType = ElasticHelper.guessDatatype("");
+        Assert.assertEquals("string", dataType);
+
+        dataType = ElasticHelper.guessDatatype("str");
+        Assert.assertEquals("string", dataType);
+    }
+
+
+
     @Test
     public void getScrollUrlTest() throws URISyntaxException {
         String expected = "http://localhost/_search/scroll";
