@@ -184,6 +184,8 @@ public class JSoupAnalyzer {
                 String jsonLd = jsonLdScripts.get(i).data();
                 ObjectMapper objectMapper = new ObjectMapper();
                 objectMapper.configure(JsonParser.Feature.ALLOW_COMMENTS, true);
+                objectMapper.configure(JsonParser.Feature.ALLOW_UNQUOTED_CONTROL_CHARS, true);
+                objectMapper.configure(JsonParser.Feature.ALLOW_BACKSLASH_ESCAPING_ANY_CHARACTER, true);
                 JsonNode json = objectMapper.readTree(jsonLd);
                 jsonLdList.add(objectMapper.writeValueAsString(json));
             } catch (Exception e) {
