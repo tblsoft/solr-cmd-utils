@@ -95,8 +95,7 @@ public class HtmlFilter extends AbstractFilter {
                     String key = ElasticHelper.normalizeKey(attribute.getName());
                     document.setField("attr_" + key, attribute.getValue());
                     document.addField("datatypes", key + "=" + ElasticHelper.guessDatatype(attribute.getValue()));
-                    document.addField("attributeKeys", key);
-                    document.addField("attributeKeysOriginal", attribute.getName());
+                    document.addField("attributeKeys", key + "=" + attribute.getName());
                 }
             }
 
