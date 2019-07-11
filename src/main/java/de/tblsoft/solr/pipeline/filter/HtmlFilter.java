@@ -27,6 +27,8 @@ public class HtmlFilter extends AbstractFilter {
 
     protected String htmlField;
     protected String urlField;
+    protected String attributeStrategy;
+    protected List<String> attributeSelector;
 
     private Map<String, String> webPageMapping;
 
@@ -36,6 +38,8 @@ public class HtmlFilter extends AbstractFilter {
 
         htmlField = getProperty("htmlField", "html");
         urlField = getProperty("urlField", "url");
+        attributeStrategy = getProperty("attributeStrategy", null);
+        attributeSelector = getPropertyAsList("attributeSelector", null);
         List<String> mappingConfiguration = getPropertyAsList("mapping", new ArrayList<String>());
         webPageMapping = readConfig(mappingConfiguration, "webpage");
 		super.init();
@@ -66,8 +70,8 @@ public class HtmlFilter extends AbstractFilter {
         JSoupAnalyzer jSoupAnalyzer = new JSoupAnalyzer(url, html);
 
         Attributes attributes = new Attributes();
-        attributes.setStrategy("tableThTd");
-        attributes.setSelector(Arrays.asList("table.techdata"));
+        attributes.setStrategy(attributeStrategy);
+        attributes.setSelector(attributeSelector);
         jSoupAnalyzer.analyze();
         jSoupAnalyzer.extractAttributes(attributes);
 
@@ -93,6 +97,7 @@ public class HtmlFilter extends AbstractFilter {
             if (webpage.getAttributes() != null) {
                 for (Attribute attribute : webpage.getAttributes().getAttributes()) {
                     String key = ElasticHelper.normalizeKey(attribute.getName());
+                    document.addField("attributes", attribute.getValue());
                     document.setField("attr_" + key, attribute.getValue());
                     document.addField("datatypes", key + "=" + ElasticHelper.guessDatatype(attribute.getValue()));
                     document.addField("attributeKeys", key + "=" + attribute.getName());
