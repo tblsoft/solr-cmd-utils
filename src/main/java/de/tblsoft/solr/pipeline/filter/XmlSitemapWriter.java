@@ -101,7 +101,13 @@ public class XmlSitemapWriter extends AbstractFilter {
             XMLOutputFactory output = XMLOutputFactory.newInstance();
             String finalFilename = filename.replaceAll(Pattern.quote("${sitemapCounter}"), String.valueOf(sitemapCounter));
             sitemapFiles.add(finalFilename);
-            OutputStream os = new FileOutputStream(new File(finalFilename));
+            File file = new File(finalFilename);
+
+            if(!file.getParentFile().exists()) {
+                file.getParentFile().mkdirs();
+            }
+
+            OutputStream os = new FileOutputStream(file);
             writer = output.createXMLStreamWriter(os);
             writer.writeStartDocument();
             writer.writeStartElement("urlset");
@@ -142,12 +148,16 @@ public class XmlSitemapWriter extends AbstractFilter {
 
             for (String sitemapFile : sitemapFiles) {
                 Sitemap sitemap = new Sitemap();
-                sitemap.setLoc(baseUrl + sitemapFile);
+                File file = new File(sitemapFile);
+                sitemap.setLoc(baseUrl + file.getName());
                 sitemapindex.getSitemap().add(sitemap);
             }
 
 
             File file = new File(sitemapIndexFilename);
+            if(!file.getParentFile().exists()) {
+                file.getParentFile().mkdirs();
+            }
             JAXBContext jaxbContext = JAXBContext.newInstance(Sitemapindex.class);
             Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
             jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);

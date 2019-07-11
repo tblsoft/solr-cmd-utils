@@ -9,8 +9,10 @@ All notable changes for the solr-cmd-utils project will be documented in this fi
 - ElasticWriter - check if the index exists before creating a new one
 - ElasticWriter - implement delete for bulk methods
 
-### Changed
 
+### Changed
+- add jaxb dependencies to enable jdk 11 support
+- Xml Sitemap Writer - create the final directory if it does not exists
 
 ### Fixed
 
