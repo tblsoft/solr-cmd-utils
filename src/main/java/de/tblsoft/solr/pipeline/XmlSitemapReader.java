@@ -25,6 +25,10 @@ public class XmlSitemapReader extends AbstractReader {
 
     private List<String> sitemapBlacklits;
 
+    private Long maxRows;
+
+    private Long currentRow = 0L;
+
     public void read() {
 
         sitemapBlacklits = getPropertyAsList("sitemapBlacklits", new ArrayList<String>());
@@ -32,6 +36,7 @@ public class XmlSitemapReader extends AbstractReader {
         List<String> urls = getPropertyAsList("urls", new ArrayList<String>());
         List<String> sitemapIndexUrls = getPropertyAsList("sitemapIndexUrls", new ArrayList<String>());
         List<String> sitemapUrls = getPropertyAsList("sitemapUrls", new ArrayList<String>());
+        maxRows = getPropertyAsInteger("maxRows", null);
 
         try {
 
@@ -145,7 +150,10 @@ public class XmlSitemapReader extends AbstractReader {
             }
 
         }
-        executer.document(document);
+        if(!(maxRows != null && currentRow > maxRows) ) {
+            executer.document(document);
+            currentRow++;
+        }
     }
 
 }
