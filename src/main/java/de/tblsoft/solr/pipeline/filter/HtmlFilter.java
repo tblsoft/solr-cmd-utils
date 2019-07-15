@@ -5,6 +5,7 @@ import com.jayway.jsonpath.Configuration;
 import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
 import com.jayway.jsonpath.Option;
+import de.tblsoft.solr.crawl.Breadcrumb;
 import de.tblsoft.solr.crawl.JSoupAnalyzer;
 import de.tblsoft.solr.crawl.Webpage;
 import de.tblsoft.solr.crawl.attr.Attribute;
@@ -29,6 +30,7 @@ public class HtmlFilter extends AbstractFilter {
     protected String urlField;
     protected String attributeStrategy;
     protected List<String> attributeSelector;
+    protected String breadCrumbSelector;
 
     private Map<String, String> webPageMapping;
 
@@ -40,6 +42,7 @@ public class HtmlFilter extends AbstractFilter {
         urlField = getProperty("urlField", "url");
         attributeStrategy = getProperty("attributeStrategy", null);
         attributeSelector = getPropertyAsList("attributeSelector", null);
+        breadCrumbSelector = getProperty("breadCrumbSelector", null);
         List<String> mappingConfiguration = getPropertyAsList("mapping", new ArrayList<String>());
         webPageMapping = readConfig(mappingConfiguration, "webpage");
 		super.init();
@@ -75,6 +78,11 @@ public class HtmlFilter extends AbstractFilter {
         jSoupAnalyzer.analyze();
         jSoupAnalyzer.extractAttributes(attributes);
 
+
+        Breadcrumb breadcrumb = new Breadcrumb();
+        breadcrumb.setSelector(breadCrumbSelector);
+        jSoupAnalyzer.extractBreadcrumb(breadcrumb);
+
         Webpage webpage = jSoupAnalyzer.getWebpage();
         ObjectMapper objectMapper = new ObjectMapper();
         StringWriter writer = new StringWriter();
@@ -91,10 +99,12 @@ public class HtmlFilter extends AbstractFilter {
                 String jsonPath = mapping.getKey();
                 String fieldName = mapping.getValue();
                 Object value = context.read(jsonPath);
-                document.setField(fieldName, value);
+                if(value != null) {
+                    document.setField(fieldName, value);
+                }
             }
 
-            if (webpage.getAttributes() != null) {
+            if (webpage.getAttributes() != null && webpage.getAttributes().getAttributes() != null) {
                 for (Attribute attribute : webpage.getAttributes().getAttributes()) {
                     String key = ElasticHelper.normalizeKey(attribute.getName());
                     document.addField("attributes", attribute.getValue());

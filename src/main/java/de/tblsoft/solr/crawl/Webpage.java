@@ -14,6 +14,7 @@ import java.util.List;
 public class Webpage {
 
 
+    private String url;
     private long parseTime;
 
     private String rawHtml;
@@ -231,5 +232,23 @@ public class Webpage {
 
     public void setBreadcrumb(Breadcrumb breadcrumb) {
         this.breadcrumb = breadcrumb;
+    }
+
+    /**
+     * Getter for property 'url'.
+     *
+     * @return Value for property 'url'.
+     */
+    public String getUrl() {
+        return url;
+    }
+
+    /**
+     * Setter for property 'url'.
+     *
+     * @param url Value to set for property 'url'.
+     */
+    public void setUrl(String url) {
+        this.url = url;
     }
 }

@@ -37,6 +37,7 @@ public class JSoupAnalyzer {
 
     public void analyze() {
         this.webpage = new Webpage();
+        this.webpage.setUrl(url);
         webpage.setBaseUrl(extractBaseUrl());
         webpage.setTitle(getFirstElement("title"));
         webpage.setMetaDescription(getMeta("description"));
