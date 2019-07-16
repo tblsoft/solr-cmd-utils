@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.tblsoft.solr.crawl.attr.Attributes;
+import de.tblsoft.solr.http.UrlUtil;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ public class Webpage {
 
 
     private String url;
+    private String domain;
     private long parseTime;
 
     private String rawHtml;
@@ -250,5 +252,21 @@ public class Webpage {
      */
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public String getDomain() {
+        if(this.domain == null && this.url != null) {
+            this.domain = UrlUtil.getHost(this.url);
+        }
+        return domain;
+    }
+
+    /**
+     * Setter for property 'domain'.
+     *
+     * @param domain Value to set for property 'domain'.
+     */
+    public void setDomain(String domain) {
+        this.domain = domain;
     }
 }

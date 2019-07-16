@@ -13,6 +13,7 @@ import de.tblsoft.solr.crawl.attr.Attributes;
 import de.tblsoft.solr.http.ElasticHelper;
 import de.tblsoft.solr.pipeline.AbstractFilter;
 import de.tblsoft.solr.pipeline.bean.Document;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -79,9 +80,11 @@ public class HtmlFilter extends AbstractFilter {
         jSoupAnalyzer.extractAttributes(attributes);
 
 
-        Breadcrumb breadcrumb = new Breadcrumb();
-        breadcrumb.setSelector(breadCrumbSelector);
-        jSoupAnalyzer.extractBreadcrumb(breadcrumb);
+        if(StringUtils.isNotEmpty(breadCrumbSelector)) {
+            Breadcrumb breadcrumb = new Breadcrumb();
+            breadcrumb.setSelector(breadCrumbSelector);
+            jSoupAnalyzer.extractBreadcrumb(breadcrumb);
+        }
 
         Webpage webpage = jSoupAnalyzer.getWebpage();
         ObjectMapper objectMapper = new ObjectMapper();
