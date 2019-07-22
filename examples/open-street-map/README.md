@@ -54,3 +54,7 @@ https://wiki.openstreetmap.org/wiki/DE:Key:postal%20code?uselang=de
     
 ## Elastic Polygon API
 https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-geo-polygon-query.html
+
+
+## OSM Relation Analyzer
+- http://ra.osmsurround.org/
