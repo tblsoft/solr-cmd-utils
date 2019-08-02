@@ -3,6 +3,7 @@ package de.tblsoft.solr.pipeline;
 import de.tblsoft.solr.pipeline.bean.Reader;
 import org.apache.commons.lang3.text.StrSubstitutor;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -50,9 +51,16 @@ public abstract class AbstractReader implements ReaderIF {
         if(reader.getProperty() == null) {
             return defaultValue;
         }
-        List<String> value = (List<String>) reader.getProperty().get(name);
-        if(value != null) {
-            return value;
+        List<String> values = (List<String>) reader.getProperty().get(name);
+        if(values != null) {
+            List<String> substitutedValues = new ArrayList<>();
+            StrSubstitutor strSubstitutor = new StrSubstitutor(variables);
+            for(String value : values) {
+                value = strSubstitutor.replace(value);
+                substitutedValues.add(value);
+            }
+
+            return substitutedValues;
         }
         return defaultValue;
     }
