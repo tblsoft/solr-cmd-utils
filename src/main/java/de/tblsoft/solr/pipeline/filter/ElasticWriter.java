@@ -269,11 +269,46 @@ public class ElasticWriter extends AbstractFilter {
                 fieldName = StringUtils.substringBefore(fieldName, ".");
             }
 
+            Object fieldValueByDataType = getFieldValueByDataType(field);
+            if(fieldValueByDataType != null) {
+                fieldValue = fieldValueByDataType;
+            }
+
             jsonDocument.put(fieldName, fieldValue);
         }
 
         return jsonDocument;
 
+    }
+
+    public static Object getFieldValueByDataType(Field field) {
+        if(field.getDatatype() == null) {
+            return null;
+        }
+        if("multipoint".equals(field.getDatatype())) {
+
+            Map<String, Object> data = new HashMap<>();
+            data.put("type", "multipoint");
+
+
+            List<List<Double>> coordinates = new ArrayList<>();
+            for(String value : field.getValues()) {
+                String[] splitted = value.split(",");
+                if(splitted.length == 2) {
+                    coordinates.add(
+                            Arrays.asList(
+                                    Double.valueOf(splitted[1]),
+                                    Double.valueOf(splitted[0])
+                            )
+                    );
+                }
+
+            }
+            data.put("coordinates", coordinates );
+            return data;
+        }
+
+        return null;
     }
 
 

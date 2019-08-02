@@ -122,29 +122,33 @@ public class Document {
     }
 
     public void addField(Field field) {
-        addField(field.getName(), field.getValues());
+        addField(field.getName(), field.getValues(), field.getDatatype());
     }
 
     public void addField(String name, String value) {
-        Field existingField = getField(name);
-        if(existingField == null) {
-            Field field = new Field(name,value);
-            this.fields.add(field);
-        } else {
-            existingField.getValues().add(value);
-        }
-        fieldChanged();
+        addField(name, value, null);
     }
 
-    public void addField(String name, List<String> values) {
+    public void addField(String name, String value, String dataType) {
+        List<String> values = new ArrayList<>();
+        values.add(value);
+        addField(name, values, dataType);
+    }
+
+    public void addField(String name, List<String> values, String dataType) {
         Field existingField = getField(name);
         if(existingField == null) {
             Field field = new Field(name,values);
+            field.setDatatype(dataType);
             this.fields.add(field);
         } else {
             existingField.getValues().addAll(values);
         }
         fieldChanged();
+    }
+
+    public void addField(String name, List<String> values) {
+       addField(name, values, null);
     }
 
     public void addFieldIfNotNullOrEmpty(String name, String value) {
