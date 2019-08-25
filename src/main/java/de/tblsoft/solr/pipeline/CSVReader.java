@@ -5,6 +5,7 @@ import de.tblsoft.solr.util.IOUtils;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
+import org.apache.commons.csv.QuoteMode;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.InputStream;
@@ -33,6 +34,7 @@ public class CSVReader extends AbstractReader {
             addMeta = getPropertyAsBoolean("addMeta", false);
             Long maxRows = getPropertyAsInteger("maxRows", Long.MAX_VALUE);
             String delimiter = getProperty("delimiter", ",");
+            String quote = getProperty("quote", null);
             String arrayDelimiter = getProperty("arrayDelimiter", null);
             String[] headers = getPropertyAsArray("headers", null);
             InputStream in = IOUtils.getInputStream(absoluteFilename);
@@ -46,6 +48,12 @@ public class CSVReader extends AbstractReader {
             }
 
             format=format.withDelimiter(delimiter.charAt(0));
+            if("null".equals(quote)) {
+                format = format.withQuote(null);
+            } else if (quote != null) {
+                format = format.withQuote(quote.charAt(0));
+            }
+
 
             CSVParser parser = format.parse(reader);
             Iterator<CSVRecord> csvIterator = parser.iterator();
