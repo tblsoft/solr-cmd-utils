@@ -9,6 +9,7 @@ All notable changes for the solr-cmd-utils project will be documented in this fi
 - ElasticWriter - check if the index exists before creating a new one
 - ElasticWriter - implement delete for bulk methods
 - CSVReader - add a property to configure the quote
+- HTTPFilter - add a property to configure follow redirects
 
 
 ### Changed

@@ -4,6 +4,7 @@ import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import de.tblsoft.solr.pipeline.AbstractFilter;
 import de.tblsoft.solr.pipeline.bean.Document;
 import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.slf4j.Logger;
@@ -42,16 +43,22 @@ public class HttpFilter extends AbstractFilter {
         cacheBasePath = getProperty("cacheBasePath", null);
         //httpclient = HttpClients.createDefault();
         threads = getPropertyAsInt("threads", 1);
+        boolean redirectsEnabled = getPropertyAsBoolean("redirectsEnabled", false);
 
         PoolingHttpClientConnectionManager cm = new PoolingHttpClientConnectionManager();
         cm.setMaxTotal(threads);
         cm.setDefaultMaxPerRoute(threads);
 
-        httpclient = HttpClients.custom()
+        HttpClientBuilder httpClientBuilder = HttpClients.custom()
                 .setConnectionManager(cm)
-                .setMaxConnPerRoute(threads)
-                .disableRedirectHandling()
-                .build();
+                .setMaxConnPerRoute(threads);
+
+
+        if(!redirectsEnabled) {
+            httpClientBuilder = httpClientBuilder.disableRedirectHandling();
+        }
+
+        httpclient = httpClientBuilder.build();
 
 
         ThreadFactory namedThreadFactory = new ThreadFactoryBuilder()
