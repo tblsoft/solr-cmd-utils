@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Webpage {
@@ -41,7 +42,7 @@ public class Webpage {
 
     private Meta meta;
 
-    private List<Custom> custom;
+    private Map<String, Custom> custom;
 
     private Attributes attributes;
 
@@ -176,11 +177,21 @@ public class Webpage {
         this.meta = meta;
     }
 
-    public List<Custom> getCustom() {
+    /**
+     * Getter for property 'custom'.
+     *
+     * @return Value for property 'custom'.
+     */
+    public Map<String, Custom> getCustom() {
         return custom;
     }
 
-    public void setCustom(List<Custom> custom) {
+    /**
+     * Setter for property 'custom'.
+     *
+     * @param custom Value to set for property 'custom'.
+     */
+    public void setCustom(Map<String, Custom> custom) {
         this.custom = custom;
     }
 

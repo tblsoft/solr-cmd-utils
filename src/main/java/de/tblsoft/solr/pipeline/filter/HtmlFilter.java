@@ -6,6 +6,7 @@ import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
 import com.jayway.jsonpath.Option;
 import de.tblsoft.solr.crawl.Breadcrumb;
+import de.tblsoft.solr.crawl.Custom;
 import de.tblsoft.solr.crawl.JSoupAnalyzer;
 import de.tblsoft.solr.crawl.Webpage;
 import de.tblsoft.solr.crawl.attr.Attribute;
@@ -34,6 +35,7 @@ public class HtmlFilter extends AbstractFilter {
     protected String breadCrumbSelector;
 
     private Map<String, String> webPageMapping;
+    private Map<String, String> jsoupMapping;
 
 
 	@Override
@@ -46,6 +48,7 @@ public class HtmlFilter extends AbstractFilter {
         breadCrumbSelector = getProperty("breadCrumbSelector", null);
         List<String> mappingConfiguration = getPropertyAsList("mapping", new ArrayList<String>());
         webPageMapping = readConfig(mappingConfiguration, "webpage");
+        jsoupMapping = readConfig(mappingConfiguration, "jsoup");
 		super.init();
 	}
 
@@ -85,6 +88,16 @@ public class HtmlFilter extends AbstractFilter {
             breadcrumb.setSelector(breadCrumbSelector);
             jSoupAnalyzer.extractBreadcrumb(breadcrumb);
         }
+
+        List<Custom> customs = new ArrayList<>();
+        for(Map.Entry<String, String> entry : jsoupMapping.entrySet()) {
+            Custom custom = new Custom();
+            custom.setJsoupSelector(entry.getKey());
+            custom.setFieldName(entry.getValue());
+            customs.add(custom);
+        }
+
+        jSoupAnalyzer.extractCustom(customs);
 
         Webpage webpage = jSoupAnalyzer.getWebpage();
         ObjectMapper objectMapper = new ObjectMapper();

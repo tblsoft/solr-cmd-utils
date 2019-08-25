@@ -10,7 +10,7 @@ All notable changes for the solr-cmd-utils project will be documented in this fi
 - ElasticWriter - implement delete for bulk methods
 - CSVReader - add a property to configure the quote
 - HTTPFilter - add a property to configure follow redirects
-
+- HTMLFilter - implement a custom mapping with jsoup
 
 ### Changed
 - add jaxb dependencies to enable jdk 11 support

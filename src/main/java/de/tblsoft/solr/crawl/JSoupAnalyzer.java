@@ -8,6 +8,7 @@ import de.tblsoft.solr.crawl.attr.AttributeExtractor;
 import de.tblsoft.solr.crawl.attr.AttributeExtractorFactory;
 import de.tblsoft.solr.crawl.attr.Attributes;
 import org.jsoup.Jsoup;
+import org.jsoup.nodes.Attribute;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.TextNode;
@@ -111,21 +112,23 @@ public class JSoupAnalyzer {
 
     public void extractCustom(List<Custom> customs) {
         if(webpage.getCustom() == null) {
-            webpage.setCustom(new ArrayList<>());
+            webpage.setCustom(new HashMap<>());
         }
         for(Custom custom : customs) {
-            if("html".equals(custom.getType())) {
-                StringBuilder builder = new StringBuilder();
-                jsoupDocument.select(custom.getJsoupSelector()).forEach(builder::append);
-                custom.setValue(builder.toString());
-            }  if("attr".equals(custom.getType())) {
-                String value = jsoupDocument.select(custom.getJsoupSelector()).attr(custom.getAttributeName());
-                custom.setValue(value);
-            } else {
-                String value = jsoupDocument.select(custom.getJsoupSelector()).text();
-                custom.setValue(value);
+            StringBuilder builder = new StringBuilder();
+            jsoupDocument.select(custom.getJsoupSelector()).forEach(builder::append);
+            custom.setHtml(builder.toString());
+
+
+            Element element = jsoupDocument.select(custom.getJsoupSelector()).first();
+            if (element != null) {
+                for (Attribute attribute : element.attributes().asList()) {
+                    custom.putAttribute(attribute.getKey(), attribute.getValue());
+                }
             }
-            webpage.getCustom().add(custom);
+
+            custom.setText(jsoupDocument.select(custom.getJsoupSelector()).text());
+            webpage.getCustom().put(custom.getFieldName(), custom);
         }
     }
 
