@@ -84,6 +84,15 @@ public class Document {
         fieldChanged();
     }
 
+    public void setRawField(String name, Object value, String dataType) {
+        Field field = new Field();
+        field.setDatatype(dataType);
+        field.setName(name);
+        field.setRawValue(value);
+        fields.add(field);
+        fieldChanged();
+    }
+
     public void setField(String name, Object value) {
         if(value instanceof List) {
             deleteField(name);

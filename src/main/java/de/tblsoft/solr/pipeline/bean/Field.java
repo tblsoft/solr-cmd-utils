@@ -38,6 +38,8 @@ public class Field {
 
     private List<String> values;
 
+    private Object rawValue;
+
     private String datatype;
 
     public String getName() {
@@ -81,6 +83,9 @@ public class Field {
     }
 
     public long getSize() {
+        if(this.values == null) {
+            return 0;
+        }
         long totalSize = getName().length();
         for(String value: getValues()) {
             if(value != null) {
@@ -89,5 +94,36 @@ public class Field {
         }
 
         return totalSize;
+    }
+
+    /**
+     * Getter for property 'rawValue'.
+     *
+     * @return Value for property 'rawValue'.
+     */
+    public Object getRawValue() {
+        return rawValue;
+    }
+
+    /**
+     * Setter for property 'rawValue'.
+     *
+     * @param rawValue Value to set for property 'rawValue'.
+     */
+    public void setRawValue(Object rawValue) {
+        this.rawValue = rawValue;
+    }
+
+
+    public boolean hasValues() {
+        if(values != null && values.size() > 0) {
+            return true;
+        }
+
+        if(this.rawValue != null) {
+            return true;
+        }
+
+        return false;
     }
 }

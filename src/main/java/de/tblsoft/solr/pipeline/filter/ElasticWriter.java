@@ -115,9 +115,30 @@ public class ElasticWriter extends AbstractFilter {
         super.init();
     }
 
+
+    static Object transformRawValue(Field field) {
+        String dataType = field.getDatatype();
+        if(dataType.equals("json")) {
+            Gson gson = new Gson();
+            return gson.toJsonTree(field.getRawValue());
+        }
+
+        return null;
+    }
+
+
     static Object transformDatatype(Field field, boolean detectNumberValues) {
 
         String value = field.getValue();
+        String dataType = field.getDatatype();
+        if(dataType == null) {
+            dataType = "string";
+        }
+
+        if(dataType.equals("json")) {
+            Gson gson = new Gson();
+            return gson.toJson(field.getRawValue());
+        }
 
         if(!detectNumberValues) {
             return value;
@@ -251,27 +272,24 @@ public class ElasticWriter extends AbstractFilter {
     static Map<String, Object> mapToJson(Document document, boolean detectNumberValues) {
         Map<String, Object> jsonDocument = new HashMap<String, Object>();
         for (Field field : document.getFields()) {
-            List<String> values = field.getValues();
-            if (values == null || values.isEmpty()) {
+            if (!field.hasValues()) {
                 continue;
             }
+
 
             boolean fieldIsFlat= field.getName().contains(".");
             String fieldName = field.getName();
             Object fieldValue = field.getValues();
+            Object fieldRawValue = field.getRawValue();
 
-            if (values.size() == 1) {
+
+            if(fieldRawValue != null) {
+                fieldValue = transformRawValue(field);
+            } else if (field.getValues().size() == 1) {
                 fieldValue = transformDatatype(field, detectNumberValues);
-            }
-
-            if(fieldIsFlat) {
+            } else if (fieldIsFlat) {
                 fieldValue = createExpandedValue(fieldName, fieldValue);
                 fieldName = StringUtils.substringBefore(fieldName, ".");
-            }
-
-            Object fieldValueByDataType = getFieldValueByDataType(field);
-            if(fieldValueByDataType != null) {
-                fieldValue = fieldValueByDataType;
             }
 
             jsonDocument.put(fieldName, fieldValue);
@@ -281,7 +299,7 @@ public class ElasticWriter extends AbstractFilter {
 
     }
 
-    public static Object getFieldValueByDataType(Field field) {
+    public static Object getFielddddValueByDataType(Field field) {
         if(field.getDatatype() == null) {
             return null;
         }
