@@ -58,6 +58,8 @@ public class ElasticWriter extends AbstractFilter {
 
     private String bulkMethodFieldName;
 
+    private boolean includeTypeName;
+
     @Override
     public void init() {
 
@@ -78,6 +80,7 @@ public class ElasticWriter extends AbstractFilter {
 
         idField = getProperty("idField", null);
         hashId = getPropertyAsBoolean("hashId", false);
+        includeTypeName = getPropertyAsBoolean("includeTypeName", false);
 
         GsonBuilder builder = new GsonBuilder();
         gson = builder.create();
@@ -101,6 +104,9 @@ public class ElasticWriter extends AbstractFilter {
                         getBaseDir(), elasticMappingLocation);
                 String mappingJson = IOUtils.getString(absoluteElasticMappingLocation);
                 String mappingUrl = ElasticHelper.getIndexUrl(indexUrl);
+                if(includeTypeName) {
+                    mappingUrl = mappingUrl + "?include_type_name=true";
+                }
                 LOG.debug("mapping url: {} mappingJson: {}", mappingUrl, mappingJson );
                 if(HTTPHelper.getStatusCode(mappingUrl) == 404) {
                     HTTPHelper.put(mappingUrl, mappingJson, "application/json");
