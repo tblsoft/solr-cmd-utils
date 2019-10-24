@@ -90,6 +90,7 @@ public class PipelineExecuter {
         classRegestriy.put("solrcmdutils.ValueMappingFilter", ValueMappingFilter.class);
         classRegestriy.put("solrcmdutils.EncodingCorrectionFilter", EncodingCorrectionFilter.class);
         classRegestriy.put("solrcmdutils.RegexSplitFilter", RegexSplitFilter.class);
+        classRegestriy.put("solrcmdutils.RegexFindFilter", RegexFindFilter.class);
         classRegestriy.put("solrcmdutils.FieldSplitter", FieldSplitter.class);
         classRegestriy.put("solrcmdutils.IgnoreDocumentFilter", IgnoreDocumentFilter.class);
         classRegestriy.put("solrcmdutils.BeanShellFilter", BeanShellFilter.class);
