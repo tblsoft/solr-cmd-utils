@@ -21,8 +21,8 @@ public class FileLineWriter extends AbstractFilter {
     private OutputStream outputStream;
 
     private List<String> fieldNames;
-    private String fieldSeperator = ",";
-    private String documentSeperator = "\n";
+    private String fieldSeperator;
+    private String documentSeperator;
 
 
     @Override
@@ -30,6 +30,8 @@ public class FileLineWriter extends AbstractFilter {
 
         String relativeFilename = getProperty("filename", null);
         fieldNames = getPropertyAsList("fieldNames", null);
+        fieldSeperator = getProperty("fieldSeperator", ",");
+        documentSeperator = getProperty("documentSeperator", "\n");
         filename = IOUtils.getAbsoluteFile(getBaseDir(), relativeFilename);
 
         verify(filename, "For the FileLineWriter a filname must be defined.");
