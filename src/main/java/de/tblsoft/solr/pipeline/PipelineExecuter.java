@@ -141,6 +141,7 @@ public class PipelineExecuter {
         classRegestriy.put("solrcmdutils.Json2SingleDocumentsProcessor", Json2SingleDocumentsProcessor.class);
         classRegestriy.put("solrcmdutils.StopwordFilter", StopwordFilter.class);
         classRegestriy.put("solrcmdutils.NoopProcessor", NoopProcessor.class);
+        classRegestriy.put("solrcmdutils.HtmlTextExtractorFilter", HtmlTextExtractorFilter.class);
     }
 
     public PipelineExecuter(String yamlFileName) {

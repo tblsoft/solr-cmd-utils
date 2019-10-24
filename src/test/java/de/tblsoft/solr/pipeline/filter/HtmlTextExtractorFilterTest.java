@@ -1,0 +1,42 @@
+package de.tblsoft.solr.pipeline.filter;
+
+import de.tblsoft.solr.pipeline.test.AbstractFilterTest;
+import org.junit.Test;
+
+
+public class HtmlTextExtractorFilterTest extends AbstractFilterTest {
+
+    @Override
+    public void configure() {
+        addProperty("fields", "text");
+        setClazz(HtmlTextExtractorFilter.class);
+    }
+
+    @Test
+    public void testPassthrough() {
+        configure();
+        createField("foo", "bar");
+        runTest();
+        assertFiled("foo","bar");
+        assertNumberOfDocuments(1);
+        assertNumberOfFields(1);
+        assertInitWasDelegated();
+        assertEndWasDelegated();
+    }
+
+    @Test
+    public void testEmptyDocument() {
+        configure();
+        runTest();
+        assertNumberOfDocuments(1);
+        assertNumberOfFields(0);
+    }
+
+    @Test
+    public void testFilter() {
+        configure();
+        createField("text", "<p>Apple macht mit dem iPhone X offenbar richtig Kasse. Analysten zufolge entfallen mehr als ein Drittel aller Gewinne auf dem Handymarkt auf das Top-Smartphone aus Cupertino.<!--more--></p><p>Ersten Untersuchungen aus dem vergangenen Herbst zufolge <a href=\"\"https://t3n.de/news/iphone-x-kosten-herstellung-857893/\"\">kostet Apple das iPhone X in der Herstellung</a> rund 430 US-Dollar – nicht eingerechnet Marketing- oder Entwicklungskosten. Verkauft wird das Top-Smartphone für über 1.000 Dollar. Kein Wunder, dass <a href=\"\"https://t3n.de/news/iphone-apple-rekord-quartal-932572/\"\">Apple mit dem iPhone X</a> im Schlussquartal 2017 einen Anteil von satten 35 Prozent der weltweiten Smartphone-Gewinne eingestrichen hat, wie die Analysefirma <a href=\"\"https://www.counterpointresearch.com/iphone-x-alone-generated-35-total-handset-industry-profits-q4-2017/\"\">Counterpoint Research ausgerechnet</a> hat.</p><h2>Gewinne mit Smartphones: 8 iPhones in den Top-10, iPhone X klar voran</h2><p>Dass Apples Gewinnmarge im Vergleich mit der Konkurrenz überdurchschnittlich hoch ist, zeigt unter anderem, dass das iPhone X „nur“ 21 Prozent Anteil am Umsatz der Branche hat. Insgesamt finden sich unter den zehn Smartphones mit dem höchsten Anteil am Gesamtgewinn auf dem Smartphone-Sektor acht iPhones – neben den iPhone-8- und -7-Modellen auch das iPhone 6 und das iPhone SE. Selbst mit älteren Geräten macht Apple also noch gute Gewinne. Lediglich Samsungs Galaxy Note 8 und Galaxy S8 Plus können die iPhone-Phalanx in der Top-10-Liste etwas auflockern.</p><figure class=\"\"caption alignnone\"\" id=\"\"attachment_1061843\"\"><img alt=\"\"\"\" class=\"\"size-large wp-image-1061843\"\" height=\"\"338\"\" src=\"\"https://assets.t3n.sc/news/wp-content/uploads/2018/04/iphone-x-gewinne-smartphone-markt-620x338.jpg?auto=compress\"\" width=\"\"620\"\" /><figcaption class=\"\"tg-noadgoal\"\">Das iPhone X macht mehr als ein Drittel aller Gewinne im Smartphone-Bereich. (Screenshot: Counterpoint Research/t3n.de)</figcaption></figure><p>Insgesamt verlor der Handymarkt im vierten Quartal 2017 rund ein Prozent, was die Gewinne angeht. Apple legte dagegen um ein Prozent zu. Der iPhone-Konzern macht mit seinen Geräten 86 Prozent aller Gewinne auf dem Smartphone-Sektor. Die chinesischen Hersteller wie Huawei, Oppo oder Vivo sehen die Analysten aber ebenfalls im Aufwind. Alle chinesischen Smartphone-Konzerne zusammen haben zwischen Oktober und Dezember rund 1,3 Milliarden Dollar Gewinn gemacht.</p><div class=\"\"tg-article-gallery c-gallery__preview  c-box\"\">    <strong class=\"\"u-text-medium\"\">iPhone X: Das ist Apples Neuinterpretation des iPhones</strong>            <figure>            <div class=\"\"c-gallery__preview-image\"\">                <img alt=\"\"iPhone X. (Bild: Apple)\"\" src=\"\"https://assets.t3n.sc/news/wp-content/uploads/2017/09/iphone-x-2.jpg?auto=compress\"\" />                <a class=\"\"c-gallery__icon tg-gallerylink\"\" href=\"\"https://t3n.de/news/apple-iphone-x-856291/iphone-x_2/?parent=1061838\"\">                    <span class=\"\"c-button c-gallery__link -highlight\"\">                        Bilder                        <svg class=\"\"u-gap-left-small\"\" fill=\"\"#FFFFFF\"\" height=\"\"10px\"\" width=\"\"10px\"\" xmlns=\"\"http://www.w3.org/2000/svg\"\">                            <use xlink:href=\"\"#s-arrow-right\"\" xmlns:xlink=\"\"http://www.w3.org/1999/xlink\"\"></use>                        </svg>                    </span>                </a>            </div>            <div class=\"\"o-grid\"\">                <figcaption class=\"\"o-grid__item u-gap-small u-nopadded-outer\"\">iPhone X. (Bild: Apple)</figcaption>                <p class=\"\"u-color-mute u-pull-right u-text-extrasmall u-gap-left u-gap-top-small\"\">                    1 von 16                </p>            </div>        </figure>    </div><p>Allein Huawei konnte laut Counterpoint Research seinen Gewinn gegenüber dem vergleichbaren Vorjahreszeitraum um 59 Prozent steigern. Mit steigenden Verkaufspreisen und hochwertigeren Geräten sollen die chinesischen Hersteller ihren Anteil am Gesamtgewinn der Branche in den kommenden Quartalen weiter steigern, so die Prognose.</p><p>Noch eine beeindruckende Zahl zum Abschluss: Das iPhone X hat Apple im vierten Quartal 2017 – obwohl nur zwei Monate davon im Verkauf – fünf Mal soviel Gewinn eingebracht, wie über 600 Android-Smartphone-Hersteller zusammen generieren konnten, schreiben die Analysten von Counterpoint Research.</p><p><strong>Ebenfalls interessant: <a href=\"\"https://t3n.de/news/samsung-iphone-x-galaxy-s8-863362/\"\">Analysten – Samsung verdient am iPhone X mehr als am Galaxy S8</a> und <a href=\"\"https://t3n.de/news/apple-iphone-x-umsatz-king-952034/\"\">Dank iPhone X – Apple macht mehr Umsatz als alle anderen Hersteller zusammen</a></strong></p>");
+        runTest();
+        assertFiledList("text", "Apple macht mit dem iPhone X offenbar richtig Kasse. Analysten zufolge entfallen mehr als ein Drittel aller Gewinne auf dem Handymarkt auf das Top-Smartphone aus Cupertino. Ersten Untersuchungen aus dem vergangenen Herbst zufolge kostet Apple das iPhone X in der Herstellung rund 430 US-Dollar – nicht eingerechnet Marketing- oder Entwicklungskosten. Verkauft wird das Top-Smartphone für über 1.000 Dollar. Kein Wunder, dass Apple mit dem iPhone X im Schlussquartal 2017 einen Anteil von satten 35 Prozent der weltweiten Smartphone-Gewinne eingestrichen hat, wie die Analysefirma Counterpoint Research ausgerechnet hat. Gewinne mit Smartphones: 8 iPhones in den Top-10, iPhone X klar voran Dass Apples Gewinnmarge im Vergleich mit der Konkurrenz überdurchschnittlich hoch ist, zeigt unter anderem, dass das iPhone X „nur“ 21 Prozent Anteil am Umsatz der Branche hat. Insgesamt finden sich unter den zehn Smartphones mit dem höchsten Anteil am Gesamtgewinn auf dem Smartphone-Sektor acht iPhones – neben den iPhone-8- und -7-Modellen auch das iPhone 6 und das iPhone SE. Selbst mit älteren Geräten macht Apple also noch gute Gewinne. Lediglich Samsungs Galaxy Note 8 und Galaxy S8 Plus können die iPhone-Phalanx in der Top-10-Liste etwas auflockern. Das iPhone X macht mehr als ein Drittel aller Gewinne im Smartphone-Bereich. (Screenshot: Counterpoint Research/t3n.de) Insgesamt verlor der Handymarkt im vierten Quartal 2017 rund ein Prozent, was die Gewinne angeht. Apple legte dagegen um ein Prozent zu. Der iPhone-Konzern macht mit seinen Geräten 86 Prozent aller Gewinne auf dem Smartphone-Sektor. Die chinesischen Hersteller wie Huawei, Oppo oder Vivo sehen die Analysten aber ebenfalls im Aufwind. Alle chinesischen Smartphone-Konzerne zusammen haben zwischen Oktober und Dezember rund 1,3 Milliarden Dollar Gewinn gemacht. iPhone X: Das ist Apples Neuinterpretation des iPhones Bilder iPhone X. (Bild: Apple) 1 von 16 Allein Huawei konnte laut Counterpoint Research seinen Gewinn gegenüber dem vergleichbaren Vorjahreszeitraum um 59 Prozent steigern. Mit steigenden Verkaufspreisen und hochwertigeren Geräten sollen die chinesischen Hersteller ihren Anteil am Gesamtgewinn der Branche in den kommenden Quartalen weiter steigern, so die Prognose. Noch eine beeindruckende Zahl zum Abschluss: Das iPhone X hat Apple im vierten Quartal 2017 – obwohl nur zwei Monate davon im Verkauf – fünf Mal soviel Gewinn eingebracht, wie über 600 Android-Smartphone-Hersteller zusammen generieren konnten, schreiben die Analysten von Counterpoint Research. Ebenfalls interessant: Analysten – Samsung verdient am iPhone X mehr als am Galaxy S8 und Dank iPhone X – Apple macht mehr Umsatz als alle anderen Hersteller zusammen");
+    }
+}
