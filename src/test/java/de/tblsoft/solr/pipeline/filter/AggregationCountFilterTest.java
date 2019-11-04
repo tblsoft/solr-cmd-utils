@@ -12,6 +12,7 @@ public class AggregationCountFilterTest extends AbstractFilterTest {
 
     @Override
     public void configure() {
+        putProperty("splitRegex", "\\s+");
         setClazz(AggregationCountFilter.class);
     }
 
@@ -29,7 +30,7 @@ public class AggregationCountFilterTest extends AbstractFilterTest {
     @Test
     public void testAggregationCountFilter() {
         configure();
-        Document document1 = DocumentBuilder.document().field("field1", "value1").create();
+        Document document1 = DocumentBuilder.document().field("field1", "value1 value3   value4   ").create();
         Document document2 = DocumentBuilder.document().field("field1", "value1").field("field2","value2").create();
         document(document1, document2);
 
@@ -43,7 +44,7 @@ public class AggregationCountFilterTest extends AbstractFilterTest {
         assertFiled(1, "count", "1");
         assertFiled(1, "type", "field2");
 
-        assertNumberOfDocuments(2);
+        assertNumberOfDocuments(4);
         assertNumberOfFields(3);
 
         assertInitWasDelegated();

@@ -14,6 +14,13 @@ import java.util.Map;
 public class AggregationCountFilter extends AbstractFilter {
 
     Map<String, AtomicLongMap<String>> aggregation = new HashMap<String, AtomicLongMap<String>>();
+    String splitRegex;
+
+    @Override
+    public void init() {
+        splitRegex = getProperty("splitRegex", null);
+        super.init();
+    }
 
     @Override
     public void document(Document document) {
@@ -23,7 +30,16 @@ public class AggregationCountFilter extends AbstractFilter {
                 countMap = AtomicLongMap.create();
             }
             for(String value : field.getValues()) {
-                countMap.incrementAndGet(value);
+                if(splitRegex != null) {
+                    if(value != null) {
+                        String[] values = value.split(splitRegex);
+                        for (String val : values) {
+                            countMap.incrementAndGet(val);
+                        }
+                    }
+                } else {
+                    countMap.incrementAndGet(value);
+                }
             }
             aggregation.put(field.getName(), countMap);
         }
