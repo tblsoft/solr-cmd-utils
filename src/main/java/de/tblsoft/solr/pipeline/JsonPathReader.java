@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Read Json Files from File or Url
+ * Read Json Files from File, Url or Json
  */
 public class JsonPathReader extends AbstractReader {
 
@@ -32,6 +32,7 @@ public class JsonPathReader extends AbstractReader {
             String url = getProperty("url", null);
             String path = getProperty("path", null);
             String filename = getProperty("filename", null);
+            String json = getProperty("json", null);
 
             if(!Strings.isNullOrEmpty(url)) {
                 DocumentContext context = loadJsonContextFromUrl(url);
@@ -39,6 +40,9 @@ public class JsonPathReader extends AbstractReader {
             } else if(!Strings.isNullOrEmpty(filename)) {
                 File jsonFile = IOUtils.getAbsoluteFileAsFile(getBaseDir(), filename);
                 DocumentContext context = loadJsonContextFromFile(jsonFile);
+                execute(context, filename);
+            } else if(!Strings.isNullOrEmpty(json)) {
+                DocumentContext context = loadJsonContextFromJson(json);
                 execute(context, filename);
             } else if(!Strings.isNullOrEmpty(path)) {
                 String absolutePath = IOUtils.getAbsoluteFile(getBaseDir(), path);
@@ -86,6 +90,11 @@ public class JsonPathReader extends AbstractReader {
 
     protected DocumentContext loadJsonContextFromFile(File jsonFile) throws IOException {
         DocumentContext context = JsonPath.parse(jsonFile);
+        return context;
+    }
+
+    protected DocumentContext loadJsonContextFromJson(String jsonString) throws IOException {
+        DocumentContext context = JsonPath.parse(jsonString);
         return context;
     }
 
