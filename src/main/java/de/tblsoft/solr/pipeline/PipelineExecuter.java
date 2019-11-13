@@ -10,14 +10,13 @@ import de.tblsoft.solr.pipeline.bean.Processor;
 import de.tblsoft.solr.pipeline.filter.*;
 import de.tblsoft.solr.pipeline.processor.Json2SingleDocumentsProcessor;
 import de.tblsoft.solr.pipeline.processor.NoopProcessor;
+import de.tblsoft.solr.util.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.*;
@@ -336,18 +335,10 @@ public class PipelineExecuter {
 
     Pipeline readPipelineFromYamlFile(String fileName) {
         try {
-            InputStream input;
-            if(fileName.startsWith("http")) {
-                input = HTTPHelper.getAsInputStream(fileName);
-            } else {
-                input = new FileInputStream(new File(
-                        fileName));
-            }
-
             Yaml yaml = new Yaml(new Constructor(Pipeline.class));
-            Pipeline pipeline = (Pipeline) yaml.load(input);
-
-            input.close();
+            String pipelineString = IOUtils.getString(fileName);
+            LOG.info("pipeline:\n" + pipelineString);
+            Pipeline pipeline = yaml.load(pipelineString);
             return pipeline;
         } catch (Exception e) {
             throw new RuntimeException(e);

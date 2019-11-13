@@ -1,0 +1,19 @@
+name: "csv unit testing pipeline"
+reader:
+  name: "CsvReader"
+  clazz: "solrcmdutils.CSVReader"
+  property:
+    filename: "/Users/tbl/Downloads/name.basics.tsv.gz"
+    delimiter: "\t"
+
+filter:
+  - name: "Status filter"
+    clazz: "solrcmdutils.StatusTimeFilter"
+  - name: "Status filter"
+    clazz: "solrcmdutils.FieldSplitter"
+    property:
+      sourceField: "primaryProfession"
+      splitChar: ","
+      trimValues: "true"
+  - name: "SystemOutWriter"
+    clazz: "solrcmdutils.SystemOutWriter"
