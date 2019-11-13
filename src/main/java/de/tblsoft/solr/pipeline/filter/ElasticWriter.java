@@ -25,6 +25,7 @@ public class ElasticWriter extends AbstractFilter {
     private static Logger LOG = LoggerFactory.getLogger(ElasticWriter.class);
 
     private Gson gson;
+    private String jsonDatePattern;
 
     private String type;
 
@@ -81,8 +82,9 @@ public class ElasticWriter extends AbstractFilter {
         idField = getProperty("idField", null);
         hashId = getPropertyAsBoolean("hashId", false);
         includeTypeName = getPropertyAsBoolean("includeTypeName", false);
+        jsonDatePattern = getProperty("jsonDatePattern", "yyyy-MM-dd'T'HH:mm:ssZ");
 
-        GsonBuilder builder = new GsonBuilder();
+        GsonBuilder builder = new GsonBuilder().setDateFormat(jsonDatePattern);
         gson = builder.create();
 
         try {
@@ -122,10 +124,9 @@ public class ElasticWriter extends AbstractFilter {
     }
 
 
-    static Object transformRawValue(Field field) {
+    Object transformRawValue(Field field) {
         String dataType = field.getDatatype();
         if(dataType.equals("json")) {
-            Gson gson = new Gson();
             return gson.toJsonTree(field.getRawValue());
         }
 
@@ -246,7 +247,7 @@ public class ElasticWriter extends AbstractFilter {
         super.document(document);
     }
 
-    public static String mapToJsonString(List<Document> documentList, boolean detectNumberValues) {
+    public String mapToJsonString(List<Document> documentList, boolean detectNumberValues) {
         List<Map<String, Object>> documentMap = new ArrayList<Map<String, Object>>();
         for (Document document : documentList) {
             documentMap.add(mapToJson(document, detectNumberValues));
@@ -275,7 +276,7 @@ public class ElasticWriter extends AbstractFilter {
         return result;
     }
 
-    static Map<String, Object> mapToJson(Document document, boolean detectNumberValues) {
+    private Map<String, Object> mapToJson(Document document, boolean detectNumberValues) {
         Map<String, Object> jsonDocument = new HashMap<String, Object>();
         for (Field field : document.getFields()) {
             if (!field.hasValues()) {
