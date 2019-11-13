@@ -98,13 +98,19 @@ public class Pipeline {
         this.webHookEnd = webHookEnd;
     }
 
+
     @Override
     public String toString() {
         return "Pipeline{" +
                 "name='" + name + '\'' +
+                ", processId='" + processId + '\'' +
+                ", webHookStart='" + webHookStart + '\'' +
+                ", webHookEnd='" + webHookEnd + '\'' +
                 ", variables=" + variables +
                 ", reader=" + reader +
                 ", filter=" + filter +
+                ", preProcessor=" + preProcessor +
+                ", postProcessor=" + postProcessor +
                 '}';
     }
 }
