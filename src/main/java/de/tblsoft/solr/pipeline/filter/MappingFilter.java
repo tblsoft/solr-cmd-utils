@@ -55,7 +55,7 @@ public class MappingFilter extends AbstractSubFieldFilter {
 
 
 
-	public Document processDocument(Document document) {
+	public List<Document> processDocument(Document document) {
 		Document mappedDocument;
 		if(!appendFields) {
 			mappedDocument = new Document();
@@ -112,7 +112,7 @@ public class MappingFilter extends AbstractSubFieldFilter {
 
 			addMissingFields(mappedDocument);
 			sortFieldsByName(mappedDocument);
-			return mappedDocument;
+			return Arrays.asList(mappedDocument);
 		}
 		return null;
 	}
