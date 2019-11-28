@@ -84,6 +84,12 @@ public class Document {
         fieldChanged();
     }
 
+    public void setField(Field field) {
+        deleteField(field.getName());
+        this.fields.add(field);
+        fieldChanged();
+    }
+
     public void setRawField(String name, Object value, String dataType) {
         Field field = new Field();
         field.setDatatype(dataType);
@@ -92,6 +98,41 @@ public class Document {
         fields.add(field);
         fieldChanged();
     }
+
+    public void addSubField(String name, Document document) {
+        Field field = getField(name);
+        if(field == null) {
+            field = new Field();
+            fields.add(field);
+        }
+        field.setDatatype("subField");
+        field.setName(name);
+        List<Document> documents = field.getDocuments();
+        if(documents == null) {
+            documents = new ArrayList<>();
+        }
+        documents.add(document);
+        field.setDocuments(documents);
+        fieldChanged();
+    }
+
+    public void setSubField(String name, List<Document> documents) {
+        Field field = new Field();
+        field.setDatatype("subField");
+        field.setName(name);
+        field.setDocuments(documents);
+        setField(field);
+    }
+
+
+    public List<Document> getSubField(String name) {
+        Field subField = getField(name);
+        if(subField == null) {
+            return null;
+        }
+        return subField.getDocuments();
+    }
+
 
     public void setField(String name, Object value) {
         if(value instanceof List) {

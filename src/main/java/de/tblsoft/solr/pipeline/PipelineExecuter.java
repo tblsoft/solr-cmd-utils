@@ -8,6 +8,7 @@ import de.tblsoft.solr.pipeline.bean.Filter;
 import de.tblsoft.solr.pipeline.bean.Pipeline;
 import de.tblsoft.solr.pipeline.bean.Processor;
 import de.tblsoft.solr.pipeline.filter.*;
+import de.tblsoft.solr.pipeline.processor.DownloadResourcesProcessor;
 import de.tblsoft.solr.pipeline.processor.Json2SingleDocumentsProcessor;
 import de.tblsoft.solr.pipeline.processor.NoopProcessor;
 import de.tblsoft.solr.util.IOUtils;
@@ -50,6 +51,7 @@ public class PipelineExecuter {
 
     private static Map<String, Class> classRegestriy = new HashMap<String, Class>();
     static {
+        classRegestriy.put("solrcmdutils.DownloadResourcesProcessor", DownloadResourcesProcessor.class);
         classRegestriy.put("solrcmdutils.StandardReader", StandardReader.class);
         classRegestriy.put("solrcmdutils.RandomReader", RandomReader.class);
         classRegestriy.put("solrcmdutils.GrokReader", GrokReader.class);

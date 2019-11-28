@@ -288,9 +288,16 @@ public class ElasticWriter extends AbstractFilter {
             String fieldName = field.getName();
             Object fieldValue = field.getValues();
             Object fieldRawValue = field.getRawValue();
+            List<Document> subDocuments = field.getDocuments();
 
 
-            if(fieldRawValue != null) {
+            if(subDocuments != null) {
+                List<Map<String, Object>> subFieldValue = new ArrayList<>();
+                for(Document subDocument : subDocuments) {
+                    subFieldValue.add(mapToJson(subDocument, detectNumberValues));
+                }
+                fieldValue = subFieldValue;
+            } else if(fieldRawValue != null) {
                 fieldValue = transformRawValue(field);
             } else if (field.getValues().size() == 1) {
                 fieldValue = transformDatatype(field, detectNumberValues);

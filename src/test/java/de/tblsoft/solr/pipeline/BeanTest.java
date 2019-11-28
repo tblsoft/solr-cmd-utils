@@ -1,4 +1,4 @@
-package de.tblsoft.solr.pipeline.test;
+package de.tblsoft.solr.pipeline;
 
 import de.tblsoft.solr.pipeline.bean.Document;
 import de.tblsoft.solr.pipeline.bean.DocumentBuilder;

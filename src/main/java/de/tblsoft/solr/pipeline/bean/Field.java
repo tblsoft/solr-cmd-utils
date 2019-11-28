@@ -14,7 +14,7 @@ public class Field {
 
     public Field(String name, String value) {
         this.name = name;
-        this.values = new ArrayList<String>();
+        this.values = new ArrayList<>();
         this.values.add(value);
     }
 
@@ -31,12 +31,16 @@ public class Field {
 
         this.name = copy.getName();
         this.values = values;
+        this.rawValue = copy.getRawValue();
+        this.documents = copy.getDocuments();
         this.datatype = copy.getDatatype();
     }
 
     private String name;
 
     private List<String> values;
+
+    private List<Document> documents;
 
     private Object rawValue;
 
@@ -52,6 +56,13 @@ public class Field {
 
     public List<String> getValues() {
         return values;
+    }
+
+    public void addSubDocument(Document document) {
+        if(this.documents == null) {
+            this.documents = new ArrayList<>();
+        }
+        this.documents.add(document);
     }
 
     public void setValues(List<String> values) {
@@ -115,12 +126,34 @@ public class Field {
     }
 
 
+    /**
+     * Getter for property 'documents'.
+     *
+     * @return Value for property 'documents'.
+     */
+    public List<Document> getDocuments() {
+        return documents;
+    }
+
+    /**
+     * Setter for property 'documents'.
+     *
+     * @param documents Value to set for property 'documents'.
+     */
+    public void setDocuments(List<Document> documents) {
+        this.documents = documents;
+    }
+
     public boolean hasValues() {
         if(values != null && values.size() > 0) {
             return true;
         }
 
         if(this.rawValue != null) {
+            return true;
+        }
+
+        if(this.documents != null && this.documents.size() > 0) {
             return true;
         }
 

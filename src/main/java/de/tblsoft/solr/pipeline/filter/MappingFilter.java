@@ -1,7 +1,6 @@
 package de.tblsoft.solr.pipeline.filter;
 
 import com.google.common.base.Strings;
-import de.tblsoft.solr.pipeline.AbstractFilter;
 import de.tblsoft.solr.pipeline.bean.Document;
 import de.tblsoft.solr.pipeline.bean.Field;
 import de.tblsoft.solr.pipeline.bean.FieldComperator;
@@ -10,7 +9,7 @@ import org.apache.commons.lang3.text.StrSubstitutor;
 import java.util.*;
 import java.util.Map.Entry;
 
-public class MappingFilter extends AbstractFilter {
+public class MappingFilter extends AbstractSubFieldFilter {
 
 	private List<String> prefixMapping = new ArrayList<>();
 	private Map<String, List<String>> mapping = new HashMap<String, List<String>>();
@@ -55,8 +54,8 @@ public class MappingFilter extends AbstractFilter {
 	}
 
 
-	@Override
-	public void document(Document document) {
+
+	public Document processDocument(Document document) {
 		Document mappedDocument;
 		if(!appendFields) {
 			mappedDocument = new Document();
@@ -112,9 +111,10 @@ public class MappingFilter extends AbstractFilter {
 		if (mappedDocument.getFields().size() != 0) {
 
 			addMissingFields(mappedDocument);
-            sortFieldsByName(mappedDocument);
-			super.document(mappedDocument);
+			sortFieldsByName(mappedDocument);
+			return mappedDocument;
 		}
+		return null;
 	}
 
     void sortFieldsByName(Document mappedDocument) {
