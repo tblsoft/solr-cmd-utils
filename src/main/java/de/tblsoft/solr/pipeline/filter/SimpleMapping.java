@@ -9,6 +9,8 @@ import de.tblsoft.solr.util.PairBuilder;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 
 import java.util.*;
 import java.util.regex.Pattern;
@@ -93,6 +95,8 @@ public class SimpleMapping {
             return StringUtils.trim(value);
         }else if ("removeWhitespace".equals(function)) {
             return value.replaceAll(" ", "");
+        } else if ("removeHtml".equals(function)) {
+            return removeHtml(value);
         } else if ("toSolrDate".equals(function)) {
             return DateUtils.toSolrDate(value);
         } else if ("uniq".equals(function)) {
@@ -128,6 +132,8 @@ public class SimpleMapping {
         } else if ("trim".equals(function)) {
             return;
         } else if ("removeWhitespace".equals(function)) {
+            return;
+        } else if ("removeHtml".equals(function)) {
             return;
         } else if ("toSolrDate".equals(function)) {
             return;
@@ -199,6 +205,12 @@ public class SimpleMapping {
         value = value.replaceAll("\u00ee", "i"); // î
         value = value.replaceAll("\u00dc", "U"); // Ü
         value = value.replaceAll("\u00fb", "u"); // û
+        return value;
+    }
+
+    public static String removeHtml(String value) {
+        Document jsoupDoc = Jsoup.parseBodyFragment(value);
+        value = jsoupDoc.body().text();
         return value;
     }
 }
