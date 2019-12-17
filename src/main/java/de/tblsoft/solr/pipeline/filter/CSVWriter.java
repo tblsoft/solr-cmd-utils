@@ -10,12 +10,12 @@ import de.tblsoft.solr.util.IOUtils;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 
-import java.io.BufferedWriter;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 import java.io.Writer;
+import java.nio.file.Files;
+import java.nio.file.OpenOption;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,6 +38,8 @@ public class CSVWriter extends AbstractFilter {
     
     private boolean withHeaders = true;
 
+    private boolean append = true;
+
     @Override
     public void init() {
 
@@ -50,6 +52,7 @@ public class CSVWriter extends AbstractFilter {
 
             multiValueSeperator = getProperty("multiValueSeperator", ";");
             withHeaders = getPropertyAsBoolean("withHeaders", true);
+            append = getPropertyAsBoolean("append", false);
 
 
 
@@ -77,18 +80,17 @@ public class CSVWriter extends AbstractFilter {
                 if(headers == null) {
                     headers = getFieldNames(document);
                 }
-                //PrintWriter out = new PrintWriter(absoluteFilename);
-                OutputStream out = IOUtils.getOutputStream(absoluteFilename);
                 CSVFormat format = CSVFormat.RFC4180;
                 if(withHeaders) {
                 	format = format.withDelimiter(delimiter.charAt(0)).withHeader(headers);
-                	
-
-                	
                 } else {
                 	format = format.withDelimiter(delimiter.charAt(0));
                 }
-                Writer out1 = new BufferedWriter(new OutputStreamWriter(out));
+
+                OpenOption[] openOptions = append ?
+                                            new OpenOption[] {StandardOpenOption.APPEND, StandardOpenOption.CREATE} :
+                                            new OpenOption[] {StandardOpenOption.CREATE};
+                Writer out1 = Files.newBufferedWriter(Paths.get(absoluteFilename), openOptions);
                 
             	printer = new CSVPrinter(out1, format);
                 firstDocument = false;
