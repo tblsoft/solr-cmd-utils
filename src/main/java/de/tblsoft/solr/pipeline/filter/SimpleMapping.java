@@ -97,6 +97,8 @@ public class SimpleMapping {
             return value.replaceAll(" ", "");
         } else if ("removeHtml".equals(function)) {
             return removeHtml(value);
+        } else if ("removeUrls".equals(function)) {
+            return removeUrls(value);
         } else if ("toSolrDate".equals(function)) {
             return DateUtils.toSolrDate(value);
         } else if ("uniq".equals(function)) {
@@ -134,6 +136,8 @@ public class SimpleMapping {
         } else if ("removeWhitespace".equals(function)) {
             return;
         } else if ("removeHtml".equals(function)) {
+            return;
+        } else if ("removeUrls".equals(function)) {
             return;
         } else if ("toSolrDate".equals(function)) {
             return;
@@ -211,6 +215,13 @@ public class SimpleMapping {
     public static String removeHtml(String value) {
         Document jsoupDoc = Jsoup.parseBodyFragment(value);
         value = jsoupDoc.body().text();
+        return value;
+    }
+
+    public static String removeUrls(String value) {
+        if(StringUtils.isNotEmpty(value)) {
+            value = value.replaceAll("\\b(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]", " ");
+        }
         return value;
     }
 }
