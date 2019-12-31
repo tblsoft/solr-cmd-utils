@@ -15,12 +15,16 @@ import java.util.Map;
  */
 public class ElasticdumpJsonReader extends AbstractReader {
     private String filepath;
+    private String format; // elasticdump (default) or bulk
+    private String jsonPathRoot;
 
     public void read() {
         filepath = getProperty("filepath", null);
         if(Strings.isNullOrEmpty(filepath)) {
             throw new RuntimeException("For the ElasticdumpJsonReader a filepath property must be defined!");
         }
+        format = getProperty("format", "elasticdump");
+        jsonPathRoot = "elasticdump".equals(format) ? "$['_source']" : "$";
 
         try {
             readFileAsLines(filepath);
@@ -38,7 +42,15 @@ public class ElasticdumpJsonReader extends AbstractReader {
 
             String line;
             while ((line = br.readLine()) != null) {
-                Document doc = parseJsonLineAsDoc(line);
+                Document doc = parseJsonLineAsDoc(line, jsonPathRoot);
+                if("bulk".equals(format)) {
+                    String lineSource = br.readLine();
+                    Document docSource = parseJsonLineAsDoc(lineSource, jsonPathRoot);
+                    docSource.setField("_index", doc.getFieldValue("_index"));
+                    docSource.setField("_type", doc.getFieldValue("_type"));
+                    docSource.setField("_id", doc.getFieldValue("_id"));
+                    doc = docSource;
+                }
                 executer.document(doc);
             }
         } catch (FileNotFoundException e) {
@@ -58,7 +70,7 @@ public class ElasticdumpJsonReader extends AbstractReader {
         }
     }
 
-    protected static Document parseJsonLineAsDoc(String jsonLine) {
+    protected static Document parseJsonLineAsDoc(String jsonLine, String jsonSourcePath) {
         DocumentContext context = JsonPath.parse(jsonLine);
 
         Document doc = new Document();
@@ -66,7 +78,7 @@ public class ElasticdumpJsonReader extends AbstractReader {
         doc.setField("_type", (String) readJsonValueOrNull(context, "$['_type']"));
         doc.setField("_id", (String) readJsonValueOrNull(context, "$['_id']"));
 
-        Map<String, Object> source = readJsonValueOrNull(context, "$['_source']");
+        Map<String, Object> source = readJsonValueOrNull(context, jsonSourcePath);
         Map<String, Object> flatSource = flatSourceToDocument(source);
         if(flatSource != null) {
             for (Map.Entry<String, Object> entry : flatSource.entrySet()) {

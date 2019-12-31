@@ -16,7 +16,7 @@ public class ElasticdumpJsonReaderTest {
         String jsonLine = "{\"_index\":\"example\",\"_type\":\"doc\",\"_id\":\"123-456-789\",\"_score\":1,\"_source\":{\"title\":\"Hello World!\",\"tags\":[\"tag1\", \"tag2\"],\"weight\":10.5}}";
 
         // when
-        Document doc = ElasticdumpJsonReader.parseJsonLineAsDoc(jsonLine);
+        Document doc = ElasticdumpJsonReader.parseJsonLineAsDoc(jsonLine, "$['_source']");
 
         // then
         assertNotNull(doc);
@@ -34,7 +34,7 @@ public class ElasticdumpJsonReaderTest {
         String jsonLine = "{\"_index\":\"example\",\"_type\":\"doc\",\"_score\":1,\"_source\":{\"title\":\"Hello World!\",\"tags\":[\"tag1\", \"tags2\"],\"weight\":10.5}}";
 
         // when
-        Document doc = ElasticdumpJsonReader.parseJsonLineAsDoc(jsonLine);
+        Document doc = ElasticdumpJsonReader.parseJsonLineAsDoc(jsonLine, "$['_source']");
 
         // then
         assertNotNull(doc);
@@ -49,7 +49,7 @@ public class ElasticdumpJsonReaderTest {
         String jsonLine = "{\"_index\":\"example\",\"_type\":\"doc\",\"_score\":1}";
 
         // when
-        Document doc = ElasticdumpJsonReader.parseJsonLineAsDoc(jsonLine);
+        Document doc = ElasticdumpJsonReader.parseJsonLineAsDoc(jsonLine, "$['_source']");
 
         // then
         assertNotNull(doc);
