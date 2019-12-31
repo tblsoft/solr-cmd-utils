@@ -4,6 +4,7 @@ import com.google.common.base.Strings;
 import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
 import de.tblsoft.solr.pipeline.bean.Document;
+import de.tblsoft.solr.util.IOUtils;
 
 import java.io.*;
 import java.util.HashMap;
@@ -37,7 +38,8 @@ public class ElasticdumpJsonReader extends AbstractReader {
         BufferedReader br = null;
         FileReader fr = null;
         try {
-            fr = new FileReader(filepath);
+            File jsonFile = IOUtils.getAbsoluteFileAsFile(getBaseDir(), filepath);
+            fr = new FileReader(jsonFile);
             br = new BufferedReader(fr);
 
             String line;
