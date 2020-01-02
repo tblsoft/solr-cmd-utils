@@ -16,6 +16,8 @@ public class Pipeline {
 
     private String webHookEnd;
 
+    private String webHookError;
+
     private Map<String,String> variables = new HashMap<String, String>();
 
     private Reader reader;
@@ -98,6 +100,23 @@ public class Pipeline {
         this.webHookEnd = webHookEnd;
     }
 
+    /**
+     * Getter for property 'webHookError'.
+     *
+     * @return Value for property 'webHookError'.
+     */
+    public String getWebHookError() {
+        return webHookError;
+    }
+
+    /**
+     * Setter for property 'webHookError'.
+     *
+     * @param webHookError Value to set for property 'webHookError'.
+     */
+    public void setWebHookError(String webHookError) {
+        this.webHookError = webHookError;
+    }
 
     @Override
     public String toString() {
@@ -106,6 +125,7 @@ public class Pipeline {
                 ", processId='" + processId + '\'' +
                 ", webHookStart='" + webHookStart + '\'' +
                 ", webHookEnd='" + webHookEnd + '\'' +
+                ", webHookError='" + webHookError + '\'' +
                 ", variables=" + variables +
                 ", reader=" + reader +
                 ", filter=" + filter +

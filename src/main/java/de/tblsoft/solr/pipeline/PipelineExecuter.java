@@ -35,6 +35,8 @@ public class PipelineExecuter {
 
     private String webHookEnd;
 
+    private String webHookError;
+
     private List<ProcessorIF> preProcessorList;
 
     private List<FilterIF> filterList;
@@ -174,6 +176,7 @@ public class PipelineExecuter {
 
             webHookStart = pipeline.getWebHookStart();
             webHookEnd = pipeline.getWebHookEnd();
+            webHookError = pipeline.getWebHookError();
 
             HTTPHelper.webHook(webHookStart,
                     "status", "start",
@@ -288,38 +291,54 @@ public class PipelineExecuter {
     }
 
     public void execute() {
-        LOG.debug("Start the initialization.");
-        init();
+        try {
+            LOG.debug("Start the initialization.");
+            init();
 
 
-        LOG.debug("Process the pre processors.");
-        for(ProcessorIF processorIF: preProcessorList) {
-            processorIF.process();
-        }
-
-        if(reader != null) {
-            LOG.debug("Start the initialization for all filters.");
-            if(filterList.size() > 0 ) {
-                filterList.get(0).init();
+            LOG.debug("Process the pre processors.");
+            for (ProcessorIF processorIF : preProcessorList) {
+                processorIF.process();
             }
-            LOG.debug("Read the input from the configured reader.");
-            reader.read();
-            LOG.debug("Finalize the pipeline.");
-            end();
+
+            if (reader != null) {
+                LOG.debug("Start the initialization for all filters.");
+                if (filterList.size() > 0) {
+                    filterList.get(0).init();
+                }
+                LOG.debug("Read the input from the configured reader.");
+                reader.read();
+                LOG.debug("Finalize the pipeline.");
+                end();
+            }
+
+
+            LOG.debug("Process the post processors.");
+            for (ProcessorIF processorIF : postProcessorList) {
+                processorIF.process();
+            }
+
+
+            HTTPHelper.webHook(webHookEnd,
+                    "status", "end",
+                    "processId", processId);
+        } catch (Exception e) {
+
+            throw e;
         }
-
-
-        LOG.debug("Process the post processors.");
-        for(ProcessorIF processorIF: postProcessorList) {
-            processorIF.process();
-        }
-
-
-        HTTPHelper.webHook(webHookEnd,
-                "status", "end",
-                "processId", processId);
     }
 
+    private void onWebhookError() {
+        if(!Strings.isNullOrEmpty(webHookError)) {
+            try {
+                HTTPHelper.get(webHookError);
+            } catch (Exception e) {
+                LOG.error("Could not call the error webHookError {} because {}", webHookError, e.getMessage(), e );
+                // fail silent
+            }
+        }
+
+    }
 
     //public void field(String name, String value) {
     //    filterList.get(0).field(name, value);
