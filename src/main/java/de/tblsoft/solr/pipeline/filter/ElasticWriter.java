@@ -8,6 +8,7 @@ import de.tblsoft.solr.http.ElasticHelper;
 import de.tblsoft.solr.http.HTTPHelper;
 import de.tblsoft.solr.pipeline.AbstractFilter;
 import de.tblsoft.solr.pipeline.bean.Document;
+import de.tblsoft.solr.pipeline.bean.ElasticBulkResponse;
 import de.tblsoft.solr.pipeline.bean.Field;
 import de.tblsoft.solr.util.IOUtils;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -207,7 +208,13 @@ public class ElasticWriter extends AbstractFilter {
 
             String bulkUrl = ElasticHelper.getBulkUrl(indexUrl);
             LOG.debug("bulk url: {} bulkRequest: {}", bulkUrl, bulkRequest);
-            HTTPHelper.post(bulkUrl, bulkRequest.toString(), "application/json");
+            String response = HTTPHelper.post(bulkUrl, bulkRequest.toString(), "application/json");
+            ElasticBulkResponse elasticBulkResponse = gson.fromJson(response, ElasticBulkResponse.class);
+
+            if(Boolean.TRUE.equals(elasticBulkResponse.getErrors())) {
+                LOG.error("There was an error processing the bulk request {} with message: {}", bulkRequest.toString(), response );
+                throw new Exception("There was an error processing the bulk request");
+            }
         } catch (Exception e) {
             LOG.info("There was an error processing the bulk request: " + e.getMessage());
             LOG.info(bulkRequest.toString());
