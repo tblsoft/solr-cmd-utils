@@ -12,6 +12,7 @@ import de.tblsoft.solr.pipeline.processor.DownloadResourcesProcessor;
 import de.tblsoft.solr.pipeline.processor.Json2SingleDocumentsProcessor;
 import de.tblsoft.solr.pipeline.processor.NoopProcessor;
 import de.tblsoft.solr.util.IOUtils;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yaml.snakeyaml.Yaml;
@@ -323,15 +324,16 @@ public class PipelineExecuter {
                     "status", "end",
                     "processId", processId);
         } catch (Exception e) {
-
+            onWebhookError(e);
             throw e;
         }
     }
 
-    private void onWebhookError() {
+    private void onWebhookError(Exception exception) {
         if(!Strings.isNullOrEmpty(webHookError)) {
             try {
-                HTTPHelper.get(webHookError);
+                String exceptionString = ExceptionUtils.getStackTrace(exception);
+                HTTPHelper.post(webHookError, exceptionString);
             } catch (Exception e) {
                 LOG.error("Could not call the error webHookError {} because {}", webHookError, e.getMessage(), e );
                 // fail silent
