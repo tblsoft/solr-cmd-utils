@@ -77,6 +77,10 @@ public class IOUtils {
         throw new RuntimeException("The file or path does not exists: " + path);
     }
 
+    public static InputStream getInputStream(File inputFile) throws IOException {
+        return getInputStream(inputFile.getAbsolutePath());
+    }
+
 
     public static InputStream getInputStream(String inputFileName) throws IOException {
         InputStream inputStream;
@@ -103,6 +107,10 @@ public class IOUtils {
     }
 
 
+    public static OutputStream getOutputStream(File outputFile) throws IOException {
+        return getOutputStream(outputFile.getAbsolutePath());
+
+    }
     public static OutputStream getOutputStream(String outputFileName) throws IOException {
         if("stdout".equals(outputFileName)) {
             return System.out;

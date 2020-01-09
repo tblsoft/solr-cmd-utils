@@ -29,6 +29,7 @@ public class HttpFilter extends AbstractFilter {
 
     private String userAgent;
     private String cacheBasePath;
+    private String fileExtension;
 
     private int threads = 1;
 
@@ -41,6 +42,7 @@ public class HttpFilter extends AbstractFilter {
         urlField = getProperty("urlField", "url");
         userAgent = getProperty("userAgent", "Solr Cmd Utils Http Agent/1.0");
         cacheBasePath = getProperty("cacheBasePath", null);
+        fileExtension = getProperty("fileExtension", ".gz");
         //httpclient = HttpClients.createDefault();
         threads = getPropertyAsInt("threads", 1);
         boolean redirectsEnabled = getPropertyAsBoolean("redirectsEnabled", false);
@@ -88,7 +90,8 @@ public class HttpFilter extends AbstractFilter {
 
         for(Document documentFromQueue: documentQueue) {
 
-            HttpWorker worker = new HttpWorker(documentFromQueue, httpclient, urlField, userAgent, cacheBasePath);
+            HttpWorker worker = new HttpWorker(documentFromQueue,
+                    httpclient, urlField, userAgent, cacheBasePath, fileExtension);
             Future<Document> future = executor.submit(worker);
             documentFutures.add(future);
 

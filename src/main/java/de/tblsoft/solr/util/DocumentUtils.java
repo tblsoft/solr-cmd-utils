@@ -16,13 +16,13 @@ public class DocumentUtils {
 	public static void writeToFile(File file, Document document) throws IOException {
 		ObjectMapper objectMapper = new ObjectMapper();
 		file.getParentFile().mkdirs();
-		objectMapper.writeValue(file, document);
+		objectMapper.writeValue(IOUtils.getOutputStream(file), document);
 	}
 
 	public static Document readFromFile(File file) throws IOException {
 		ObjectMapper objectMapper = new ObjectMapper();
 		objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-		return objectMapper.readValue(file, Document.class);
+		return objectMapper.readValue(IOUtils.getInputStream(file), Document.class);
 	}
 
 	public static String normalizeFieldKey(String key) {

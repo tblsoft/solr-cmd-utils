@@ -37,12 +37,20 @@ public class HttpWorker implements Callable<Document> {
 
     private String cacheBasePath;
 
-    public HttpWorker(Document document, CloseableHttpClient httpclient, String urlField, String userAgent, String cacheBasePath) {
+    private String fileExtension;
+
+    public HttpWorker(Document document,
+                      CloseableHttpClient httpclient,
+                      String urlField,
+                      String userAgent,
+                      String cacheBasePath,
+                      String fileExtension) {
         this.document = document;
         this.httpclient = httpclient;
         this.urlField = urlField;
         this.userAgent = userAgent;
         this.cacheBasePath = cacheBasePath;
+        this.fileExtension = fileExtension;
     }
 
     public Document call() throws Exception {
@@ -116,7 +124,7 @@ public class HttpWorker implements Callable<Document> {
     private File getTargetFile(String url) throws URISyntaxException {
         String hashedUrl = hash(url);
         URI uri = new URI(url);
-        File target = new File(cacheBasePath + "/" + uri.getHost() + "/" + hashedUrl);
+        File target = new File(cacheBasePath + "/" + uri.getHost() + "/" + hashedUrl + fileExtension);
         return target;
     }
 
