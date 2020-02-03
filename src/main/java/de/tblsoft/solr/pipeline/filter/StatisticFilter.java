@@ -3,7 +3,6 @@ package de.tblsoft.solr.pipeline.filter;
 import de.tblsoft.solr.pipeline.AbstractFilter;
 import de.tblsoft.solr.pipeline.bean.Document;
 import de.tblsoft.solr.pipeline.bean.Field;
-import de.tblsoft.solr.schema.SolrSchemaManager;
 import de.tblsoft.solr.util.DatatypeUtils;
 import de.tblsoft.solr.util.PairBuilder;
 import org.apache.commons.lang3.StringUtils;
@@ -77,10 +76,8 @@ public class StatisticFilter extends AbstractFilter {
 
         System.out.printf("%40s %5s %5s %10s %100s", "field name", "mv", "count", "type", "example values");
         LOG.info("");
-        SolrSchemaManager solrSchemaManager = new SolrSchemaManager("http://localhost:8983/solr/bar");
         try {
 
-            //solrSchemaManager.deleteAllFields();
 
             for(Map.Entry<String,FieldStatistic> fieldStatisticEntry: fieldStatisticMap.entrySet()) {
                 FieldStatistic fieldStatistic = fieldStatisticEntry.getValue();
@@ -88,9 +85,6 @@ public class StatisticFilter extends AbstractFilter {
                 for(String value : fieldStatistic.getExampleValues()) {
                     exampleValueBuilder.append(StringUtils.abbreviate(value, 20)).append(", ");
                 }
-
-                //solrSchemaManager.addField(fieldStatistic.getFieldName(), fieldStatistic.getDataType(), fieldStatistic.isMultiValue());
-
 
                 System.out.printf("%40s %5s %5s %10s %100s",
                         fieldStatistic.getFieldName(),
