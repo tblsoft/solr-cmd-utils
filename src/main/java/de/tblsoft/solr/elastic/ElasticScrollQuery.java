@@ -105,6 +105,8 @@ public class ElasticScrollQuery {
                         JsonElement nextElement = iter.next();
                         if(nextElement.isJsonPrimitive()) {
                             values.add(nextElement.getAsString());
+                        } else {
+                            values.add(nextElement.getAsJsonObject().toString());
                         }
                     }
                     document.addField(entry.getKey(), values);
