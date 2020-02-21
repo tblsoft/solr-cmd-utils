@@ -43,6 +43,7 @@ All notable changes for the solr-cmd-utils project will be documented in this fi
 - add support for subfields
 - log the pipeline
 - make the elastic reader ready for elastic 7
+- support nested objects in the elastic scroll api
 
 ### Changed
 - add jaxb dependencies to enable jdk 11 support
