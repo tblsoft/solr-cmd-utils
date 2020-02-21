@@ -9,9 +9,14 @@ import org.apache.commons.io.filefilter.IOFileFilter;
 import org.apache.commons.io.filefilter.WildcardFileFilter;
 
 import java.io.*;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
@@ -127,5 +132,16 @@ public class IOUtils {
     public static void appendToOutputStream(OutputStream out, String value ) throws IOException {
         out.write(value.getBytes("UTF-8"));
 
+    }
+
+    public static List<String> file2List(String fileName) throws IOException {
+       return file2List(fileName, StandardCharsets.UTF_8);
+    }
+
+    public static List<String> file2List(String fileName, Charset charSet) throws IOException {
+        List<String> result;
+        Stream<String> lines = java.nio.file.Files.lines(Paths.get(fileName), charSet);
+        result = lines.collect(Collectors.toList());
+        return result;
     }
 }
