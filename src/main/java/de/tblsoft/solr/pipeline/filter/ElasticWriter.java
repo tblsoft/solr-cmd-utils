@@ -9,6 +9,7 @@ import de.tblsoft.solr.http.HTTPHelper;
 import de.tblsoft.solr.pipeline.AbstractFilter;
 import de.tblsoft.solr.pipeline.bean.Document;
 import de.tblsoft.solr.pipeline.bean.ElasticBulkResponse;
+import de.tblsoft.solr.pipeline.bean.ElasticResponse;
 import de.tblsoft.solr.pipeline.bean.Field;
 import de.tblsoft.solr.util.IOUtils;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -99,7 +100,13 @@ public class ElasticWriter extends AbstractFilter {
         }
 
         if (delete && !"elasticupdate".equals(type)) {
-            HTTPHelper.delete(indexUrl);
+            String response = HTTPHelper.delete(indexUrl);
+            ElasticResponse elasticResponse = gson.fromJson(response, ElasticResponse.class);
+            if(!Boolean.TRUE.equals(elasticResponse.getAcknowledged())) {
+                LOG.error("Could not delete index: {} error: {} ",
+                        indexUrl, response);
+            }
+            LOG.debug("delete elastic index for url {} and response {}", indexUrl, response);
         }
         if (elasticMappingLocation != null) {
             try {
@@ -107,12 +114,23 @@ public class ElasticWriter extends AbstractFilter {
                         getBaseDir(), elasticMappingLocation);
                 String mappingJson = IOUtils.getString(absoluteElasticMappingLocation);
                 String mappingUrl = ElasticHelper.getIndexUrl(indexUrl);
+                int statusCode = HTTPHelper.getStatusCode(mappingUrl);
+                LOG.debug("status code {}", statusCode);
+
                 if(includeTypeName) {
                     mappingUrl = mappingUrl + "?include_type_name=true";
                 }
                 LOG.debug("mapping url: {} mappingJson: {}", mappingUrl, mappingJson );
-                if(HTTPHelper.getStatusCode(mappingUrl) == 404) {
-                    HTTPHelper.put(mappingUrl, mappingJson, "application/json");
+                if(statusCode == 404) {
+                    String response = HTTPHelper.put(mappingUrl, mappingJson, "application/json");
+                    ElasticResponse elasticResponse = gson.fromJson(response, ElasticResponse.class);
+                    if(!Boolean.TRUE.equals(elasticResponse.getAcknowledged())) {
+                        LOG.error("Could not create mapping for url: {} mappingJson: {} error: {} ",
+                                mappingUrl, mappingJson, response);
+                        throw new RuntimeException("Could not create mapping");
+                    }
+
+                    LOG.debug("mapping response {}", response);
                 }
             } catch (URISyntaxException e) {
                 throw new RuntimeException(e);
