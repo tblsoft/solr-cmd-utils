@@ -67,7 +67,12 @@ For logging the slf4j simple logger is used. The log level can be configured wit
 ```
 export SOLR_CMD_UTILS_JAVA_OPTS="-Dorg.slf4j.simpleLogger.defaultLogLevel=debug" 
 ```
-       
+
+To enable debug in a docker container:
+```
+-e "SOLR_CMD_UTILS_JAVA_OPTS=-Dorg.slf4j.simpleLogger.defaultLogLevel=debug"
+```
+
 ## Todo's
 * Documentation for installation
 * improve help menu for the command line options
