@@ -1,0 +1,11 @@
+name: "squad unit testing pipeline"
+reader:
+  name: "SquadReader"
+  clazz: "solrcmdutils.SquadReader"
+  property:
+    filename: "squad-example.json"
+
+filter:
+  - name: "Testing Filter"
+    id: "testingFilter"
+    clazz: "solrcmdutils.TestingFilter"
