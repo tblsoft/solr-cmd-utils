@@ -1,8 +1,17 @@
 # Changelog
 All notable changes for the solr-cmd-utils project will be documented in this file.
 
-
 ## [Unreleased]
+### Added
+
+
+### Changed
+
+
+### Fixed
+
+
+## [3.9]
 ### Added
 - add CONTRIBUTING.md
 - add pull_request_template.md
