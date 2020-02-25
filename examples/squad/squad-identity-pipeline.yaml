@@ -1,0 +1,12 @@
+name: "squad identity  pipeline"
+reader:
+  name: "SquadReader"
+  clazz: "solrcmdutils.SquadReader"
+  property:
+    filename: "squad-example.json"
+
+filter:
+  - name: "SquadWriter"
+    clazz: "solrcmdutils.SquadWriter"
+    property:
+      filename: "squad-out.json"

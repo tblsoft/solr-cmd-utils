@@ -8,6 +8,8 @@ import de.tblsoft.solr.pipeline.bean.Filter;
 import de.tblsoft.solr.pipeline.bean.Pipeline;
 import de.tblsoft.solr.pipeline.bean.Processor;
 import de.tblsoft.solr.pipeline.filter.*;
+import de.tblsoft.solr.pipeline.nlp.squad.SquadReader;
+import de.tblsoft.solr.pipeline.nlp.squad.SquadWriter;
 import de.tblsoft.solr.pipeline.processor.DownloadResourcesProcessor;
 import de.tblsoft.solr.pipeline.processor.Json2SingleDocumentsProcessor;
 import de.tblsoft.solr.pipeline.processor.NoopProcessor;
@@ -146,6 +148,8 @@ public class PipelineExecuter {
         classRegestriy.put("solrcmdutils.StopwordFilter", StopwordFilter.class);
         classRegestriy.put("solrcmdutils.NoopProcessor", NoopProcessor.class);
         classRegestriy.put("solrcmdutils.HtmlTextExtractorFilter", HtmlTextExtractorFilter.class);
+        classRegestriy.put("solrcmdutils.SquadWriter", SquadWriter.class);
+        classRegestriy.put("solrcmdutils.SquadReader", SquadReader.class);
     }
 
     public PipelineExecuter(String yamlFileName) {

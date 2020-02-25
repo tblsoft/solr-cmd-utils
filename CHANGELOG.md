@@ -3,7 +3,8 @@ All notable changes for the solr-cmd-utils project will be documented in this fi
 
 ## [Unreleased]
 ### Added
-
+- SquadReader to read squad data 
+- SquadWriter to write squad data 
 
 ### Changed
 
