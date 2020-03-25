@@ -5,6 +5,7 @@ All notable changes for the solr-cmd-utils project will be documented in this fi
 ### Added
 - SquadReader to read squad data 
 - SquadWriter to write squad data 
+- implement a filter to add static values
 
 ### Changed
 

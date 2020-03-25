@@ -150,6 +150,7 @@ public class PipelineExecuter {
         classRegestriy.put("solrcmdutils.HtmlTextExtractorFilter", HtmlTextExtractorFilter.class);
         classRegestriy.put("solrcmdutils.SquadWriter", SquadWriter.class);
         classRegestriy.put("solrcmdutils.SquadReader", SquadReader.class);
+        classRegestriy.put("solrcmdutils.AddStaticValueFilter", AddStaticValueFilter.class);
     }
 
     public PipelineExecuter(String yamlFileName) {
