@@ -1,4 +1,4 @@
 FROM anapsix/alpine-java
-ADD /solr-cmd-utils-3.10-SNAPSHOT-cmd.tar.gz /
+ADD /solr-cmd-utils-3.11-SNAPSHOT-cmd.tar.gz /
 ENV SOLR_CMD_UTILS_HOME=/solr-cmd-utils
 ENV PATH="$SOLR_CMD_UTILS_HOME/bin:${PATH}"
