@@ -143,7 +143,7 @@ public class XmlSitemapReader extends AbstractReader {
         }
         for (int k = 0; k < url.getLength(); k++) {
             Node noder = url.item(k);
-            if(1 == noder.getNodeType()) {
+            if(1 == noder.getNodeType() && noder.getFirstChild() != null) {
                 String name = noder.getNodeName();
                 String value = noder.getFirstChild().getNodeValue();
                 document.addField(name, value);
