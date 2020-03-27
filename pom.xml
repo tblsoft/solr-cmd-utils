@@ -150,6 +150,12 @@
             <artifactId>jaxb-core</artifactId>
             <version>2.2.11</version>
         </dependency>
+        <dependency>
+            <groupId>com.quasiris.qsf</groupId>
+            <artifactId>qsf-commons</artifactId>
+            <version>0.1-SNAPSHOT</version>
+        </dependency>
+
 
 
     </dependencies>
