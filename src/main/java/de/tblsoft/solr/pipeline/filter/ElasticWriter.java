@@ -132,6 +132,17 @@ public class ElasticWriter extends AbstractFilter {
 
                     LOG.debug("mapping response {}", response);
                 }
+
+                if(housekeepingEnabled) {
+                    // check if alias exists, if not create it
+                    String aliasFromUrl = ElasticHelper.getIndexFromUrl(location);
+                    if(!AliasManager.exists(indexUrl, aliasFromUrl)) {
+                        String index = ElasticHelper.getIndexFromUrl(indexUrl);
+                        LOG.info("Create the alias: {} for index: {}", aliasFromUrl, index);
+                        AliasManager.switchAlias(indexUrl, aliasFromUrl, new ArrayList<>(), index);
+
+                    }
+                }
             } catch (URISyntaxException e) {
                 throw new RuntimeException(e);
             } catch (IOException e) {

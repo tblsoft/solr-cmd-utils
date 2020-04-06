@@ -23,6 +23,13 @@ public class AliasManager {
     private static String separator = "_";
 
 
+    public static boolean exists(String elasticUrl, String alias) throws URISyntaxException {
+
+        String aliasUrl = ElasticHelper.getAliasUrl(elasticUrl) + "/" + alias;
+        int statusCode = HTTPHelper.getStatusCode(aliasUrl);
+        return statusCode == 200;
+    }
+
     public static String getElasticUrlWithDatePattern(String elasticUrl) throws URISyntaxException {
         String type = ElasticHelper.getTypeFromUrl(elasticUrl);
         String indexUrl = ElasticHelper.getIndexUrl(elasticUrl);
@@ -67,7 +74,7 @@ public class AliasManager {
                     "    ]\n" +
                     "}");
 
-            String url = ElasticHelper.getAliaslUrl(elasticUrl);
+            String url = ElasticHelper.getAliasesUrl(elasticUrl);
             HTTPHelper.post(url, request.toString(), "application/json");
         } catch (Exception e) {
             throw new RuntimeException(e);

@@ -43,12 +43,27 @@ public class ElasticHelper {
         return uri.toString();
     }
 
-    public static String getAliaslUrl(String url) throws URISyntaxException {
+    @Deprecated
+    public static String getAliaslUrll(String url) throws URISyntaxException {
+        return getAliasesUrl(url);
+    }
+
+    public static String getAliasesUrl(String url) throws URISyntaxException {
         if(url==null) {
             throw new URISyntaxException("", "The url is null.");
         }
         URI uri = new URI(url);
         String path = "/_aliases";
+        uri = uri.resolve(path);
+        return uri.toString();
+    }
+
+    public static String getAliasUrl(String url) throws URISyntaxException {
+        if(url==null) {
+            throw new URISyntaxException("", "The url is null.");
+        }
+        URI uri = new URI(url);
+        String path = "/_alias";
         uri = uri.resolve(path);
         return uri.toString();
     }

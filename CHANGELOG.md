@@ -9,11 +9,15 @@ All notable changes for the solr-cmd-utils project will be documented in this fi
 - implement a random iban generator
 - implement a QSF Data reader
 - implement a qsf data repository manager
+- ElasticWriter: add a alias at the beginning of the feeding, if no alias exists
 
 ### Changed
 
 
 ### Fixed
+
+### Deprecated
+- ElasticHelper.getAliaslUrl() is renamed to getAliasesUrl()
 
 
 ## [3.9]

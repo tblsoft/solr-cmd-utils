@@ -35,6 +35,21 @@ public class ElasticHelperTest {
     }
 
 
+    @Test
+    public void getAliasUrlTest() throws URISyntaxException {
+        String expected = "http://localhost:9200/_alias";
+        String actual = ElasticHelper.getAliasUrl("http://localhost:9200/tblsfot/my-search");
+        Assert.assertEquals(expected, actual);
+    }
+
+
+    @Test
+    public void getAliasesUrlTest() throws URISyntaxException {
+        String expected = "http://localhost:9200/_aliases";
+        String actual = ElasticHelper.getAliasesUrl("http://localhost:9200/tblsfot/my-search");
+        Assert.assertEquals(expected, actual);
+    }
+
 
     @Test
     public void getScrollUrlTest() throws URISyntaxException {
