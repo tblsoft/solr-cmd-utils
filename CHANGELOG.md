@@ -10,6 +10,7 @@ All notable changes for the solr-cmd-utils project will be documented in this fi
 - implement a QSF Data reader
 - implement a qsf data repository manager
 - ElasticWriter: add a alias at the beginning of the feeding, if no alias exists
+- read variables from a settings file in the home directory
 
 ### Changed
 
