@@ -195,15 +195,15 @@ public class PipelineExecuter {
             LOG.debug("Default variables in the pipeline {}", pipeline.getVariables());
             LOG.debug("Configured variables in the pipeline {}", pipelineVariables);
 
-            String settingsPropertiesFileName = FileUtils.getUserDirectory().getAbsolutePath() + "/.solr-cmd-utils/settings.properties";
-            Properties prop = new Properties();
-            prop.load(new FileInputStream(settingsPropertiesFileName));
+            File settingsPropertiesFile = new File(FileUtils.getUserDirectory().getAbsolutePath() + "/.solr-cmd-utils/settings.properties");
+            if(settingsPropertiesFile.exists()) {
+                Properties prop = new Properties();
+                prop.load(new FileInputStream(settingsPropertiesFile));
+                Map<String, String> settings = new HashMap<>();
+                prop.forEach((key, value) -> settings.put(key.toString(), value.toString()));
+                pipeline.getVariables().putAll(settings);
+            }
 
-
-            Map<String, String> settings = new HashMap<>();
-            prop.forEach((key, value) -> settings.put(key.toString(), value.toString()));
-
-            pipeline.getVariables().putAll(settings);
             pipeline.getVariables().putAll(pipelineVariables);
             LOG.debug("Effective variables in the pipeline {}", pipeline.getVariables());
 
