@@ -18,7 +18,7 @@ public class Pipeline {
 
     private String webHookError;
 
-    private Map<String,String> variables = new HashMap<String, String>();
+    private Map<String,String> variables = new HashMap<>();
 
     private Reader reader;
     private List<Filter> filter;

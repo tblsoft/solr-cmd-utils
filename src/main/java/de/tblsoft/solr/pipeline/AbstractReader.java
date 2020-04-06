@@ -19,7 +19,7 @@ public abstract class AbstractReader implements ReaderIF {
 
     protected String baseDir;
 
-    protected Map<String,String> variables = new HashMap<String, String>();
+    protected Map<String,String> variables = new HashMap<>();
 
 
     @Override

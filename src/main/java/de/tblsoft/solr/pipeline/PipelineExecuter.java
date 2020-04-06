@@ -3,17 +3,16 @@ package de.tblsoft.solr.pipeline;
 import com.google.common.base.Strings;
 import de.tblsoft.solr.compare.SolrCompareFilter;
 import de.tblsoft.solr.http.HTTPHelper;
-import de.tblsoft.solr.pipeline.bean.Document;
-import de.tblsoft.solr.pipeline.bean.Filter;
-import de.tblsoft.solr.pipeline.bean.Pipeline;
-import de.tblsoft.solr.pipeline.bean.Processor;
+import de.tblsoft.solr.pipeline.bean.*;
 import de.tblsoft.solr.pipeline.filter.*;
 import de.tblsoft.solr.pipeline.nlp.squad.SquadReader;
 import de.tblsoft.solr.pipeline.nlp.squad.SquadWriter;
 import de.tblsoft.solr.pipeline.processor.DownloadResourcesProcessor;
 import de.tblsoft.solr.pipeline.processor.Json2SingleDocumentsProcessor;
 import de.tblsoft.solr.pipeline.processor.NoopProcessor;
+import de.tblsoft.solr.pipeline.processor.QSFDataRepositoryUploadProcessor;
 import de.tblsoft.solr.util.IOUtils;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +20,7 @@ import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.*;
@@ -50,7 +50,7 @@ public class PipelineExecuter {
 
     private String yamlFileName;
     
-    private Map<String, String> pipelineVariables = new HashMap<String, String>();
+    private Map<String, String> pipelineVariables = new HashMap<>();
 
     private String processId;
 
@@ -58,6 +58,7 @@ public class PipelineExecuter {
     static {
         classRegestriy.put("solrcmdutils.DownloadResourcesProcessor", DownloadResourcesProcessor.class);
         classRegestriy.put("solrcmdutils.StandardReader", StandardReader.class);
+        classRegestriy.put("solrcmdutils.QSFDataReader", QSFDataReader.class);
         classRegestriy.put("solrcmdutils.RandomReader", RandomReader.class);
         classRegestriy.put("solrcmdutils.GrokReader", GrokReader.class);
         classRegestriy.put("solrcmdutils.GCLogReader", GCLogReader.class);
@@ -147,6 +148,7 @@ public class PipelineExecuter {
         classRegestriy.put("solrcmdutils.Json2SingleDocumentsProcessor", Json2SingleDocumentsProcessor.class);
         classRegestriy.put("solrcmdutils.StopwordFilter", StopwordFilter.class);
         classRegestriy.put("solrcmdutils.NoopProcessor", NoopProcessor.class);
+        classRegestriy.put("solrcmdutils.QSFDataRepositoryUploadProcessor", QSFDataRepositoryUploadProcessor.class);
         classRegestriy.put("solrcmdutils.HtmlTextExtractorFilter", HtmlTextExtractorFilter.class);
         classRegestriy.put("solrcmdutils.SquadWriter", SquadWriter.class);
         classRegestriy.put("solrcmdutils.SquadReader", SquadReader.class);
@@ -192,10 +194,20 @@ public class PipelineExecuter {
 
             LOG.debug("Default variables in the pipeline {}", pipeline.getVariables());
             LOG.debug("Configured variables in the pipeline {}", pipelineVariables);
+
+            String settingsPropertiesFileName = FileUtils.getUserDirectory().getAbsolutePath() + "/.solr-cmd-utils/settings.properties";
+            Properties prop = new Properties();
+            prop.load(new FileInputStream(settingsPropertiesFileName));
+
+
+            Map<String, String> settings = new HashMap<>();
+            prop.forEach((key, value) -> settings.put(key.toString(), value.toString()));
+
+            pipeline.getVariables().putAll(settings);
             pipeline.getVariables().putAll(pipelineVariables);
             LOG.debug("Effective variables in the pipeline {}", pipeline.getVariables());
 
-            createReaderInstance();
+            reader = createReaderInstance(pipeline.getReader(), getBaseDirFromYamlFile(), pipeline.getVariables(), this);
 
             preProcessorList = createProcessorInstanceList(pipeline.getPreProcessor());
             postProcessorList = createProcessorInstanceList(pipeline.getPostProcessor());
@@ -239,16 +251,17 @@ public class PipelineExecuter {
         return filterInstanceList;
     }
 
-    private void createReaderInstance() throws ClassNotFoundException, IllegalAccessException, InstantiationException {
-        if(pipeline.getReader() == null) {
-            return;
+    public static ReaderIF createReaderInstance(Reader reader, String baseDir, Map<String, String> variables, PipelineExecuter pipelineExecuter) throws ClassNotFoundException, IllegalAccessException, InstantiationException {
+        if(reader == null) {
+            return null;
         }
 
-        reader = (ReaderIF) getInstance(pipeline.getReader().getClazz());
-        reader.setPipelineExecuter(this);
-        reader.setReader(pipeline.getReader());
-        reader.setBaseDir(getBaseDirFromYamlFile());
-        reader.setVariables(pipeline.getVariables());
+        ReaderIF readerInstance = (ReaderIF) getInstance(reader.getClazz());
+        readerInstance.setPipelineExecuter(pipelineExecuter);
+        readerInstance.setReader(reader);
+        readerInstance.setBaseDir(baseDir);
+        readerInstance.setVariables(variables);
+        return readerInstance;
     }
 
     private List<ProcessorIF> createProcessorInstanceList(List<Processor> processorList) throws ClassNotFoundException, IllegalAccessException, InstantiationException {
@@ -361,7 +374,7 @@ public class PipelineExecuter {
         filterList.get(0).end();
     }
 
-    Pipeline readPipelineFromYamlFile(String fileName) {
+    public static Pipeline readPipelineFromYamlFile(String fileName) {
         try {
             Yaml yaml = new Yaml(new Constructor(Pipeline.class));
             String pipelineString = IOUtils.getString(fileName);

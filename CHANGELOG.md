@@ -6,6 +6,8 @@ All notable changes for the solr-cmd-utils project will be documented in this fi
 - SquadReader to read squad data 
 - SquadWriter to write squad data 
 - implement a filter to add static values
+- implement a random iban generator
+- implement a QSF Data reader
 
 ### Changed
 
