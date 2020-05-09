@@ -13,6 +13,7 @@ All notable changes for the solr-cmd-utils project will be documented in this fi
 - read variables from a settings file in the home directory
 - allow classpath references in IOUTILS
 - implement the expectedDocumentCount feature
+- implement a lowercase filter
 
 ### Changed
 
