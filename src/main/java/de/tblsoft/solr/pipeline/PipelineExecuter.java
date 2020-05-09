@@ -54,6 +54,8 @@ public class PipelineExecuter {
 
     private String processId;
 
+    private Long expectedDocumentCount = -1L;
+
     private static Map<String, Class> classRegestriy = new HashMap<String, Class>();
     static {
         classRegestriy.put("solrcmdutils.DownloadResourcesProcessor", DownloadResourcesProcessor.class);
@@ -92,6 +94,7 @@ public class PipelineExecuter {
         classRegestriy.put("solrcmdutils.SpyFilter", SpyFilter.class);
         classRegestriy.put("solrcmdutils.StatusFilter", StatusFilter.class);
         classRegestriy.put("solrcmdutils.StatusTimeFilter", StatusTimeFilter.class);
+        classRegestriy.put("solrcmdutils.ExpectedDocumentCountFilter", ExpectedDocumentCountFilter.class);
         classRegestriy.put("solrcmdutils.StatisticFilter", StatisticFilter.class);
         classRegestriy.put("solrcmdutils.MappingFilter", MappingFilter.class);
         classRegestriy.put("solrcmdutils.ValueMappingFilter", ValueMappingFilter.class);
@@ -104,6 +107,9 @@ public class PipelineExecuter {
         classRegestriy.put("solrcmdutils.LookupFilter", LookupFilter.class);
         classRegestriy.put("solrcmdutils.TokenCounterFilter", TokenCounterFilter.class);
         classRegestriy.put("solrcmdutils.TokenizerFilter", TokenizerFilter.class);
+        classRegestriy.put("solrcmdutils.LowercaseFilter", LowercaseFilter.class);
+        classRegestriy.put("solrcmdutils.ShingleFilter", ShingleFilter.class);
+        classRegestriy.put("solrcmdutils.RemoveHtmlFilter", RemoveHtmlFilter.class);
         classRegestriy.put("solrcmdutils.CharCounterFilter", CharCounterFilter.class);
         classRegestriy.put("solrcmdutils.CompoundWordFilter", CompoundWordFilter.class);
         classRegestriy.put("solrcmdutils.LinkCheckerFilter", LinkCheckerFilter.class);
@@ -127,6 +133,7 @@ public class PipelineExecuter {
         classRegestriy.put("solrcmdutils.WhitelistTopicTermsFilter", WhitelistTopicTermsFilter.class);
         classRegestriy.put("solrcmdutils.TopicMergeFilter", TopicMergeFilter.class);
         classRegestriy.put("solrcmdutils.TopicAggregationFilter", TopicAggregationFilter.class);
+        classRegestriy.put("solrcmdutils.AggregationCountFilter", AggregationCountFilter.class);
         classRegestriy.put("solrcmdutils.ElasticdumpFileWriter", ElasticdumpFileWriter.class);
         classRegestriy.put("solrcmdutils.DocumentGeneratorReader", DocumentGeneratorReader.class);
         classRegestriy.put("solrcmdutils.JavaScriptFilter", JavaScriptFilter.class);
@@ -421,5 +428,23 @@ public class PipelineExecuter {
 
     public void setProcessId(String processId) {
         this.processId = processId;
+    }
+
+    /**
+     * Getter for property 'expectedDocumentCount'.
+     *
+     * @return Value for property 'expectedDocumentCount'.
+     */
+    public Long getExpectedDocumentCount() {
+        return expectedDocumentCount;
+    }
+
+    /**
+     * Setter for property 'expectedDocumentCount'.
+     *
+     * @param expectedDocumentCount Value to set for property 'expectedDocumentCount'.
+     */
+    public void setExpectedDocumentCount(Long expectedDocumentCount) {
+        this.expectedDocumentCount = expectedDocumentCount;
     }
 }

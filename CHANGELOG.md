@@ -12,6 +12,7 @@ All notable changes for the solr-cmd-utils project will be documented in this fi
 - ElasticWriter: add a alias at the beginning of the feeding, if no alias exists
 - read variables from a settings file in the home directory
 - allow classpath references in IOUTILS
+- implement the expectedDocumentCount feature
 
 ### Changed
 

@@ -35,6 +35,7 @@ public abstract class AbstractStatusFilter extends AbstractFilter {
             HTTPHelper.webHook(webHook,
                     "status", "progress.start",
                     "documentCounter", String.valueOf(documentCounter),
+                    "expectedDocumentCount", String.valueOf(pipelineExecuter.getExpectedDocumentCount()),
                     "processId", getPipelineExecuter().getProcessId());
         }
 
@@ -87,6 +88,7 @@ public abstract class AbstractStatusFilter extends AbstractFilter {
             HTTPHelper.webHook(webHook,
                     "status", "progress",
                     "documentCounter", String.valueOf(documentCounter),
+                    "expectedDocumentCount", String.valueOf(pipelineExecuter.getExpectedDocumentCount()),
                     "processId", getPipelineExecuter().getProcessId());
         }
     }
@@ -99,6 +101,7 @@ public abstract class AbstractStatusFilter extends AbstractFilter {
             HTTPHelper.webHook(webHook,
                     "status", "progress.end",
                     "documentCounter", String.valueOf(documentCounter),
+                    "expectedDocumentCount", String.valueOf(pipelineExecuter.getExpectedDocumentCount()),
                     "processId", getPipelineExecuter().getProcessId());
 		}
     }
