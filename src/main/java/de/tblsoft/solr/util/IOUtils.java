@@ -28,6 +28,8 @@ public class IOUtils {
     public static String getAbsoluteFile(String directory, String fileName) {
         if(fileName.toLowerCase().startsWith("http")) {
             return fileName;
+        } else if(fileName.toLowerCase().startsWith("classpath:")) {
+    		return fileName;
         } else if(fileName.toLowerCase().startsWith("c:\\")) {
     		return fileName;
     	} else if(fileName.startsWith("/")) {
@@ -91,6 +93,9 @@ public class IOUtils {
         InputStream inputStream;
         if(inputFileName.startsWith("http")) {
             inputStream =  HTTPHelper.getAsInputStream(inputFileName);
+        } else if (inputFileName.startsWith("classpath:")) {
+            String classpath = inputFileName.replaceFirst("classpath:", "");
+            return IOUtils.class.getResourceAsStream(classpath);
         } else {
             inputStream = new FileInputStream(inputFileName);
         }
