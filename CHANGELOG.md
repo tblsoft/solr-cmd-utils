@@ -15,6 +15,7 @@ All notable changes for the solr-cmd-utils project will be documented in this fi
 - implement the expectedDocumentCount feature
 - implement a lowercase filter
 - implement a RemoveHtmlFilter
+- implement a ShingleFilter
 
 ### Changed
 
