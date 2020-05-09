@@ -14,6 +14,7 @@ All notable changes for the solr-cmd-utils project will be documented in this fi
 - allow classpath references in IOUTILS
 - implement the expectedDocumentCount feature
 - implement a lowercase filter
+- implement a RemoveHtmlFilter
 
 ### Changed
 
