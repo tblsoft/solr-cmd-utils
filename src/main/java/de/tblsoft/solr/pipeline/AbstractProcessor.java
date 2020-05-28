@@ -58,6 +58,9 @@ public abstract class AbstractProcessor implements ProcessorIF {
     }
 
     public String getProperty(String name, String defaultValue) {
+        if(processor.getProperty() == null) {
+            return defaultValue;
+        }
         String value = (String) processor.getProperty().get(name);
         if(value != null) {
             StrSubstitutor strSubstitutor = new StrSubstitutor(variables);
