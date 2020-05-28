@@ -7,10 +7,7 @@ import de.tblsoft.solr.pipeline.bean.*;
 import de.tblsoft.solr.pipeline.filter.*;
 import de.tblsoft.solr.pipeline.nlp.squad.SquadReader;
 import de.tblsoft.solr.pipeline.nlp.squad.SquadWriter;
-import de.tblsoft.solr.pipeline.processor.DownloadResourcesProcessor;
-import de.tblsoft.solr.pipeline.processor.Json2SingleDocumentsProcessor;
-import de.tblsoft.solr.pipeline.processor.NoopProcessor;
-import de.tblsoft.solr.pipeline.processor.QSFDataRepositoryUploadProcessor;
+import de.tblsoft.solr.pipeline.processor.*;
 import de.tblsoft.solr.util.IOUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -159,6 +156,10 @@ public class PipelineExecuter {
         classRegestriy.put("solrcmdutils.HtmlTextExtractorFilter", HtmlTextExtractorFilter.class);
         classRegestriy.put("solrcmdutils.SquadWriter", SquadWriter.class);
         classRegestriy.put("solrcmdutils.SquadReader", SquadReader.class);
+        classRegestriy.put("solrcmdutils.OpenNlpPosTagFilter", OpenNlpPosTagFilter.class);
+        classRegestriy.put("solrcmdutils.OpenNlpPosTagWriteTrainingFilter", OpenNlpPosTagWriteTrainingFilter.class);
+        classRegestriy.put("solrcmdutils.OpenNLPPosTaggerTrainProcessor", OpenNLPPosTaggerTrainProcessor.class);
+        classRegestriy.put("solrcmdutils.PosTagDictReplaceFilter", PosTagDictReplaceFilter.class);
         classRegestriy.put("solrcmdutils.AddStaticValueFilter", AddStaticValueFilter.class);
     }
 
