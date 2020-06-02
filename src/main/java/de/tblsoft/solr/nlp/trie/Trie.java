@@ -11,7 +11,7 @@ class Trie {
         root = new TrieNode();
     }
 
-    void insert(String word) {
+    public void insert(String word) {
         TrieNode current = root;
 
         for (char l : word.toCharArray()) {
@@ -37,13 +37,19 @@ class Trie {
         }
         char token = text.charAt(position+1);
         return token == ' ';
+    }
 
+    int getNextTokenSize(String text) {
 
-
+        return 0;
     }
 
     int findNextTokenizerPosition(String text) {
-        for (int i = 0; i < text.length(); i++) {
+        return findNextTokenizerPosition(text, 0);
+    }
+
+    int findNextTokenizerPosition(String text, int start) {
+        for (int i = start; i < text.length(); i++) {
             char ch = text.charAt(i);
             if(ch == ' ') {
                 return i+1;
@@ -54,9 +60,8 @@ class Trie {
 
 
     Phrase getPhraseEndPosition(String word) {
-        Phrase phrase = null;
+        Phrase phrase = new Phrase();
         TrieNode current = root;
-        int potentialPhraseEnd = -1;
 
         for (int i = 0; i < word.length(); i++) {
             char ch = word.charAt(i);
@@ -65,20 +70,13 @@ class Trie {
             }
             TrieNode node = current.getChildren().get(ch);
             if (node == null) {
-                phrase = new Phrase();
-                phrase.setEndPosition(potentialPhraseEnd);
-                phrase.setNormalizedText(current.getValue());
                 return phrase;
             }
             current = node;
             if(current.isEndOfWord() && isEndToken(i, word)) {
-                potentialPhraseEnd = i;
+                phrase.setEndPosition(i);
+                phrase.setNormalizedText(current.getValue());
             }
-        }
-        if(potentialPhraseEnd > 0) {
-            phrase = new Phrase();
-            phrase.setEndPosition(potentialPhraseEnd);
-            phrase.setNormalizedText(current.getValue());
         }
         return phrase;
     }

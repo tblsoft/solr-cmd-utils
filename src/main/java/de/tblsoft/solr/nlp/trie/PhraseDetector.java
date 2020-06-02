@@ -9,7 +9,7 @@ public class PhraseDetector extends Trie {
 
 
 
-    List<Phrase> detectPhrases(String text) {
+    public List<Phrase> detectPhrases(String text) {
         List<Phrase> phraseList = new ArrayList<>();
         if(text == null) {
             return phraseList;
@@ -18,7 +18,7 @@ public class PhraseDetector extends Trie {
         int globalPosition = 0;
         while( textWindow.length() > 0) {
             Phrase phraseEnd = getPhraseEndPosition(textWindow);
-            if(phraseEnd != null && phraseEnd.getEndPosition() > 0) {
+            if(phraseEnd != null && phraseEnd.getEndPosition() != null) {
 
                 String phraseText = textWindow.substring(0, phraseEnd.getEndPosition()+1);
                 Phrase phrase = new Phrase();
