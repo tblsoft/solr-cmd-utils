@@ -1,5 +1,8 @@
 <?xml version="1.0"?>
-<stx:transform xmlns:stx="http://stx.sourceforge.net/2002/ns" xmlns:content="http://purl.org/rss/1.0/modules/content/"
+<stx:transform
+        xmlns:stx="http://stx.sourceforge.net/2002/ns"
+        xmlns:content="http://purl.org/rss/1.0/modules/content/"
+        xmlns:dc="http://purl.org/dc/elements/1.1/"
                version="1.0">
 
 
@@ -16,6 +19,51 @@
 
     <stx:template match="link">
         <field name="link">
+            <stx:value-of select="."></stx:value-of>
+        </field>
+    </stx:template>
+
+    <stx:template match="title">
+        <field name="title">
+            <stx:value-of select="."></stx:value-of>
+        </field>
+    </stx:template>
+
+    <stx:template match="content:encoded">
+        <field name="content">
+            <stx:value-of select="."></stx:value-of>
+        </field>
+    </stx:template>
+
+    <stx:template match="description">
+        <field name="description">
+            <stx:value-of select="."></stx:value-of>
+        </field>
+    </stx:template>
+    <stx:template match="category">
+        <field name="category">
+            <stx:value-of select="."></stx:value-of>
+        </field>
+    </stx:template>
+
+    <stx:template match="pubDate">
+        <field name="pubDate">
+            <stx:value-of select="."></stx:value-of>
+        </field>
+    </stx:template>
+
+    <stx:template match="guid">
+        <field name="guid">
+            <stx:value-of select="."></stx:value-of>
+        </field>
+    </stx:template>
+    <stx:template match="enclosure">
+        <field name="enclosure">
+            <stx:value-of select="."></stx:value-of>
+        </field>
+    </stx:template>
+    <stx:template match="dc:creator">
+        <field name="creator">
             <stx:value-of select="."></stx:value-of>
         </field>
     </stx:template>

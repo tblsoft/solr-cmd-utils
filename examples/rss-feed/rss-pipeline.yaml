@@ -3,21 +3,13 @@ reader:
   name: "XmlReader"
   clazz: "solrcmdutils.XmlReader"
   property:
+    #filename: "spiegel-rss.xml"
     filename: "http://www.spiegel.de/schlagzeilen/tops/index.rss"
     transformations:
-      - rss.stx
+      - "classpath:xml/rss.stx"
 
 filter:
-  - name: "Mapping Filter"
-    clazz: "solrcmdutils.MappingFilter"
-    property:
-        mapping:
-          - "link->link"
   - name: "CSV Writer"
     clazz: "solrcmdutils.CSVWriter"
     property:
         filename: "spiegel-urls.csv"
-  - name: "Kafka Writer"
-    clazz: "solrcmdutils.KafkaWriter"
-    property:
-      topic: "test"
