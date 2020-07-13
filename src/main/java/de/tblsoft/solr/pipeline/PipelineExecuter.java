@@ -99,6 +99,7 @@ public class PipelineExecuter {
         classRegestriy.put("solrcmdutils.RegexSplitFilter", RegexSplitFilter.class);
         classRegestriy.put("solrcmdutils.RegexFindFilter", RegexFindFilter.class);
         classRegestriy.put("solrcmdutils.FieldSplitter", FieldSplitter.class);
+        classRegestriy.put("solrcmdutils.Multivalue2DocumentFilter", Multivalue2DocumentFilter.class);
         classRegestriy.put("solrcmdutils.IgnoreDocumentFilter", IgnoreDocumentFilter.class);
         classRegestriy.put("solrcmdutils.BeanShellFilter", BeanShellFilter.class);
         classRegestriy.put("solrcmdutils.LookupFilter", LookupFilter.class);
