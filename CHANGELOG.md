@@ -1,7 +1,18 @@
 # Changelog
 All notable changes for the solr-cmd-utils project will be documented in this file.
 
+
 ## [Unreleased]
+### Added
+
+### Changed
+
+
+### Fixed
+
+### Deprecated
+
+## [3.13] - 2020-07-13
 ### Added
 - SquadReader to read squad data 
 - SquadWriter to write squad data 
