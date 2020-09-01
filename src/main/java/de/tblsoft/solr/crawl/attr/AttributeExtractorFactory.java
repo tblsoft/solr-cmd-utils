@@ -12,6 +12,9 @@ public class AttributeExtractorFactory {
         } else if("tableThTd".equals(type)) {
             return new TableThTdAttributeExtractor(jSoupAnalyzer);
         }
+        else if("paragraph".equals(type)) {
+            return new ParagraphAttributeExtractor(jSoupAnalyzer);
+        }
 
         return new TableTdTdAttributeExtractor(jSoupAnalyzer);
     }
