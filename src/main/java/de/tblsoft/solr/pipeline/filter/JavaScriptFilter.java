@@ -33,6 +33,7 @@ public class JavaScriptFilter extends AbstractFilter {
         String internalFilename = getProperty("filename", null);
         verify(internalFilename, "For the JavaScriptFilter a filename property must be defined.");
         filename = IOUtils.getAbsoluteFile(getBaseDir(),internalFilename);
+        script = getProperty("script", null);
 
 
         ScriptEngineManager mgr = new ScriptEngineManager();
@@ -40,8 +41,9 @@ public class JavaScriptFilter extends AbstractFilter {
 
 
         try {
-            script = FileUtils.readFileToString(new File(filename));
-
+            if(filename != null) {
+                script = FileUtils.readFileToString(new File(filename));
+            }
             Compilable compEngine = (Compilable) engine;
             compiledScript = compEngine.compile(script);
 
