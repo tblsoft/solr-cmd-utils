@@ -1,0 +1,15 @@
+name: "pos tagger pipeline"
+reader:
+  name: "CsvReader"
+  clazz: "solrcmdutils.CSVReader"
+  property:
+    filename: "input.csv"
+
+filter:
+  - name: "OpenNlpPosTagFilter"
+    clazz: "solrcmdutils.OpenNlpPosTagFilter"
+    property:
+      modelBaseUrl: "${variables.qsf.data.repository.upload.modelBaseUrl}"
+      modelBasePath: "${variables.qsf.data.repository.upload.modelBasePath}"
+  - name: "SystemOutWriter"
+    clazz: "solrcmdutils.SystemOutWriter"
