@@ -12,12 +12,14 @@ var html =  "<html>\n" +
             "</html>";
 var jsoupDoc = htmlParser.parseInput(html, "");
 var selector = ".product-info-wrapper > p";
+var doc = docs.get(0);
 
 // parse
 var elements = jsoupDoc.select(selector);
 elements.forEach(function(element) {
     var splitted = element.text().split(":");
-    var key = splitted[0];
-    var value = splitted[1];
-    print("attr_"+key+": "+value);
+    var key = "attr_"+splitted[0].trim();
+    var value = splitted[1].trim();
+    doc.addField(key, value);
+    print(key+": "+value);
 });

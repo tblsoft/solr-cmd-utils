@@ -5,6 +5,7 @@ import de.tblsoft.solr.pipeline.bean.Document;
 import de.tblsoft.solr.pipeline.bean.DocumentBuilder;
 import de.tblsoft.solr.util.IOUtils;
 import org.apache.commons.io.FileUtils;
+import org.jsoup.parser.Parser;
 
 import javax.script.Compilable;
 import javax.script.CompiledScript;
@@ -14,12 +15,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by tblsoft 30.03.18.
- */
-public class JavaScriptFilter extends AbstractFilter {
 
-
+public class RichJavaScriptFilter extends AbstractFilter {
     private String filename;
 
     private String script;
@@ -31,10 +28,9 @@ public class JavaScriptFilter extends AbstractFilter {
     @Override
     public void init() {
         String internalFilename = getProperty("filename", null);
-        verify(internalFilename, "For the JavaScriptFilter a filename property must be defined.");
+        verify(internalFilename, "For the RichJavaScriptFilter a filename property must be defined.");
         filename = IOUtils.getAbsoluteFile(getBaseDir(),internalFilename);
         script = getProperty("script", null);
-
 
         ScriptEngineManager mgr = new ScriptEngineManager();
         engine = mgr.getEngineByName("JavaScript");
@@ -51,28 +47,25 @@ public class JavaScriptFilter extends AbstractFilter {
             throw new RuntimeException(e);
         }
         super.init();
-
     }
 
     @Override
     public void document(Document document) {
+        List<Document> docs = new ArrayList<>();
+        docs.add(document);
         try {
-            engine.put("input", document);
-            DocumentBuilder documentBuilder = new DocumentBuilder();
-            engine.put("documentBuilder", documentBuilder);
-
-            List<Document> output = new ArrayList<>();
-            engine.put("output", output);
+            engine.put("htmlParser", Parser.htmlParser());
+            engine.put("xmlParser", Parser.xmlParser());
+            engine.put("docs", docs);
+            engine.put("documentBuilder", new DocumentBuilder());
             compiledScript.eval();
 
-            for(Document d : output) {
+            for(Document d : docs) {
                 super.document(d);
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-
-
     }
 
     @Override
