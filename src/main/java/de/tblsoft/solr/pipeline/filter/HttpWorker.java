@@ -1,9 +1,8 @@
 package de.tblsoft.solr.pipeline.filter;
 
+import de.tblsoft.solr.cache.FileCache;
 import de.tblsoft.solr.pipeline.bean.Document;
 import de.tblsoft.solr.util.DateUtils;
-import de.tblsoft.solr.util.DocumentUtils;
-import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.http.Header;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -12,11 +11,6 @@ import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.nio.file.Files;
-import java.util.Base64;
 import java.util.Date;
 import java.util.concurrent.Callable;
 
@@ -35,9 +29,7 @@ public class HttpWorker implements Callable<Document> {
 
     private String userAgent;
 
-    private String cacheBasePath;
-
-    private String fileExtension;
+    private FileCache cache;
 
     public HttpWorker(Document document,
                       CloseableHttpClient httpclient,
@@ -49,8 +41,7 @@ public class HttpWorker implements Callable<Document> {
         this.httpclient = httpclient;
         this.urlField = urlField;
         this.userAgent = userAgent;
-        this.cacheBasePath = cacheBasePath;
-        this.fileExtension = fileExtension;
+        cache = new FileCache(cacheBasePath, fileExtension);
     }
 
     public Document call() throws Exception {
@@ -66,7 +57,7 @@ public class HttpWorker implements Callable<Document> {
 
         CloseableHttpResponse response = null;
         try {
-            Document cachedDocument = readFromCache(url);
+            Document cachedDocument = cache.readFromCache(url);
             if(cachedDocument != null) {
                 return cachedDocument;
             }
@@ -89,50 +80,12 @@ public class HttpWorker implements Callable<Document> {
             document.setField("http_code", String.valueOf(response.getStatusLine().getStatusCode()));
             document.setField("http_payload", responseBuilder.toString());
             document.setField("http_time", DateUtils.date2String(new Date()));
-            writeToCache(url,document);
+            cache.writeToCache(url,document);
         } catch (Exception e) {
+            LOG.error(e.getMessage(), e);
             document.addField("errormessage", e.getMessage());
         }
         return document;
 
-    }
-
-    private Document readFromCache( String url)  {
-        if(cacheBasePath == null) {
-            return null;
-        }
-        try {
-            File target = getTargetFile(url);
-            if (!Files.exists(target.toPath())) {
-                return null;
-            }
-            return DocumentUtils.readFromFile(target);
-        } catch (Exception e) {
-            LOG.error("error " + e.getMessage() + " reading from cache for url: " + url, e);
-            return null;
-        }
-    }
-
-    private void writeToCache(String url, Document document) throws Exception {
-        if(cacheBasePath == null) {
-            return;
-        }
-        File target = getTargetFile(url);
-        DocumentUtils.writeToFile(target, document);
-    }
-
-    private File getTargetFile(String url) throws URISyntaxException {
-        String hashedUrl = hash(url);
-        URI uri = new URI(url);
-        File target = new File(cacheBasePath + "/" + uri.getHost() + "/" + hashedUrl + fileExtension);
-        return target;
-    }
-
-    private String hash(String url) {
-        String base64 = Base64.getEncoder().encodeToString(url.getBytes());
-        if(base64.length() < 255) {
-            return base64;
-        }
-        return DigestUtils.md5Hex(url.getBytes());
     }
 }
