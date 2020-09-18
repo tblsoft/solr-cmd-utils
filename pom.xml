@@ -240,6 +240,7 @@
                 </executions>
                 <configuration>
                     <failOnError>false</failOnError>
+                    <source>1.8</source>
                 </configuration>
             </plugin>
             <plugin>
