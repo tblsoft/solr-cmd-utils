@@ -62,6 +62,7 @@ import de.tblsoft.solr.pipeline.filter.RegexSplitFilter;
 import de.tblsoft.solr.pipeline.filter.RemoveFieldFilter;
 import de.tblsoft.solr.pipeline.filter.RemoveHtmlFilter;
 import de.tblsoft.solr.pipeline.filter.RestFilter;
+import de.tblsoft.solr.pipeline.filter.RichJavaScriptFilter;
 import de.tblsoft.solr.pipeline.filter.RoundNumberFilter;
 import de.tblsoft.solr.pipeline.filter.ShingleFilter;
 import de.tblsoft.solr.pipeline.filter.SimpleGenderFilter;
