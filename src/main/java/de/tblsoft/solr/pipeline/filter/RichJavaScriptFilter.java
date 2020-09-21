@@ -28,16 +28,14 @@ public class RichJavaScriptFilter extends AbstractFilter {
     @Override
     public void init() {
         String internalFilename = getProperty("filename", null);
-        verify(internalFilename, "For the RichJavaScriptFilter a filename property must be defined.");
-        filename = IOUtils.getAbsoluteFile(getBaseDir(),internalFilename);
         script = getProperty("script", null);
 
         ScriptEngineManager mgr = new ScriptEngineManager();
         engine = mgr.getEngineByName("JavaScript");
 
-
         try {
-            if(filename != null) {
+            if(internalFilename != null) {
+                filename = IOUtils.getAbsoluteFile(getBaseDir(),internalFilename);
                 script = FileUtils.readFileToString(new File(filename));
             }
             Compilable compEngine = (Compilable) engine;
