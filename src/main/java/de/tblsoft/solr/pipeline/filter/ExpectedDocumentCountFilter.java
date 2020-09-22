@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -36,8 +37,11 @@ public class ExpectedDocumentCountFilter extends AbstractFilter {
     @Override
     public void end() {
         pipelineExecuter.setExpectedDocumentCount((long) documents.size());
-        for(Document document : documents) {
-            super.document(document);
+        Iterator<Document> iterator = documents.iterator();
+        while(iterator.hasNext()) {
+            Document doc = iterator.next();
+            super.document(doc);
+            iterator.remove();
         }
         super.end();
     }
