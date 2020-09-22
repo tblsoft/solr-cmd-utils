@@ -25,6 +25,9 @@ public class RichJavaScriptFilter extends AbstractFilter {
 
     private CompiledScript compiledScript;
 
+    Parser htmlParser;
+    Parser xmlParser;
+
     @Override
     public void init() {
         String internalFilename = getProperty("filename", null);
@@ -33,6 +36,8 @@ public class RichJavaScriptFilter extends AbstractFilter {
         ScriptEngineManager mgr = new ScriptEngineManager();
         engine = mgr.getEngineByName("JavaScript");
 
+        htmlParser = Parser.htmlParser();
+        xmlParser = Parser.xmlParser();
         try {
             if(internalFilename != null) {
                 filename = IOUtils.getAbsoluteFile(getBaseDir(),internalFilename);
@@ -52,8 +57,8 @@ public class RichJavaScriptFilter extends AbstractFilter {
         List<Document> docs = new ArrayList<>();
         docs.add(document);
         try {
-            engine.put("htmlParser", Parser.htmlParser());
-            engine.put("xmlParser", Parser.xmlParser());
+            engine.put("htmlParser", htmlParser);
+            engine.put("xmlParser", xmlParser);
             engine.put("docs", docs);
             engine.put("documentBuilder", new DocumentBuilder());
             compiledScript.eval();
