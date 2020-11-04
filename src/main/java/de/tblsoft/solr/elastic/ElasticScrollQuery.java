@@ -72,7 +72,6 @@ public class ElasticScrollQuery {
 
     public List<Document> nextDocuments() throws Exception {
 
-
         List<Document> documents = new ArrayList<>();
         String response;
         if(usePostMethod) {
@@ -85,8 +84,11 @@ public class ElasticScrollQuery {
 
         JsonElement jsonResponse = gson.fromJson(response,
                 JsonElement.class);
-        scrollId = jsonResponse.getAsJsonObject()
-                .get("_scroll_id").getAsString();
+
+        if(jsonResponse.getAsJsonObject().get("_scroll_id") != null) {
+            scrollId = jsonResponse.getAsJsonObject()
+                    .get("_scroll_id").getAsString();
+        }
 
         Iterator<JsonElement> hitsIterator = jsonResponse.getAsJsonObject()
                 .get("hits").getAsJsonObject().get("hits").getAsJsonArray()
