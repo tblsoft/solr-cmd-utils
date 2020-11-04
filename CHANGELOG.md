@@ -6,9 +6,10 @@ All notable changes for the solr-cmd-utils project will be documented in this fi
 ### Added
 
 ### Changed
-
+- improve error handling in HttpHelper
 
 ### Fixed
+- fix nullpointer in ElasticScrollQuery
 
 ### Deprecated
 
