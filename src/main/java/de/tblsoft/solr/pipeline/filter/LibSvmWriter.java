@@ -154,7 +154,8 @@ public class LibSvmWriter extends AbstractFilter {
         String featureName = null;
 
         if(value != null && value instanceof String) {
-            featureName = field+"."+value;
+//            featureName = field+"."+value;
+            featureName = value.toString();
         }
 
         return featureName;
