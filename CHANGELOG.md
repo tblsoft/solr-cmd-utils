@@ -7,6 +7,7 @@ All notable changes for the solr-cmd-utils project will be documented in this fi
 
 ### Changed
 - improve error handling in HttpHelper
+- CSVWriter always delete the file if append is false
 
 ### Fixed
 - fix nullpointer in ElasticScrollQuery

@@ -10,6 +10,7 @@ import de.tblsoft.solr.util.IOUtils;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.Writer;
 import java.nio.file.Files;
@@ -87,12 +88,17 @@ public class CSVWriter extends AbstractFilter {
                 	format = format.withDelimiter(delimiter.charAt(0));
                 }
 
+                if(!append) {
+                    File file = new File(absoluteFilename);
+                    file.delete();
+                }
+
                 OpenOption[] openOptions = append ?
                                             new OpenOption[] {StandardOpenOption.APPEND, StandardOpenOption.CREATE} :
                                             new OpenOption[] {StandardOpenOption.CREATE};
-                Writer out1 = Files.newBufferedWriter(Paths.get(absoluteFilename), openOptions);
+                Writer writer = Files.newBufferedWriter(Paths.get(absoluteFilename), openOptions);
                 
-            	printer = new CSVPrinter(out1, format);
+            	printer = new CSVPrinter(writer, format);
                 firstDocument = false;
             } catch (Exception e) {
                 throw new RuntimeException(e);
