@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.*;
@@ -31,6 +32,8 @@ public class HttpFilter extends AbstractFilter {
     private String cacheBasePath;
     private String fileExtension;
 
+    Duration cacheMaxAge = null;
+
     private int threads = 1;
 
     private List<Document> documentQueue = new ArrayList<Document>();
@@ -46,6 +49,13 @@ public class HttpFilter extends AbstractFilter {
         //httpclient = HttpClients.createDefault();
         threads = getPropertyAsInt("threads", 1);
         boolean redirectsEnabled = getPropertyAsBoolean("redirectsEnabled", false);
+
+        // "PT1H30M" - https://en.wikipedia.org/wiki/ISO_8601#Durations
+        String cacheMaxAgeString = getProperty("cacheMaxAge", null);
+        if(cacheMaxAgeString != null) {
+            cacheMaxAge = Duration.parse(cacheMaxAgeString);
+        }
+
 
         PoolingHttpClientConnectionManager cm = new PoolingHttpClientConnectionManager();
         cm.setMaxTotal(threads);
@@ -91,7 +101,7 @@ public class HttpFilter extends AbstractFilter {
         for(Document documentFromQueue: documentQueue) {
 
             HttpWorker worker = new HttpWorker(documentFromQueue,
-                    httpclient, urlField, userAgent, cacheBasePath, fileExtension);
+                    httpclient, urlField, userAgent, cacheBasePath, fileExtension, cacheMaxAge);
             Future<Document> future = executor.submit(worker);
             documentFutures.add(future);
 

@@ -4,6 +4,7 @@ All notable changes for the solr-cmd-utils project will be documented in this fi
 
 ## [Unreleased]
 ### Added
+- add a cache max age parameter to the http filter
 
 ### Changed
 - improve error handling in HttpHelper

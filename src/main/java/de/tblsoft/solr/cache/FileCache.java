@@ -10,6 +10,8 @@ import java.io.File;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.Base64;
 
 public class FileCache {
@@ -21,9 +23,13 @@ public class FileCache {
 
     private String fileExtension;
 
-    public FileCache(String cacheBasePath, String fileExtension) {
+    private Duration maxAge;
+
+
+    public FileCache(String cacheBasePath, String fileExtension, Duration maxAge) {
         this.cacheBasePath = cacheBasePath;
         this.fileExtension = fileExtension;
+        this.maxAge = maxAge;
     }
 
     public Document readFromCache(String url)  {
@@ -35,6 +41,14 @@ public class FileCache {
             if (!Files.exists(target.toPath())) {
                 return null;
             }
+            if(maxAge != null) {
+                Instant lastModified = Files.getLastModifiedTime(target.toPath()).toInstant();
+                Duration fileAge = Duration.between(lastModified, Instant.now());
+                if(maxAge.compareTo(fileAge) < 0) {
+                    return null;
+                }
+            }
+
             return DocumentUtils.readFromFile(target);
         } catch (Exception e) {
             LOG.error("error " + e.getMessage() + " reading from cache for url: " + url, e);

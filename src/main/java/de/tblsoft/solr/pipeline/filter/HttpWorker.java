@@ -11,6 +11,7 @@ import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.time.Duration;
 import java.util.Date;
 import java.util.concurrent.Callable;
 
@@ -31,17 +32,20 @@ public class HttpWorker implements Callable<Document> {
 
     private FileCache cache;
 
+    private Duration maxAge;
+
     public HttpWorker(Document document,
                       CloseableHttpClient httpclient,
                       String urlField,
                       String userAgent,
                       String cacheBasePath,
-                      String fileExtension) {
+                      String fileExtension,
+                      Duration maxAge) {
         this.document = document;
         this.httpclient = httpclient;
         this.urlField = urlField;
         this.userAgent = userAgent;
-        cache = new FileCache(cacheBasePath, fileExtension);
+        cache = new FileCache(cacheBasePath, fileExtension, maxAge);
     }
 
     public Document call() throws Exception {
