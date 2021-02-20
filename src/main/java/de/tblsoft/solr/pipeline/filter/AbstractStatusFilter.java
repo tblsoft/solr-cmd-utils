@@ -6,6 +6,8 @@ import de.tblsoft.solr.pipeline.bean.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
+
 /**
  * Created by tblsoft on 26.11.16.
  * 
@@ -23,6 +25,8 @@ public abstract class AbstractStatusFilter extends AbstractFilter {
 	protected long start = 0;
 
 	protected String webHook;
+
+	protected List<String> fieldsToPrint;
 	
     @Override
     public void init() {
@@ -30,6 +34,7 @@ public abstract class AbstractStatusFilter extends AbstractFilter {
     	lapStart = System.currentTimeMillis();
     	start = System.currentTimeMillis();
     	webHook = getProperty("webHook", null);
+    	fieldsToPrint = getPropertyAsList("fieldsToPrint", null);
 
         if(webHook != null) {
             HTTPHelper.webHook(webHook,
@@ -51,7 +56,7 @@ public abstract class AbstractStatusFilter extends AbstractFilter {
             long duration = now - start;
             long lapDuration = now - lapStart;
 
-            printStatus(duration, lapDuration);
+            printStatus(duration, lapDuration, document);
             lapStart = now;
             lapCount = 0;
         }
@@ -81,8 +86,21 @@ public abstract class AbstractStatusFilter extends AbstractFilter {
         }
     }
     
-    void printStatus(long duration, long lapDuration) {
-    	LOG.info("processed all " + documentCounter + " in " + getFormattedDuration(duration) + ". - processed the last " + lapCount + " documents in " + getFormattedDuration(lapDuration) + ".");
+    void printStatus(long duration, long lapDuration, Document document) {
+        StringBuilder printFields = new StringBuilder();
+        if(fieldsToPrint != null) {
+            for(String fieldToPrint : fieldsToPrint) {
+                String fieldValue = document.getFieldValue(fieldToPrint);
+                if(fieldValue != null) {
+                    printFields.append(" ");
+                    printFields.append(fieldToPrint);
+                    printFields.append(":");
+                    printFields.append(fieldValue);
+                }
+            }
+        }
+
+    	LOG.info("processed all " + documentCounter + " in " + getFormattedDuration(duration) + ". - processed the last " + lapCount + " documents in " + getFormattedDuration(lapDuration) + "." + printFields);
 
         if(webHook != null) {
             HTTPHelper.webHook(webHook,

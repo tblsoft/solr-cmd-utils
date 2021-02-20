@@ -4,7 +4,7 @@ All notable changes for the solr-cmd-utils project will be documented in this fi
 
 ## [Unreleased]
 ### Added
-
+- make it possible to log documents fields in the status filter
 
 ### Changed
 
