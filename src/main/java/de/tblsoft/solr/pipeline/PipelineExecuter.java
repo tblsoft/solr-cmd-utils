@@ -176,6 +176,8 @@ public class PipelineExecuter {
         classRegestriy.put("solrcmdutils.OpenNLPPosTaggerTrainProcessor", OpenNLPPosTaggerTrainProcessor.class);
         classRegestriy.put("solrcmdutils.AddStaticValueFilter", AddStaticValueFilter.class);
         classRegestriy.put("solrcmdutils.ExcludeByValueFilter", ExcludeByValueFilter.class);
+        classRegestriy.put("solrcmdutils.DocumentReader", DocumentReader.class);
+        classRegestriy.put("solrcmdutils.DocumentWriter", DocumentWriter.class);
     }
 
     public PipelineExecuter(String yamlFileName) {

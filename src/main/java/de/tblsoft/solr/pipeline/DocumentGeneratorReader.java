@@ -10,6 +10,7 @@ import java.util.UUID;
 
 /**
  * Created by tblsoft on 07.04.18.
+ * Generate random documents.
  */
 public class DocumentGeneratorReader extends AbstractReader {
 
