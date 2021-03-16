@@ -122,6 +122,28 @@ public class MappingFilterTest extends AbstractFilterTest {
         assertNumberOfFields(1);
 
     }
+    @Test
+    public void testMappingBase64Encode() {
+        configure();
+        addProperty("mapping", "noun->noun|base64Encode");
+        createField("noun", " Substantiv ");
+        runTest();
+        assertFiled("noun", "IFN1YnN0YW50aXYg");
+        assertNumberOfDocuments(1);
+        assertNumberOfFields(1);
+
+    }
+    @Test
+    public void testMappingBase64Decode() {
+        configure();
+        addProperty("mapping", "noun->noun|base64Decode");
+        createField("noun", "IFN1YnN0YW50aXYg");
+        runTest();
+        assertFiled("noun", " Substantiv ");
+        assertNumberOfDocuments(1);
+        assertNumberOfFields(1);
+
+    }
 
     @Test
     public void testMappingUrlencode() {

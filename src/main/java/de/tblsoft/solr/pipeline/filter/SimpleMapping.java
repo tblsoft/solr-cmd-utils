@@ -81,6 +81,10 @@ public class SimpleMapping {
 
         if("md5".equals(function)) {
             return DigestUtils.md5Hex(value);
+        } else if("base64Encode".equals(function)) {
+            return Base64.getEncoder().encodeToString(value.getBytes());
+        } else if("base64Decode".equals(function)) {
+            return new String(Base64.getDecoder().decode(value));
         } else if ("mapGermanChars".equals(function)) {
             return mapGermanChars(value);
         } else if ("mapFranceChars".equals(function)) {
@@ -120,6 +124,10 @@ public class SimpleMapping {
     public static void executeFieldFunction(String function, Field field) {
 
         if("md5".equals(function)) {
+            return;
+        } else if("base64Encode".equals(function)) {
+            return;
+        } else if("base64Decode".equals(function)) {
             return;
         } else if ("mapGermanChars".equals(function)) {
             return;

@@ -7,6 +7,7 @@ All notable changes for the solr-cmd-utils project will be documented in this fi
 - make it possible to log documents fields in the status filter
 - implement a document reader
 - implement a document writer
+- add a mapping function for base65 encoding and decoding
 
 ### Changed
 
