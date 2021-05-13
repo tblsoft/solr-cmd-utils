@@ -1,0 +1,12 @@
+name: "document joiner pipeline"
+id: "main"
+reader:
+  name: "CsvReader"
+  clazz: "solrcmdutils.DocumentReader"
+  property:
+    filename: "products.json"
+
+filter:
+  - name: "Testing Filter"
+    id: "testingFilter"
+    clazz: "solrcmdutils.TestingFilter"
