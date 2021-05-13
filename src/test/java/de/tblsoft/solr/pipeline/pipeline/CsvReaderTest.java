@@ -1,6 +1,7 @@
 package de.tblsoft.solr.pipeline.pipeline;
 
 import de.tblsoft.solr.pipeline.test.AbstractPipelineTest;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -85,6 +86,7 @@ public class CsvReaderTest extends AbstractPipelineTest {
         assertNumberOfFields(2);
     }
 
+    @Ignore
     @Test(expected = RuntimeException.class)
     public void testFileNotExists() {
         runPipeline("examples/unittest/csv-file-not-exists-pipeline.yaml");
