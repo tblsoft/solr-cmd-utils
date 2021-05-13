@@ -13,6 +13,7 @@ import de.tblsoft.solr.util.IOUtils;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Read an array of documents from a json file
@@ -46,7 +47,11 @@ public class DocumentReader extends AbstractReader {
     private void execute(DocumentContext context, String source) {
         List<Object> jsonHits = context.read("$");
         for(Object obj: jsonHits){
-            Document document = objectMapper.convertValue(obj, Document.class);
+            Map<String, Object> doc = (Map<String, Object>) obj;
+            Document document = new Document();
+            for(Map.Entry<String, Object> entry : doc.entrySet()) {
+                document.setField(entry.getKey(), entry.getValue());
+            }
             executer.document(document);
         }
     }

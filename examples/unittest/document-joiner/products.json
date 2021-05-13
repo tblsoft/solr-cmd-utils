@@ -1,0 +1,21 @@
+[
+  {
+      "id" : "1",
+      "brand": "Best Brand",
+      "title": "Best TV",
+      "keywords" : [
+        "best",
+        "super"
+      ]
+  },
+  {
+      "id" : "2",
+      "brand": "Super Brand",
+      "title": "Best Phone"
+  },
+  {
+      "id" : "3",
+      "brand": "Mega Brand",
+      "title": "Mega desk"
+  }
+]

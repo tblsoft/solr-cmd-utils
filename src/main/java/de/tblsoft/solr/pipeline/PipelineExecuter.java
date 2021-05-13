@@ -9,6 +9,7 @@ import de.tblsoft.solr.pipeline.bean.Pipeline;
 import de.tblsoft.solr.pipeline.bean.Processor;
 import de.tblsoft.solr.pipeline.bean.Reader;
 import de.tblsoft.solr.pipeline.filter.*;
+import de.tblsoft.solr.pipeline.filter.nlp.SearchQueryAnalyzerFilter;
 import de.tblsoft.solr.pipeline.nlp.squad.SquadReader;
 import de.tblsoft.solr.pipeline.nlp.squad.SquadWriter;
 import de.tblsoft.solr.pipeline.processor.DownloadResourcesProcessor;
@@ -43,6 +44,9 @@ public class PipelineExecuter {
     private static Logger LOG = LoggerFactory.getLogger(PipelineExecuter.class);
 
     private Pipeline pipeline;
+    private String baseDir;
+
+    private Map<String, Pipeline> pipelineMap = new HashMap<>();
 
     private String webHookStart;
 
@@ -96,6 +100,7 @@ public class PipelineExecuter {
         classRegestriy.put("solrcmdutils.GrepFilter", GrepFilter.class);
         classRegestriy.put("solrcmdutils.KeyValueSplitterFilter", KeyValueSplitterFilter.class);
         classRegestriy.put("solrcmdutils.FieldJoiner", FieldJoiner.class);
+        classRegestriy.put("solrcmdutils.DocumentJoinerFilter", DocumentJoinerFilter.class);
         classRegestriy.put("solrcmdutils.JsonWriter", JsonWriter.class);
         classRegestriy.put("solrcmdutils.ElasticWriter", ElasticWriter.class);
         classRegestriy.put("solrcmdutils.CSVReader", CSVReader.class);
@@ -131,6 +136,7 @@ public class PipelineExecuter {
         classRegestriy.put("solrcmdutils.NounExtractorFilter", NounExtractorFilter.class);
         classRegestriy.put("solrcmdutils.FileLineWriter", FileLineWriter.class);
         classRegestriy.put("solrcmdutils.FilelineReader", FilelineReader.class);
+        classRegestriy.put("solrcmdutils.HtmlFileReader", HtmlFileReader.class);
         classRegestriy.put("solrcmdutils.CSVWriter", CSVWriter.class);
         classRegestriy.put("solrcmdutils.N3Writer", N3Writer.class);
         classRegestriy.put("solrcmdutils.KafkaWriter", KafkaWriter.class);
@@ -178,10 +184,15 @@ public class PipelineExecuter {
         classRegestriy.put("solrcmdutils.ExcludeByValueFilter", ExcludeByValueFilter.class);
         classRegestriy.put("solrcmdutils.DocumentReader", DocumentReader.class);
         classRegestriy.put("solrcmdutils.DocumentWriter", DocumentWriter.class);
+        classRegestriy.put("solrcmdutils.SearchQueryAnalyzerFilter", SearchQueryAnalyzerFilter.class);
     }
 
     public PipelineExecuter(String yamlFileName) {
         this.yamlFileName = yamlFileName;
+    }
+    public PipelineExecuter(Pipeline pipeline, String baseDir) {
+        this.pipeline = pipeline;
+        this.baseDir = baseDir;
     }
 
     private String getBaseDirFromYamlFile() {
@@ -199,9 +210,25 @@ public class PipelineExecuter {
     }
 
     public void init() {
-        LOG.debug("Read the pipeline configuration from the yaml file: {}", yamlFileName);
         try {
-            pipeline = readPipelineFromYamlFile(yamlFileName);
+            if(pipeline == null) {
+                LOG.debug("Read the pipeline configuration from the yaml file: {}", yamlFileName);
+                List<Pipeline> pipelines = readPipelinesFromYamlFile(yamlFileName);
+                for (Pipeline p : pipelines) {
+                    // the first pipeline is the main pipeline
+                    if (pipeline == null) {
+                        pipeline = p;
+                    }
+                    if (p.getId() != null) {
+                        pipelineMap.put(p.getId(), p);
+                    }
+                }
+            }
+
+            if(baseDir == null) {
+                baseDir = getBaseDirFromYamlFile();
+            }
+
             processId = pipeline.getProcessId();
             if(Strings.isNullOrEmpty(processId)) {
                 processId = UUID.randomUUID().toString();
@@ -232,7 +259,7 @@ public class PipelineExecuter {
             pipeline.getVariables().putAll(pipelineVariables);
             LOG.debug("Effective variables in the pipeline {}", pipeline.getVariables());
 
-            reader = createReaderInstance(pipeline.getReader(), getBaseDirFromYamlFile(), pipeline.getVariables(), this);
+            reader = createReaderInstance(pipeline.getReader(), baseDir, pipeline.getVariables(), this);
 
             preProcessorList = createProcessorInstanceList(pipeline.getPreProcessor());
             postProcessorList = createProcessorInstanceList(pipeline.getPostProcessor());
@@ -259,7 +286,7 @@ public class PipelineExecuter {
                 continue;
             }
             filterInstance = createFilterInstance(filter);
-            filterInstance.setBaseDir(getBaseDirFromYamlFile());
+            filterInstance.setBaseDir(baseDir);
             filterInstance.setVariables(pipeline.getVariables());
             filterInstance.setPipelineExecuter(this);
             if(lastFilter == null) {
@@ -302,7 +329,7 @@ public class PipelineExecuter {
             ProcessorIF processorInstance = (ProcessorIF) getInstance(processor.getClazz());
             processorInstance.setProcessor(processor);
             processorInstance.setVariables(pipeline.getVariables());
-            processorInstance.setBaseDir(getBaseDirFromYamlFile());
+            processorInstance.setBaseDir(baseDir);
             processorInstanceList.add(processorInstance);
 
         }
@@ -399,16 +426,39 @@ public class PipelineExecuter {
         filterList.get(0).end();
     }
 
+    /**
+     * Use readPipelinesFromYamlFile. It is possible to define multiple pipeline in one file.
+     * @param fileName the fileName of the pipeline
+     * @return the first pipeline.
+     */
+    @Deprecated
     public static Pipeline readPipelineFromYamlFile(String fileName) {
+        try {
+            List<Pipeline> pipelines = readPipelinesFromYamlFile(fileName);
+            if(pipelines == null || pipelines.size() == 0) {
+                return null;
+            }
+            return pipelines.get(0);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+    public static List<Pipeline> readPipelinesFromYamlFile(String fileName) {
         try {
             Yaml yaml = new Yaml(new Constructor(Pipeline.class));
             String pipelineString = IOUtils.getString(fileName);
             LOG.info("pipeline:\n" + pipelineString);
-            Pipeline pipeline = yaml.load(pipelineString);
-            return pipeline;
+            Iterable<Object> pipelines = yaml.loadAll(pipelineString);
+            List<Pipeline> ret = new ArrayList<>();
+            for(Object obj : pipelines) {
+                ret.add((Pipeline) obj);
+            }
+            return ret;
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+
     }
 
     public List<FilterIF> getFilterList() {
@@ -465,4 +515,9 @@ public class PipelineExecuter {
     public void setExpectedDocumentCount(Long expectedDocumentCount) {
         this.expectedDocumentCount = expectedDocumentCount;
     }
+
+    public Pipeline getPipeline(String id) {
+        return pipelineMap.get(id);
+    }
+
 }

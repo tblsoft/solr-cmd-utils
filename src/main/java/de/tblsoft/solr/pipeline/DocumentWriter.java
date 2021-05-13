@@ -4,11 +4,14 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.tblsoft.solr.pipeline.bean.Document;
+import de.tblsoft.solr.pipeline.bean.Field;
 import de.tblsoft.solr.util.IOUtils;
 import de.tblsoft.solr.util.OutputStreamStringBuilder;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by tblsoft on 27.02.21.
@@ -56,7 +59,17 @@ public class DocumentWriter extends AbstractFilter {
             } else {
                 outputStreamStringBuilder.append(",");
             }
-            outputStreamStringBuilder.append(objectMapper.writeValueAsString(document));
+
+            Map<String, Object> outputDocument = new HashMap<>();
+            for(Field field : document.getFields()) {
+                if(field.getValues().size() == 1) {
+                    outputDocument.put(field.getName(), field.getValue());
+                } else {
+                    outputDocument.put(field.getName(), field.getValues());
+                }
+
+            }
+            outputStreamStringBuilder.append(objectMapper.writeValueAsString(outputDocument));
 
             super.document(document);
         } catch (JsonProcessingException e) {

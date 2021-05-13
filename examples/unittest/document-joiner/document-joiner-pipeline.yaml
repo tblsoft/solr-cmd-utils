@@ -1,0 +1,35 @@
+name: "document joiner pipeline"
+id: "products"
+reader:
+  name: "CsvReader"
+  clazz: "solrcmdutils.DocumentReader"
+  property:
+    filename: "products.json"
+
+filter:
+  - name: "DocumentJoinerFilter"
+    clazz: "solrcmdutils.DocumentJoinerFilter"
+    property:
+      pipelineId: "prices"
+      key: "id"
+  - name: "Testing Filter"
+    id: "testingFilter"
+    clazz: "solrcmdutils.TestingFilter"
+
+
+---
+
+name: "Prices pipeline"
+id: "prices"
+reader:
+  name: "DocumentReader"
+  clazz: "solrcmdutils.DocumentReader"
+  property:
+    filename: "prices.json"
+
+filter:
+  - name: "LookupFilter"
+    id: "lookup"
+    clazz: "solrcmdutils.LookupFilter"
+    property:
+      keyField: "id"

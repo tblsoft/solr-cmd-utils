@@ -8,6 +8,8 @@ import java.util.Map;
  * Created by tblsoft on 22.01.16.
  */
 public class Pipeline {
+    private String id;
+
     private String name;
 
     private String processId;
@@ -116,6 +118,24 @@ public class Pipeline {
      */
     public void setWebHookError(String webHookError) {
         this.webHookError = webHookError;
+    }
+
+    /**
+     * Getter for property 'id'.
+     *
+     * @return Value for property 'id'.
+     */
+    public String getId() {
+        return id;
+    }
+
+    /**
+     * Setter for property 'id'.
+     *
+     * @param id Value to set for property 'id'.
+     */
+    public void setId(String id) {
+        this.id = id;
     }
 
     @Override
