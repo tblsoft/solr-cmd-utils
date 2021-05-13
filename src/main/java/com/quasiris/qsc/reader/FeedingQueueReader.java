@@ -68,7 +68,7 @@ public class FeedingQueueReader extends AbstractReader {
     }
 
 
-    private Document parseJsonDocument(String json) {
+    protected Document parseJsonDocument(String json) {
         DocumentContext documentContext = JsonPath.parse(json);
         Document document = new Document();
         for(Map.Entry<String, List<String>> mappingEntry : mapping.entrySet()) {
