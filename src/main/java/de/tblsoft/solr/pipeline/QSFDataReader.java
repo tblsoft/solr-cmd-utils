@@ -45,7 +45,7 @@ public class QSFDataReader extends AbstractReader {
 
 
             ReaderIF readerInstance = PipelineExecuter.createReaderInstance(
-                    reader, getBaseDir(), pipelineInstance.getVariables(), executer);
+                    reader, "", pipelineInstance.getVariables(), executer);
             readerInstance.read();
         } catch (Exception e) {
             throw new RuntimeException(e);
