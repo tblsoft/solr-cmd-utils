@@ -39,7 +39,7 @@ public class AliasManager {
 
     public static List<String> getIndexesByPrefix(String elasticUrl, String prefix) {
         try {
-            String url = ElasticHelper.getCatlUrl(elasticUrl) + "/" + prefix + "*?format=json";
+            String url = ElasticHelper.getCatlUrl(elasticUrl) + "/" + prefix + separator + "*?format=json";
             return JsonUtil.parse(url,"$.[*].index");
         } catch (Exception e) {
             throw new RuntimeException(e);
