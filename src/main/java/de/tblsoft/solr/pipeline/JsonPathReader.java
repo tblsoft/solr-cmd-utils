@@ -64,10 +64,11 @@ public class JsonPathReader extends AbstractReader {
         List<Object> jsonHits = context.read(rootPath);
         for(Object obj: jsonHits){
             Document document = new Document();
+            DocumentContext documentContext = JsonPath.parse(obj);
 
             for(Map.Entry<String, List<String>> mappingEntry : mapping.entrySet()) {
                 try {
-                    Object parsedValue = JsonPath.parse(obj).read(mappingEntry.getKey());
+                    Object parsedValue = documentContext.read(mappingEntry.getKey());
                     for(String target: mappingEntry.getValue()) {
                         document.setField(target, parsedValue);
                     }

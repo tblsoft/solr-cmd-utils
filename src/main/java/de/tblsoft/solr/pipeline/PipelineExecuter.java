@@ -1,6 +1,7 @@
 package de.tblsoft.solr.pipeline;
 
 import com.google.common.base.Strings;
+import com.quasiris.qsc.writer.QscDataPushWriter;
 import de.tblsoft.solr.compare.SolrCompareFilter;
 import de.tblsoft.solr.http.HTTPHelper;
 import de.tblsoft.solr.pipeline.bean.Document;
@@ -185,6 +186,7 @@ public class PipelineExecuter {
         classRegestriy.put("solrcmdutils.DocumentReader", DocumentReader.class);
         classRegestriy.put("solrcmdutils.DocumentWriter", DocumentWriter.class);
         classRegestriy.put("solrcmdutils.SearchQueryAnalyzerFilter", SearchQueryAnalyzerFilter.class);
+        classRegestriy.put("solrcmdutils.QscDataPushWriter", QscDataPushWriter.class);
     }
 
     public PipelineExecuter(String yamlFileName) {

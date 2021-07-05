@@ -16,6 +16,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.net.HttpCookie;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -74,19 +76,28 @@ public class HTTPHelper {
 	}
 
 	public static String post(String url, String postString) {
-		return post(url, postString, null);
+		return post(url, postString, new ArrayList<>());
 	}
 
 	public static String post(String url, String postString, String contentType) {
+		return post(url, postString, Arrays.asList("Content-Type: " + contentType));
+	}
+	public static String post(String url, String postString, List<String> headers) {
 		try {
 			CloseableHttpClient httpclient = HttpClients.createDefault();
 			HttpPost httpPost = new HttpPost(url);
 
 			StringEntity entity = new StringEntity(postString, "UTF-8");
 			httpPost.setEntity(entity);
-			if(!Strings.isNullOrEmpty(contentType)) {
-				httpPost.setHeader("Content-Type",contentType);
+
+			for(String header : headers ) {
+				String[] splitted = header.split(":");
+				if(splitted.length != 2) {
+					throw new RuntimeException("Invalid header definition");
+				}
+				httpPost.setHeader(splitted[0].trim() ,splitted[1].trim());
 			}
+
 			CloseableHttpResponse response = httpclient.execute(httpPost);
 			StringBuilder responseBuilder = new StringBuilder();
 
