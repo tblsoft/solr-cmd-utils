@@ -4,6 +4,7 @@ All notable changes for the solr-cmd-utils project will be documented in this fi
 
 ## [Unreleased]
 ### Added
+- implement a qsc data push writer
 
 ### Changed
 
