@@ -10,6 +10,7 @@ All notable changes for the solr-cmd-utils project will be documented in this fi
 
 
 ### Fixed
+- include the seperator for the elastic prefix index search, to avoid finding indexes with the same prefix
 
 
 ### Deprecated
