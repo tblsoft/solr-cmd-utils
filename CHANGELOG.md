@@ -3,6 +3,10 @@ All notable changes for the solr-cmd-utils project will be documented in this fi
 
 
 ## [Unreleased]
+### Changed
+- update dependencies
+
+## [3.19]
 ### Added
 - add a datype list.string to ensure arrays in the elastic index
 
