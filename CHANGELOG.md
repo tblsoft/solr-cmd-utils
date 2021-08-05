@@ -4,7 +4,12 @@ All notable changes for the solr-cmd-utils project will be documented in this fi
 
 ## [Unreleased]
 ### Added
+- add a datype list.string to ensure arrays in the elastic index
+
+## [3.18]
+### Added
 - implement a qsc data push writer
+- add a datype list.string to ensure arrays in the elastic index
 
 ### Changed
 
