@@ -172,6 +172,9 @@ public class ElasticWriter extends AbstractFilter {
             dataType = "string";
         }
 
+        if(dataType.equals("list.string")) {
+            return field.getValues();
+        }
         if(dataType.equals("json")) {
             Gson gson = new Gson();
             return gson.toJson(field.getRawValue());
