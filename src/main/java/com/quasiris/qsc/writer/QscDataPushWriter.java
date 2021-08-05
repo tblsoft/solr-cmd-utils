@@ -8,6 +8,8 @@ import de.tblsoft.solr.http.HTTPHelper;
 import de.tblsoft.solr.pipeline.AbstractFilter;
 import de.tblsoft.solr.pipeline.bean.Document;
 import de.tblsoft.solr.util.DocumentMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +21,7 @@ import java.util.UUID;
  * Push documents to the qsc push API.
  */
 public class QscDataPushWriter extends AbstractFilter {
+    private static Logger LOG = LoggerFactory.getLogger(QscDataPushWriter.class);
 
     private ObjectMapper objectMapper = new ObjectMapper();
 
@@ -36,6 +39,10 @@ public class QscDataPushWriter extends AbstractFilter {
         idField = getProperty("idField", "id");
 
         objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+
+        String fullFeedStartUrl = url.replace("bulk/qsc", "fullfeed/start");
+        HTTPHelper.post(fullFeedStartUrl, "{}", header);
+        LOG.info("Full feed start: {}", fullFeedStartUrl);
 
         super.init();
     }
@@ -84,6 +91,10 @@ public class QscDataPushWriter extends AbstractFilter {
     public void end() {
         sendBatch(batch);
         batch = new ArrayList<>();
+
+        String fullFeedEndUrl = url.replace("bulk/qsc", "fullfeed/end");
+        HTTPHelper.post(fullFeedEndUrl, "{}", header);
+        LOG.info("Full feed end: {}", fullFeedEndUrl);
         super.end();
     }
 
