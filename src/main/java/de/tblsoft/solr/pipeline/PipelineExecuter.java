@@ -187,6 +187,7 @@ public class PipelineExecuter {
         classRegestriy.put("solrcmdutils.DocumentWriter", DocumentWriter.class);
         classRegestriy.put("solrcmdutils.SearchQueryAnalyzerFilter", SearchQueryAnalyzerFilter.class);
         classRegestriy.put("solrcmdutils.QscDataPushWriter", QscDataPushWriter.class);
+        classRegestriy.put("solrcmdutils.GraphQLReader", GraphQLReader.class);
     }
 
     public PipelineExecuter(String yamlFileName) {
