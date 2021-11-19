@@ -2,12 +2,13 @@ package de.tblsoft.solr.pipeline;
 
 import de.tblsoft.solr.pipeline.bean.Reader;
 
+import java.io.Serializable;
 import java.util.Map;
 
 /**
  * Created by tblsoft on 23.01.16.
  */
-public interface ReaderIF {
+public interface ReaderIF extends Serializable {
 
     public void read();
 

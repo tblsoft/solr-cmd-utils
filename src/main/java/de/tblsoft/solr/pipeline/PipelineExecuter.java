@@ -28,6 +28,7 @@ import org.yaml.snakeyaml.constructor.Constructor;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.Serializable;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -40,7 +41,7 @@ import java.util.UUID;
 /**
  * Created by tblsoft on 23.01.16.
  */
-public class PipelineExecuter {
+public class PipelineExecuter implements Serializable {
 
     private static Logger LOG = LoggerFactory.getLogger(PipelineExecuter.class);
 
