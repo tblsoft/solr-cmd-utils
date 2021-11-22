@@ -70,7 +70,11 @@ public class Field {
     }
 
     public String getValue() {
-        for(String value :getValues()) {
+        List<String> values = getValues();
+        if(values == null) {
+            return null;
+        }
+        for(String value :values) {
             return value;
         }
         return null;
