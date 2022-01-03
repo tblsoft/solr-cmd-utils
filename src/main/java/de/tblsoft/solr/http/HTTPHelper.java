@@ -16,11 +16,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.net.HttpCookie;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by tblsoft on 18.03.16.
@@ -127,12 +123,14 @@ public class HTTPHelper {
 
     }
 
-	public static String get(String url) {
+	public static String get(String url, Header... headers) {
 		try {
 			CloseableHttpClient httpclient = HttpClients.createDefault();
-			HttpGet httpPost = new HttpGet(url);
-
-			CloseableHttpResponse response = httpclient.execute(httpPost);
+			HttpGet httpGet = new HttpGet(url);
+			for (Header header : headers) {
+				httpGet.setHeader(header);
+			}
+			CloseableHttpResponse response = httpclient.execute(httpGet);
 			StringBuilder responseBuilder = new StringBuilder();
 
 			responseBuilder.append(EntityUtils.toString(response.getEntity()));
@@ -158,13 +156,14 @@ public class HTTPHelper {
 		}
 	}
 
-
-	public static InputStream getAsInputStream(String url) {
+	public static InputStream getAsInputStream(String url, Header... headers) {
 		try {
 			CloseableHttpClient httpclient = HttpClients.createDefault();
-			HttpGet httpPost = new HttpGet(url);
-
-			CloseableHttpResponse response = httpclient.execute(httpPost);
+			HttpGet httpGet = new HttpGet(url);
+			for (Header header : headers) {
+				httpGet.setHeader(header);
+			}
+			CloseableHttpResponse response = httpclient.execute(httpGet);
 			return response.getEntity().getContent();
 		} catch (Exception e) {
 			throw new RuntimeException(e);

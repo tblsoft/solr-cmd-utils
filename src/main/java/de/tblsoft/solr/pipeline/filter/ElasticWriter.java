@@ -15,6 +15,7 @@ import de.tblsoft.solr.util.IOUtils;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
+import org.apache.http.message.BasicHeader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -112,7 +113,7 @@ public class ElasticWriter extends AbstractFilter {
             try {
                 String absoluteElasticMappingLocation = IOUtils.getAbsoluteFile(
                         getBaseDir(), elasticMappingLocation);
-                String mappingJson = IOUtils.getString(absoluteElasticMappingLocation);
+                String mappingJson = getMappingJson(absoluteElasticMappingLocation);
                 String mappingUrl = ElasticHelper.getIndexUrl(indexUrl);
                 int statusCode = HTTPHelper.getStatusCode(mappingUrl);
                 LOG.debug("status code {}", statusCode);
@@ -151,6 +152,16 @@ public class ElasticWriter extends AbstractFilter {
         }
 
         super.init();
+    }
+
+    private String getMappingJson(String absoluteElasticMappingLocation) throws IOException {
+        if (elasticMappingLocation.startsWith("http")) {
+            BasicHeader[] settingsHeaders = getPropertyAsMapping("settingsHeaders").entrySet().stream()
+                    .map(e -> new BasicHeader(e.getKey(), e.getValue()))
+                    .toArray(BasicHeader[]::new);
+            return HTTPHelper.get(elasticMappingLocation, settingsHeaders);
+        }
+        return IOUtils.getString(absoluteElasticMappingLocation);
     }
 
 
