@@ -26,12 +26,19 @@ public class HTTPHelper {
 	private static Logger LOG = LoggerFactory.getLogger(HTTPHelper.class);
 
 
+	private static void configureHttpWithDefault(String url, HttpRequestBase requestBase) {
+		List<Header> headersForEndpoint = GlobalHttpConfiguration.getHeadersForEndpoint(url);
+		for (Header header : headersForEndpoint) {
+			requestBase.setHeader(header);
+		}
+	}
+
 	public static String delete(String url) {
 		try {
 			CloseableHttpClient httpclient = HttpClients.createDefault();
-			HttpDelete httpPost = new HttpDelete(url);
-
-			CloseableHttpResponse response = httpclient.execute(httpPost);
+			HttpDelete httpDelete = new HttpDelete(url);
+			configureHttpWithDefault(url, httpDelete);
+			CloseableHttpResponse response = httpclient.execute(httpDelete);
 			StringBuilder responseBuilder = new StringBuilder();
 
 			responseBuilder.append(EntityUtils.toString(response.getEntity()));
@@ -42,21 +49,22 @@ public class HTTPHelper {
 		}
 	}
 
+
 	public static String put(String url, String postString, String contentType) {
 		try {
 			CloseableHttpClient httpclient = HttpClients.createDefault();
-			HttpPut httpPost = new HttpPut(url);
-
+			HttpPut httpPut = new HttpPut(url);
+			configureHttpWithDefault(url, httpPut);
 			if (postString != null) {
 				StringEntity entity = new StringEntity(postString, "UTF-8");
-				httpPost.setEntity(entity);
+				httpPut.setEntity(entity);
 			}
 			if(!Strings.isNullOrEmpty(contentType)) {
-				httpPost.setHeader("Content-Type",contentType);
+				httpPut.setHeader("Content-Type",contentType);
 			}
 
 
-			CloseableHttpResponse response = httpclient.execute(httpPost);
+			CloseableHttpResponse response = httpclient.execute(httpPut);
 			StringBuilder responseBuilder = new StringBuilder();
 
 			responseBuilder.append(EntityUtils.toString(response.getEntity()));
@@ -82,6 +90,7 @@ public class HTTPHelper {
 		try {
 			CloseableHttpClient httpclient = HttpClients.createDefault();
 			HttpPost httpPost = new HttpPost(url);
+			configureHttpWithDefault(url, httpPost);
 
 			StringEntity entity = new StringEntity(postString, "UTF-8");
 			httpPost.setEntity(entity);
@@ -127,6 +136,7 @@ public class HTTPHelper {
 		try {
 			CloseableHttpClient httpclient = HttpClients.createDefault();
 			HttpGet httpGet = new HttpGet(url);
+			configureHttpWithDefault(url, httpGet);
 			for (Header header : headers) {
 				httpGet.setHeader(header);
 			}
@@ -147,9 +157,9 @@ public class HTTPHelper {
 	public static InputStream getInputStream(String url) {
 		try {
 			CloseableHttpClient httpclient = HttpClients.createDefault();
-			HttpGet httpPost = new HttpGet(url);
-
-			CloseableHttpResponse response = httpclient.execute(httpPost);
+			HttpGet httpGet = new HttpGet(url);
+			configureHttpWithDefault(url, httpGet);
+			CloseableHttpResponse response = httpclient.execute(httpGet);
 			return response.getEntity().getContent();
 		} catch (Exception e) {
 			throw new RuntimeException(e);
@@ -160,6 +170,7 @@ public class HTTPHelper {
 		try {
 			CloseableHttpClient httpclient = HttpClients.createDefault();
 			HttpGet httpGet = new HttpGet(url);
+			configureHttpWithDefault(url, httpGet);
 			for (Header header : headers) {
 				httpGet.setHeader(header);
 			}
@@ -179,9 +190,9 @@ public class HTTPHelper {
 	public static void get2File(String url, File fileName) {
 		try {
 			CloseableHttpClient httpclient = HttpClients.createDefault();
-			HttpGet httpPost = new HttpGet(url);
-
-			CloseableHttpResponse response = httpclient.execute(httpPost);
+			HttpGet httpGet = new HttpGet(url);
+			configureHttpWithDefault(url, httpGet);
+			CloseableHttpResponse response = httpclient.execute(httpGet);
 			InputStream is = response.getEntity().getContent();
 			FileOutputStream fos = new FileOutputStream(fileName);
 			org.apache.commons.io.IOUtils.copy(is, fos);
@@ -196,6 +207,7 @@ public class HTTPHelper {
 		try {
 			CloseableHttpClient httpclient = HttpClients.custom().disableRedirectHandling().build();
 			HttpGet httpGet = new HttpGet(url);
+			configureHttpWithDefault(url, httpGet);
 			CloseableHttpResponse response = httpclient.execute(httpGet);
 			httpclient.close();
 			return response.getStatusLine().getStatusCode();
@@ -209,6 +221,7 @@ public class HTTPHelper {
 		try {
 			CloseableHttpClient httpclient = HttpClients.custom().disableRedirectHandling().build();
 			HttpGet httpGet = new HttpGet(url);
+			configureHttpWithDefault(url, httpGet);
 			CloseableHttpResponse response = httpclient.execute(httpGet);
 			httpclient.close();
 			Header location = response.getFirstHeader("Location");
