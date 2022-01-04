@@ -113,7 +113,7 @@ public class ElasticWriter extends AbstractFilter {
             try {
                 String absoluteElasticMappingLocation = IOUtils.getAbsoluteFile(
                         getBaseDir(), elasticMappingLocation);
-                String mappingJson = getMappingJson(absoluteElasticMappingLocation);
+                String mappingJson = IOUtils.getString(absoluteElasticMappingLocation);
                 String mappingUrl = ElasticHelper.getIndexUrl(indexUrl);
                 int statusCode = HTTPHelper.getStatusCode(mappingUrl);
                 LOG.debug("status code {}", statusCode);
@@ -153,17 +153,6 @@ public class ElasticWriter extends AbstractFilter {
 
         super.init();
     }
-
-    private String getMappingJson(String absoluteElasticMappingLocation) throws IOException {
-        if (elasticMappingLocation.startsWith("http")) {
-            BasicHeader[] settingsHeaders = getPropertyAsMapping("settingsHeaders").entrySet().stream()
-                    .map(e -> new BasicHeader(e.getKey(), e.getValue()))
-                    .toArray(BasicHeader[]::new);
-            return HTTPHelper.get(elasticMappingLocation, settingsHeaders);
-        }
-        return IOUtils.getString(absoluteElasticMappingLocation);
-    }
-
 
     Object transformRawValue(Field field) {
         String dataType = field.getDatatype();
