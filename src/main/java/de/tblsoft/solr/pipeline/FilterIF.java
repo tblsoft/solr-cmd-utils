@@ -3,12 +3,13 @@ package de.tblsoft.solr.pipeline;
 import de.tblsoft.solr.pipeline.bean.Document;
 import de.tblsoft.solr.pipeline.bean.Filter;
 
+import java.io.Serializable;
 import java.util.Map;
 
 /**
  * Created by tblsoft on 23.01.16.
  */
-public interface FilterIF {
+public interface FilterIF extends Serializable {
 
     public void init();
 

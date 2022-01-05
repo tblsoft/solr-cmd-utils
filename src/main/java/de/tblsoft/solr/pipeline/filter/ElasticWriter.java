@@ -15,6 +15,7 @@ import de.tblsoft.solr.util.IOUtils;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
+import org.apache.http.message.BasicHeader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -152,7 +153,6 @@ public class ElasticWriter extends AbstractFilter {
 
         super.init();
     }
-
 
     Object transformRawValue(Field field) {
         String dataType = field.getDatatype();
