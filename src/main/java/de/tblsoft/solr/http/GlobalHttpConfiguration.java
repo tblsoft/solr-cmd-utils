@@ -3,20 +3,17 @@ package de.tblsoft.solr.http;
 
 import org.apache.http.Header;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class GlobalHttpConfiguration {
     private static final Map<String, List<Header>> headersForEndpoints = new HashMap<>();
 
-    public static void registerEndpointHeaders(String endpoint, List<Header> headers) {
-        List<Header> headersForEndpoint = headersForEndpoints.get(endpoint);
+    public static void registerEndpointHeaders(String regexp, Header... headers) {
+        List<Header> headersForEndpoint = headersForEndpoints.get(regexp);
         if (headersForEndpoint == null) {
-            headersForEndpoints.put(endpoint, new ArrayList<>(headers));
+            headersForEndpoints.put(regexp, new ArrayList<>(Arrays.asList(headers)));
         } else {
-            headersForEndpoint.addAll(headers);
+            headersForEndpoint.addAll(Arrays.asList(headers));
         }
     }
 
