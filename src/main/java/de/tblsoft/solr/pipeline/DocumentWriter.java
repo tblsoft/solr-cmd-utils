@@ -4,13 +4,12 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.tblsoft.solr.pipeline.bean.Document;
-import de.tblsoft.solr.pipeline.bean.Field;
+import de.tblsoft.solr.util.DocumentMapper;
 import de.tblsoft.solr.util.IOUtils;
 import de.tblsoft.solr.util.OutputStreamStringBuilder;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -60,15 +59,7 @@ public class DocumentWriter extends AbstractFilter {
                 outputStreamStringBuilder.append(",");
             }
 
-            Map<String, Object> outputDocument = new HashMap<>();
-            for(Field field : document.getFields()) {
-                if(field.getValues().size() == 1) {
-                    outputDocument.put(field.getName(), field.getValue());
-                } else {
-                    outputDocument.put(field.getName(), field.getValues());
-                }
-
-            }
+            Map<String, Object> outputDocument = DocumentMapper.toMap(document);
             outputStreamStringBuilder.append(objectMapper.writeValueAsString(outputDocument));
 
             super.document(document);
