@@ -15,7 +15,6 @@ import de.tblsoft.solr.util.IOUtils;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
-import org.apache.http.message.BasicHeader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,7 +31,7 @@ public class ElasticWriter extends AbstractFilter {
 
     private String type;
 
-    private String location;
+    protected String location;
 
     private String elasticMappingLocation;
 
@@ -41,7 +40,7 @@ public class ElasticWriter extends AbstractFilter {
     private String idField;
     private Boolean hashId = false;
 
-    private List<Document> buffer = new ArrayList<Document>();
+    protected List<Document> buffer = new ArrayList<Document>();
 
     private int bufferSize = 10000;
 
@@ -202,7 +201,7 @@ public class ElasticWriter extends AbstractFilter {
         return value;
     }
 
-    void procesBuffer() {
+    protected void procesBuffer() {
         if(buffer.size() == 0) {
             return;
         }
@@ -446,4 +445,7 @@ public class ElasticWriter extends AbstractFilter {
         super.end();
     }
 
+    public String getIndexUrl() {
+        return indexUrl;
+    }
 }
