@@ -117,6 +117,23 @@ public class ElasticHelper {
         String index = parts[1];
         return index;
     }
+
+    public static String getBaseUrl(String url) throws URISyntaxException {
+        if(url==null) {
+            throw new URISyntaxException("", "The url is null.");
+        }
+        URI uri = new URI(url);
+        String baseUrl = "http://";
+        if(uri.getScheme() != null) {
+            baseUrl = uri.getScheme()+"://";
+        }
+        baseUrl += uri.getHost();
+        if(uri.getPort() > 0) {
+            baseUrl += ":" + uri.getPort();
+        }
+        return baseUrl;
+    }
+
     public static String getTypeFromUrl(String url) throws URISyntaxException {
     	if(url==null) {
     		throw new URISyntaxException("", "The url is null.");

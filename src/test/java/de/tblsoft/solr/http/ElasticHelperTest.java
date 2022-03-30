@@ -113,6 +113,25 @@ public class ElasticHelperTest {
         actual = ElasticHelper.getIndexFromUrl("http://localhost/foo/bar/?");
         Assert.assertEquals(expected, actual);
     }
+
+    @Test
+    public void getBaseUrlTest() throws URISyntaxException {
+        String expected = "http://localhost";
+        String actual = ElasticHelper.getBaseUrl("http://localhost/foo");
+        Assert.assertEquals(expected, actual);
+
+        actual = ElasticHelper.getBaseUrl("http://localhost/foo/");
+        Assert.assertEquals(expected, actual);
+
+        actual = ElasticHelper.getBaseUrl("http://localhost/foo/bar");
+        Assert.assertEquals(expected, actual);
+
+        actual = ElasticHelper.getBaseUrl("http://localhost/foo/bar/");
+        Assert.assertEquals(expected, actual);
+
+        actual = ElasticHelper.getBaseUrl("http://localhost/foo/bar/?");
+        Assert.assertEquals(expected, actual);
+    }
     
     @Test
     public void getIndexUrlTest() throws URISyntaxException {
