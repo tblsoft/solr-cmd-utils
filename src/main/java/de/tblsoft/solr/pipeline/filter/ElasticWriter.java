@@ -385,8 +385,11 @@ public class ElasticWriter extends AbstractFilter {
 
     public String createBulkMethod(String method, String index, String type,
                                    String id) {
-        String bulkMethod = "{ \"" + method + "\" : { \"_index\" : \"" + index
-                + "\", \"_type\" : \"" + type + "\", \"_id\" : \"" + id + "\"} }";
+        String bulkMethod = "{ \"" + method + "\" : { \"_index\" : \"" + index;
+        if(includeTypeName) {
+            bulkMethod += "\", \"_type\" : \"" + type + "\"";
+        }
+        bulkMethod += "\", \"_id\" : \"" + id + "\"} }";
         return bulkMethod;
     }
 
