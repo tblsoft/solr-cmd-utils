@@ -386,7 +386,7 @@ public class ElasticWriter extends AbstractFilter {
                                    String id) {
         String bulkMethod = "{ \"" + method + "\" : { \"_index\" : \"" + index;
         if(includeTypeName) {
-            bulkMethod += "\", \"_type\" : \"" + type + "\"";
+            bulkMethod += "\", \"_type\" : \"" + type;
         }
         bulkMethod += "\", \"_id\" : \"" + id + "\"} }";
         return bulkMethod;
@@ -447,5 +447,9 @@ public class ElasticWriter extends AbstractFilter {
 
     public String getIndexUrl() {
         return indexUrl;
+    }
+
+    public void setIncludeTypeName(boolean includeTypeName) {
+        this.includeTypeName = includeTypeName;
     }
 }
