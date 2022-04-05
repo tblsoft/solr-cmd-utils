@@ -88,6 +88,11 @@ public abstract class AbstractFilter implements FilterIF {
         }
         List<String> value = (List<String>) filter.getProperty().get(name);
         if(value != null) {
+            StrSubstitutor strSubstitutor = new StrSubstitutor(variables);
+            for(int i = 0; i < value.size(); i++) {
+                value.set(i, strSubstitutor.replace(value.get(i)));
+            }
+
             return value;
         }
         return defaultValue;
