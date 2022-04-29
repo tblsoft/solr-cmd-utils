@@ -74,7 +74,9 @@ public class RestWorker implements Callable<Document> {
             }
         }
 
-        filter.document(doc);
+        if(filter != null) {
+            filter.document(doc);
+        }
 
         return doc;
     }
