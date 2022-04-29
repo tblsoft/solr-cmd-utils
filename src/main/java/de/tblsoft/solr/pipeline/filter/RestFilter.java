@@ -102,14 +102,16 @@ public class RestFilter extends AbstractFilter {
 
     protected boolean filterMatch(Document doc) {
         boolean match = true;
-        for (String filter : filters) {
-            String[] split = filter.split(":");
-            if(split.length == 2) {
-                String field = split[0];
-                String value = split[1];
-                String fieldValue = doc.getFieldValue(field);
+        if(filters != null) {
+            for (String filter : filters) {
+                String[] split = filter.split(":");
+                if (split.length == 2) {
+                    String field = split[0];
+                    String value = split[1];
+                    String fieldValue = doc.getFieldValue(field);
 
-                match &= StringUtils.equals(fieldValue, value); // filter support currently only AND operator
+                    match &= StringUtils.equals(fieldValue, value); // filter support currently only AND operator
+                }
             }
         }
 
