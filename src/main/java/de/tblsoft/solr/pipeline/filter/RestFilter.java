@@ -3,11 +3,13 @@ package de.tblsoft.solr.pipeline.filter;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import de.tblsoft.solr.http.GlobalHttpConfiguration;
 import de.tblsoft.solr.http.UrlUtil;
 import de.tblsoft.solr.pipeline.AbstractFilter;
 import de.tblsoft.solr.pipeline.bean.Document;
 import de.tblsoft.solr.pipeline.bean.Field;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.http.Header;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
@@ -34,6 +36,7 @@ public class RestFilter extends AbstractFilter {
     private String url;
     private String method;
     private List<String> headers;
+    private boolean useGlobalHeaders;
     private List<String> payload;
     private boolean payloadOmitWrap; // omit wrap payload with fieldname if only one payload field is configured
     private List<String> filters;
@@ -59,10 +62,19 @@ public class RestFilter extends AbstractFilter {
             defaultHeaders.add("Content-type: application/json");
         }
         headers = getPropertyAsList("headers", defaultHeaders);
+        useGlobalHeaders = getPropertyAsBoolean("useGlobalHeaders", false);
         filters = getPropertyAsList("filters", null);
         timeout = getPropertyAsInt("timeout", 10000);
         threads = getPropertyAsInt("threads", 1);
         responsePrefix = getProperty("responsePrefix", null);
+
+        if(useGlobalHeaders) {
+            List<Header> globalHeaders = GlobalHttpConfiguration.getHeadersForEndpoint(url);
+            for (Header globalHeader : globalHeaders) {
+                String h = globalHeader.getName() + ":" + globalHeader.getValue();
+                headers.add(h);
+            }
+        }
 
         // Create httpclient
         PoolingHttpClientConnectionManager cm = new PoolingHttpClientConnectionManager();
