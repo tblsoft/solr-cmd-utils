@@ -35,6 +35,7 @@ public class RestFilter extends AbstractFilter {
     private String method;
     private List<String> headers;
     private List<String> payload;
+    private boolean payloadOmitWrap; // omit wrap payload with fieldname if only one payload field is configured
     private List<String> filters;
     private int timeout; // ms
     private int threads;
@@ -51,6 +52,7 @@ public class RestFilter extends AbstractFilter {
 
         method = getProperty("method", "GET");
         payload = getPropertyAsList("payload", null);
+        payloadOmitWrap = getPropertyAsBoolean("payloadOmitWrap", false);
 
         List<String> defaultHeaders = new ArrayList<String>();
         if(payload != null) {
@@ -171,7 +173,12 @@ public class RestFilter extends AbstractFilter {
                     payloadMap.put(fieldName, fieldValues.get(0));
                 }
             }
-            jsonPayload = gson.toJson(payloadMap);
+            if(payloadOmitWrap && payload.size() == 1) {
+                Object value = payloadMap.entrySet().iterator().next().getValue();
+                jsonPayload = gson.toJson(value);
+            } else {
+                jsonPayload = gson.toJson(payloadMap);
+            }
         }
 
         return jsonPayload;
