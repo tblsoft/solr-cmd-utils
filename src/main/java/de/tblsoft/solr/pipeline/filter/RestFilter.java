@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -95,6 +96,11 @@ public class RestFilter extends AbstractFilter {
             RestWorker.RestRequest request = buildRequest(doc);
             RestWorker worker = new RestWorker(doc, httpclient, request, responsePrefix, this.nextFilter);
             Future<Document> future = executor.submit(worker);
+            try {
+                super.document(future.get());
+            } catch (InterruptedException | ExecutionException e) {
+                throw new RuntimeException("Error during REST-call!", e);
+            }
         } else {
             super.document(doc);
         }
