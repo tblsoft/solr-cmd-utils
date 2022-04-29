@@ -189,6 +189,7 @@ public class PipelineExecuter implements Serializable {
         classRegestriy.put("solrcmdutils.SearchQueryAnalyzerFilter", SearchQueryAnalyzerFilter.class);
         classRegestriy.put("solrcmdutils.QscDataPushWriter", QscDataPushWriter.class);
         classRegestriy.put("solrcmdutils.GraphQLReader", GraphQLReader.class);
+        classRegestriy.put("solrcmdutils.RestReader", RestReader.class);
     }
 
     public PipelineExecuter(String yamlFileName) {
