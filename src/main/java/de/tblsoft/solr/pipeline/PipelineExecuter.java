@@ -18,6 +18,7 @@ import de.tblsoft.solr.pipeline.processor.Json2SingleDocumentsProcessor;
 import de.tblsoft.solr.pipeline.processor.NoopProcessor;
 import de.tblsoft.solr.pipeline.processor.OpenNLPPosTaggerTrainProcessor;
 import de.tblsoft.solr.pipeline.processor.QSFDataRepositoryUploadProcessor;
+import de.tblsoft.solr.pipeline.reader.ElasticFacetReader;
 import de.tblsoft.solr.util.IOUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -84,6 +85,7 @@ public class PipelineExecuter implements Serializable {
         classRegestriy.put("solrcmdutils.JsonReader", JsonReader.class);
         classRegestriy.put("solrcmdutils.ElasticJsonPathReader", ElasticJsonPathReader.class);
         classRegestriy.put("solrcmdutils.ElasticReader", ElasticReader.class);
+        classRegestriy.put("solrcmdutils.ElasticFacetReader", ElasticFacetReader.class);
         classRegestriy.put("solrcmdutils.XmlReader", XmlReader.class);
         classRegestriy.put("solrcmdutils.XmlSitemapReader", XmlSitemapReader.class);
         classRegestriy.put("solrcmdutils.XmlSitemapWriter", XmlSitemapWriter.class);

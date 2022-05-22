@@ -1,0 +1,61 @@
+name: "csv unit testing pipeline"
+reader:
+  name: "CsvReader"
+  clazz: "solrcmdutils.ElasticFacetReader"
+  property:
+    #url: "http://localhost:9200/qsc-tracking-prod_2022*/_search"
+    url: "mock-elastic-facet-reader-response.json"
+    "path" : "/aggregations/q/buckets"
+    query: |
+      {
+        "size": 1,
+        "query": {
+          "bool": {
+            "filter": [
+              {
+                "term": {
+                  "app": "search"
+                }
+              },
+              {
+                "term": {
+                  "tenantCode": "ab"
+                }
+              },
+              {
+                "term": {
+                  "searchCode": "products"
+                }
+              },
+              {
+                "range": {
+                  "timestamp": {
+                    "gt": "now-30d/d",
+                    "lte": "now/d"
+                  }
+                }
+              },
+              {
+                "range": {
+                  "total": {
+                    "gt": "0"
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "aggs": {
+          "q": {
+            "terms": {
+              "field": "q.keyword",
+              "size" : 20000
+            }
+          }
+        }
+      }
+
+filter:
+  - name: "Testing Filter"
+    id: "testingFilter"
+    clazz: "solrcmdutils.TestingFilter"

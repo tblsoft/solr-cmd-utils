@@ -1,0 +1,66 @@
+{
+  "took": 307,
+  "timed_out": false,
+  "_shards": {
+    "total": 1,
+    "successful": 1,
+    "skipped": 0,
+    "failed": 0
+  },
+  "hits": {
+    "total": {
+      "value": 3232,
+      "relation": "eq"
+    },
+    "max_score": null,
+    "hits": []
+  },
+  "aggregations": {
+    "q": {
+      "doc_count_error_upper_bound": 0,
+      "sum_other_doc_count": 47,
+      "buckets": [
+        {
+          "key": "wago",
+          "doc_count": 3161
+        },
+        {
+          "key": "Verteilersäule",
+          "doc_count": 7
+        },
+        {
+          "key": "kostal",
+          "doc_count": 3
+        },
+        {
+          "key": "5 qmm",
+          "doc_count": 2
+        },
+        {
+          "key": "Klemens Isenmann",
+          "doc_count": 2
+        },
+        {
+          "key": "Spülmaschine Unterbau geschirrspüler",
+          "doc_count": 2
+        },
+        {
+          "key": "ak 70",
+          "doc_count": 2
+        },
+        {
+          "key": "aki 70",
+          "doc_count": 2
+        },
+        {
+          "key": "moser",
+          "doc_count": 2
+        },
+        {
+          "key": "protection",
+          "doc_count": 2
+        }
+      ]
+    }
+  }
+}
