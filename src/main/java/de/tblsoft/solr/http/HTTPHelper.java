@@ -92,8 +92,10 @@ public class HTTPHelper {
 			HttpPost httpPost = new HttpPost(url);
 			configureHttpWithDefault(url, httpPost);
 
-			StringEntity entity = new StringEntity(postString, "UTF-8");
-			httpPost.setEntity(entity);
+			if(postString != null) {
+				StringEntity entity = new StringEntity(postString, "UTF-8");
+				httpPost.setEntity(entity);
+			}
 
 			for(String header : headers ) {
 				String[] splitted = header.split(":");

@@ -91,6 +91,10 @@ public class ElasticHelper {
         return uri.toString();
     }
 
+    public static String getIndexCloseUrl(String url, String index) throws URISyntaxException {
+        return getIndexUrl(url, index)+"/_close";
+    }
+
     public static String getIndexUrl(String url) throws URISyntaxException {
         if(url==null) {
             throw new URISyntaxException("", "The url is null.");

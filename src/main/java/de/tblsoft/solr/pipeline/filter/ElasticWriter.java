@@ -57,6 +57,7 @@ public class ElasticWriter extends AbstractFilter {
     private String housekeppingStrategy;
 
     private Boolean housekeepingEnabled = false;
+    private boolean closeOldIndices = false;
     private String alias;
 
     private String bulkMethodFieldName;
@@ -69,6 +70,7 @@ public class ElasticWriter extends AbstractFilter {
         bulkMethodFieldName = getProperty("bulkMethodFieldName", null);
         alias = getProperty("alias", null);
         housekeepingEnabled = getPropertyAsBoolean("housekeepingEnabled", housekeepingEnabled);
+        closeOldIndices = getPropertyAsBoolean("closeOldIndices", closeOldIndices);
         housekeepingCount = getPropertyAsInt("housekeepingCount", 5);
         housekeppingStrategy = getProperty("housekeppingStrategy", "linear");
 
@@ -402,14 +404,19 @@ public class ElasticWriter extends AbstractFilter {
         List<String> indexes = AliasManager.getIndexesByPrefix(indexUrl,prefix);
         Collections.sort(indexes);
 
-
+        List<String> oldIndices = new ArrayList<>(indexes);
+        String newIndex = oldIndices.remove(oldIndices.size()-1);
         try {
             String alias = ElasticHelper.getIndexFromUrl(location);
-            AliasManager.switchAlias(location, alias, indexes, indexes.get(indexes.size()-1));
-
+            AliasManager.switchAlias(location, alias, oldIndices, newIndex);
         } catch (Exception e) {
             LOG.error("There was an error switching the alias: " + e.getMessage(), e);
         }
+        if(closeOldIndices) {
+            String[] oldIndicesArray = oldIndices.toArray(new String[0]);
+            AliasManager.closeIndex(location, oldIndicesArray);
+        }
+
         int indexesToDeleteCount = indexes.size() - housekeepingCount;
         if(indexesToDeleteCount < 0) {
             indexesToDeleteCount = 0;

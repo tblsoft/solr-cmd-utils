@@ -152,6 +152,11 @@ public class ElasticHelperTest {
         Assert.assertEquals(expected, actual);
     }
 
+    @Test
+    public void getIndexCloseUrlTest() throws URISyntaxException {
+        Assert.assertEquals("http://localhost/foo/_close", ElasticHelper.getIndexCloseUrl("http://localhost/_doc", "foo"));
+    }
+
     @Test(expected = URISyntaxException.class)
     public void getIndexUrlTestWithEmptyUrl() throws URISyntaxException {
         ElasticHelper.getIndexUrl("");

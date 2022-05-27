@@ -81,6 +81,14 @@ public class AliasManager {
         }
     }
 
-
-
+    public static void closeIndex(String elasticUrl, String... indices) {
+        for (String index : indices) {
+            try {
+                String indexCloseUrl = ElasticHelper.getIndexCloseUrl(elasticUrl, index);
+                HTTPHelper.post(indexCloseUrl, null, "application/json");
+            } catch (URISyntaxException e) {
+                throw new RuntimeException("Could not close index due malformed uri!", e);
+            }
+        }
+    }
 }
