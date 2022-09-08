@@ -7,6 +7,7 @@ import de.tblsoft.solr.pipeline.bean.Filter;
 import de.tblsoft.solr.util.DateUtils;
 
 import org.apache.commons.lang3.text.StrSubstitutor;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.*;
 
@@ -48,7 +49,27 @@ public abstract class AbstractFilter implements FilterIF {
 
     @Override
     public void document(Document document) {
-        nextFilter.document(document);
+        List<Document> docs = null;
+        try {
+            docs = flatMap(document);
+        } catch (NotImplementedException ignored) {
+            docs = new ArrayList<>();
+            docs.add(document);
+        }
+
+        if(docs != null) {
+            for (Document doc : docs) {
+                nextFilter.document(document);
+            }
+        }
+    }
+
+    public List<Document> flatMap(Document document) {
+        return new ArrayList<>(Arrays.asList(map(document)));
+    }
+
+    public Document map(Document document) {
+        throw new NotImplementedException();
     }
 
     @Override

@@ -52,7 +52,7 @@ public class QscDataPushWriter extends AbstractFilter {
 
     @Override
     public void document(Document document) {
-        QscFeedingDocument qscFeedingDocument = map(document);
+        QscFeedingDocument qscFeedingDocument = convert(document);
         batch.add(qscFeedingDocument);
         if(batch.size() > batchSize) {
             sendBatch(batch);
@@ -61,7 +61,7 @@ public class QscDataPushWriter extends AbstractFilter {
     }
 
 
-    public QscFeedingDocument map(Document document) {
+    public QscFeedingDocument convert(Document document) {
         QscFeedingDocument feedingDocument = new QscFeedingDocument();
         Map<String, Object> outputDocument = DocumentMapper.toMap(document);
         feedingDocument.setPayload(outputDocument);

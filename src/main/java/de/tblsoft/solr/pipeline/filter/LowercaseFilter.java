@@ -22,7 +22,7 @@ public class LowercaseFilter extends AbstractFilter {
 
 
     @Override
-    public void document(Document document) {
+    public Document map(Document document) {
         for(Field field : document.getFields()) {
             List<String> newValues = new ArrayList<>();
             for(String value : field.getValues()) {
@@ -30,7 +30,6 @@ public class LowercaseFilter extends AbstractFilter {
             }
             field.setValues(newValues);
         }
-         super.document(document);
+        return document;
     }
-    
 }

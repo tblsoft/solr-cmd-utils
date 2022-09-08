@@ -32,8 +32,7 @@ public class SystemOutWriter extends AbstractFilter {
         super.init();
     }
 
-    @Override
-    public void document(Document document) {
+    public Document map(Document document) {
         documentCounter++;
         List<Field> values = document.getFields();
         if(values != null) {
@@ -45,8 +44,7 @@ public class SystemOutWriter extends AbstractFilter {
                 LOG.info(prefix+" -- value: " + out );
             }
         }
-
-        super.document(document);
+        return document;
     }
 
     @Override

@@ -10,6 +10,13 @@ import de.tblsoft.solr.pipeline.bean.Document;
 public class SleepFilter extends AbstractFilter {
     private long duration; // in ms
 
+    public SleepFilter() {
+    }
+
+    public SleepFilter(long duration) {
+        this.duration = duration;
+    }
+
     @Override
     public void init() {
         duration = getPropertyAsInt("duration", 1000);
@@ -26,5 +33,15 @@ public class SleepFilter extends AbstractFilter {
         }
 
         super.document(document);
+    }
+
+    @Override
+    public Document map(Document document) {
+        try {
+            Thread.sleep(duration);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        return document;
     }
 }
