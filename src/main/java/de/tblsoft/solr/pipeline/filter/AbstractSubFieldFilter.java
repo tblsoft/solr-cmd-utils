@@ -33,8 +33,8 @@ public abstract class AbstractSubFieldFilter extends AbstractFilter {
 					Document subDoc = new Document();
 					for (Map.Entry<String, Object> entry : rawDoc.entrySet()) {
 						subDoc.setField(entry.getKey(), entry.getValue());
-						document.addSubField(fieldName, subDoc);
 					}
+					document.addSubField(fieldName, subDoc);
 				}
 				documents = document.getSubField(fieldName);
 			} else {
