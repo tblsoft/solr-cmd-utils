@@ -25,7 +25,7 @@ public abstract class AbstractSubFieldFilter extends AbstractFilter {
 		List<Document> documents = document.getSubField(fieldName);
 		if(documents == null) {
 			// retrieve subfield from rawvalue field
-			if(document.getField(fieldName).getRawValue() != null) {
+			if(document.getField(fieldName) != null && document.getField(fieldName).getRawValue() != null) {
 				List<Map<String, Object>> rawDocs = (List<Map<String, Object>>) document.getField(fieldName).getRawValue();
 				document.deleteField(fieldName);
 
