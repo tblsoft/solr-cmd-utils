@@ -164,7 +164,7 @@ public class JsonWriter extends AbstractFilter {
 
     }
 
-    static Map<String, Object> mapToJson(Document document) {
+    public static Map<String, Object> mapToJson(Document document) {
         Map<String, Object> jsonDocument = new HashMap<String, Object>();
         for(Field field: document.getFields()) {
             List<String> values = field.getValues();
