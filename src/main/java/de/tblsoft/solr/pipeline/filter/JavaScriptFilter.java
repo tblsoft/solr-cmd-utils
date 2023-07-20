@@ -17,6 +17,7 @@ import java.util.List;
 /**
  * Created by tblsoft 30.03.18.
  */
+@Deprecated // javascript engine must be replaced for newer java versions
 public class JavaScriptFilter extends AbstractFilter {
 
 

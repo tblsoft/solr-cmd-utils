@@ -2,9 +2,19 @@
 All notable changes for the solr-cmd-utils project will be documented in this file.
 
 
+## [3.29]
+### Changed
+
+
+### Deprecated
+
+
+
 ## [Unreleased]
 ### Changed
 - update dependencies
+### Deprecated
+- Javascript filters are not supported anymore in newer java versions
 
 ## [3.19]
 ### Added

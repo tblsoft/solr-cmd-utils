@@ -3,11 +3,14 @@ package de.tblsoft.solr.pipeline.filter;
 import de.tblsoft.solr.pipeline.bean.DocumentBuilder;
 import de.tblsoft.solr.pipeline.bean.Field;
 import de.tblsoft.solr.pipeline.test.AbstractFilterTest;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
  * Created by tblsoft on 17.05.16.
  */
+@Deprecated // javascript engine must be replaced for newer java versions
+@Ignore
 public class RichJavaScriptFilterTest extends AbstractFilterTest {
 
     @Override
