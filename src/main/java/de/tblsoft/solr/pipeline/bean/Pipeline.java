@@ -20,6 +20,8 @@ public class Pipeline {
 
     private String webHookError;
 
+    private String webHookCancel;
+
     private Map<String,String> variables = new HashMap<>();
 
     private Reader reader;
@@ -118,6 +120,14 @@ public class Pipeline {
      */
     public void setWebHookError(String webHookError) {
         this.webHookError = webHookError;
+    }
+
+    public String getWebHookCancel() {
+        return webHookCancel;
+    }
+
+    public void setWebHookCancel(String webHookCancel) {
+        this.webHookCancel = webHookCancel;
     }
 
     /**

@@ -1,6 +1,7 @@
 package de.tblsoft.solr.pipeline;
 
 import com.google.common.base.Strings;
+import com.quasiris.qsc.exception.CancelJobException;
 import com.quasiris.qsc.writer.QscDataPushWriter;
 import de.tblsoft.solr.compare.SolrCompareFilter;
 import de.tblsoft.solr.http.HTTPHelper;
@@ -56,6 +57,8 @@ public class PipelineExecuter implements Serializable {
     private String webHookEnd;
 
     private String webHookError;
+
+    private String webHookCancel;
 
     private List<ProcessorIF> preProcessorList;
 
@@ -244,6 +247,7 @@ public class PipelineExecuter implements Serializable {
             webHookStart = pipeline.getWebHookStart();
             webHookEnd = pipeline.getWebHookEnd();
             webHookError = pipeline.getWebHookError();
+            webHookCancel = pipeline.getWebHookCancel();
 
             HTTPHelper.webHook(webHookStart,
                     "status", "start",
@@ -407,16 +411,23 @@ public class PipelineExecuter implements Serializable {
     }
 
     private void onWebhookError(Exception exception) {
-        if(!Strings.isNullOrEmpty(webHookError)) {
+        if (exception instanceof CancelJobException && webHookCancel != null) {
+            try {
+                String exceptionString = "Stopped. User initiated.";
+                HTTPHelper.post(webHookCancel, exceptionString);
+            } catch (Exception e) {
+                LOG.error("Could not call the cancel webHookCancel {} because {}", webHookCancel, e.getMessage(), e);
+                // fail silent
+            }
+        } else if (!Strings.isNullOrEmpty(webHookError)) {
             try {
                 String exceptionString = ExceptionUtils.getStackTrace(exception);
                 HTTPHelper.post(webHookError, exceptionString);
             } catch (Exception e) {
-                LOG.error("Could not call the error webHookError {} because {}", webHookError, e.getMessage(), e );
+                LOG.error("Could not call the error webHookError {} because {}", webHookError, e.getMessage(), e);
                 // fail silent
             }
         }
-
     }
 
     //public void field(String name, String value) {

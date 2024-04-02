@@ -134,6 +134,20 @@ public class HTTPHelper {
 
     }
 
+	public static String webHookWithResponse(String url, String... parameters) {
+		if (Strings.isNullOrEmpty(url)) {
+			return null;
+		}
+		Map<String, String> parametersMap = new HashMap<>();
+		for (int i = 0; i < parameters.length; i = i + 2) {
+			parametersMap.put(parameters[i], parameters[i + 1]);
+		}
+		StrSubstitutor strSubstitutor = new StrSubstitutor(parametersMap);
+		String webhook = strSubstitutor.replace(url);
+		// TODO this should be async
+		return get(webhook);
+	}
+
 	public static String get(String url, Header... headers) {
 		try {
 			CloseableHttpClient httpclient = HttpClients.createDefault();

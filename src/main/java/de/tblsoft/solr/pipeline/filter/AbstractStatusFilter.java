@@ -1,5 +1,8 @@
 package de.tblsoft.solr.pipeline.filter;
 
+import com.quasiris.qsc.dto.StatusUpdateDTO;
+import com.quasiris.qsc.exception.CancelJobException;
+import com.quasiris.qsc.factory.ObjectMapperBuilder;
 import de.tblsoft.solr.http.HTTPHelper;
 import de.tblsoft.solr.pipeline.AbstractFilter;
 import de.tblsoft.solr.pipeline.bean.Document;
@@ -85,13 +88,13 @@ public abstract class AbstractStatusFilter extends AbstractFilter {
             return durationInHours + " hours " + durationInMinute + " minutes";
         }
     }
-    
+
     void printStatus(long duration, long lapDuration, Document document) {
         StringBuilder printFields = new StringBuilder();
-        if(fieldsToPrint != null) {
-            for(String fieldToPrint : fieldsToPrint) {
+        if (fieldsToPrint != null) {
+            for (String fieldToPrint : fieldsToPrint) {
                 String fieldValue = document.getFieldValue(fieldToPrint);
-                if(fieldValue != null) {
+                if (fieldValue != null) {
                     printFields.append(" ");
                     printFields.append(fieldToPrint);
                     printFields.append(":");
@@ -100,14 +103,20 @@ public abstract class AbstractStatusFilter extends AbstractFilter {
             }
         }
 
-    	LOG.info("processed all " + documentCounter + " in " + getFormattedDuration(duration) + ". - processed the last " + lapCount + " documents in " + getFormattedDuration(lapDuration) + "." + printFields);
+        LOG.info("processed all " + documentCounter + " in " + getFormattedDuration(duration) + ". - processed the last " + lapCount + " documents in " + getFormattedDuration(lapDuration) + "." + printFields);
 
-        if(webHook != null) {
-            HTTPHelper.webHook(webHook,
-                    "status", "progress",
-                    "documentCounter", String.valueOf(documentCounter),
-                    "expectedDocumentCount", String.valueOf(pipelineExecuter.getExpectedDocumentCount()),
-                    "processId", getPipelineExecuter().getProcessId());
+        if (webHook != null) {
+            String response = HTTPHelper.webHookWithResponse(webHook, "status", "progress", "documentCounter", String.valueOf(documentCounter), "expectedDocumentCount", String.valueOf(pipelineExecuter.getExpectedDocumentCount()), "processId", getPipelineExecuter().getProcessId());
+            if (response != null) {
+                StatusUpdateDTO statusUpdateDTO = null;
+                try {
+                    statusUpdateDTO = ObjectMapperBuilder.defaultMapper().readValue(response, StatusUpdateDTO.class);
+                } catch (Exception ignore) {
+                }
+                if (statusUpdateDTO != null && Boolean.TRUE.equals(statusUpdateDTO.getCancelInitiated())) {
+                    throw new CancelJobException("Job has been canceled");
+                }
+            }
         }
     }
     
