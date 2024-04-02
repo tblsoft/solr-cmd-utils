@@ -1,7 +1,7 @@
 package de.tblsoft.solr.pipeline.filter;
 
 import com.quasiris.qsc.dto.StatusUpdateDTO;
-import com.quasiris.qsc.exception.CancelJobException;
+import com.quasiris.qsc.exception.CancelPipelineException;
 import com.quasiris.qsc.factory.ObjectMapperBuilder;
 import de.tblsoft.solr.http.HTTPHelper;
 import de.tblsoft.solr.pipeline.AbstractFilter;
@@ -113,8 +113,8 @@ public abstract class AbstractStatusFilter extends AbstractFilter {
                     statusUpdateDTO = ObjectMapperBuilder.defaultMapper().readValue(response, StatusUpdateDTO.class);
                 } catch (Exception ignore) {
                 }
-                if (statusUpdateDTO != null && Boolean.TRUE.equals(statusUpdateDTO.getCancelInitiated())) {
-                    throw new CancelJobException("Job has been canceled");
+                if (statusUpdateDTO != null && Boolean.TRUE.equals(statusUpdateDTO.getCancelPipelineInitiated())) {
+                    throw new CancelPipelineException("Job has been canceled");
                 }
             }
         }

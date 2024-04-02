@@ -1,7 +1,7 @@
 package de.tblsoft.solr.pipeline;
 
 import com.google.common.base.Strings;
-import com.quasiris.qsc.exception.CancelJobException;
+import com.quasiris.qsc.exception.CancelPipelineException;
 import com.quasiris.qsc.writer.QscDataPushWriter;
 import de.tblsoft.solr.compare.SolrCompareFilter;
 import de.tblsoft.solr.http.HTTPHelper;
@@ -411,7 +411,7 @@ public class PipelineExecuter implements Serializable {
     }
 
     private void onWebhookError(Exception exception) {
-        if (exception instanceof CancelJobException && webHookCancel != null) {
+        if (exception instanceof CancelPipelineException && webHookCancel != null) {
             try {
                 String exceptionString = "Stopped. User initiated.";
                 HTTPHelper.post(webHookCancel, exceptionString);
