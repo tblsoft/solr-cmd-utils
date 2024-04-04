@@ -13,8 +13,8 @@
     </properties>
 
     <scm>
-        <connection>scm:git:https://github.com/tblsoft/solr-cmd-utils.git</connection>
-        <developerConnection>scm:git:https://github.com/tblsoft/solr-cmd-utils.git</developerConnection>
+        <connection>scm:git:git@github.com:tblsoft/solr-cmd-utils.git</connection>
+        <developerConnection>scm:git:git@github.com:tblsoft/solr-cmd-utils.git</developerConnection>
         <url>https://github.com/tblsoft/solr-cmd-utils</url>
     <tag>solr-cmd-utils-3.13</tag>
   </scm>
