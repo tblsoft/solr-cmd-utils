@@ -2,6 +2,7 @@ package de.tblsoft.solr.pipeline;
 
 import com.google.common.base.Strings;
 import com.quasiris.qsc.exception.CancelPipelineException;
+import com.quasiris.qsc.exception.DelegatedPipelineException;
 import com.quasiris.qsc.writer.QscDataPushWriter;
 import de.tblsoft.solr.compare.SolrCompareFilter;
 import de.tblsoft.solr.http.HTTPHelper;
@@ -419,6 +420,9 @@ public class PipelineExecuter implements Serializable {
                 LOG.error("Could not call the cancel webHookCancel {} because {}", webHookCancel, e.getMessage(), e);
                 // fail silent
             }
+        } else if (exception instanceof DelegatedPipelineException) {
+            LOG.info("Skip sending webHookError (DelegatedPipelineException)");
+//            ignore
         } else if (!Strings.isNullOrEmpty(webHookError)) {
             try {
                 String exceptionString = ExceptionUtils.getStackTrace(exception);
