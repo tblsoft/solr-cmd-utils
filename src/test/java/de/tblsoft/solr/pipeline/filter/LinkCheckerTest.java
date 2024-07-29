@@ -57,7 +57,7 @@ public class LinkCheckerTest extends AbstractFilterTest {
         runTest();
         assertFiled("url", "https://quasiris.de");
         assertFiled("status", "REDIRECT");
-        assertFiled("httpCode", "302");
+        assertFiled("httpCode", "301");
 
     }
 }
