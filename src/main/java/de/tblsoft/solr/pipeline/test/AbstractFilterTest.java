@@ -42,6 +42,10 @@ public abstract class AbstractFilterTest extends AbstractBaseTest {
     public void createField(String name, String value) {
         this.inputDocument.addField(name,value);
     }
+
+    public void createField(String name, List<String> values) {
+        this.inputDocument.addField(name,values);
+    }
     public abstract void configure();
 
     @Test
