@@ -2,6 +2,7 @@ package de.tblsoft.solr.pipeline;
 
 import com.quasiris.qsf.commons.util.JsonUtil;
 import de.tblsoft.solr.pipeline.bean.Document;
+import de.tblsoft.solr.pipeline.resume.ResumeStatusDTO;
 import de.tblsoft.solr.util.IOUtils;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
@@ -69,17 +70,20 @@ public abstract class AbstractResumeReader extends AbstractReader {
     public void end() {
         if(resumable) {
             writeBatch();
-            executer.getResumeStatus().setCompleted(Boolean.TRUE);
-            executer.saveResumeStatus();
-            int fileCount = 0;
-            String file = getBatchFile(fileCount);
+            ResumeStatusDTO status = executer.getResumeStatus();
+            status.setCompleted(Boolean.TRUE);
+            if(status.getLastBatch() == null) {
+                status.setLastBatch(0);
+            }
+            String file = getBatchFile(status.getLastBatch());
             while (IOUtils.fileExists(file)) {
                 List<Document> docs = readJsonlFile(file);
                 for (Document document : docs) {
                     super.document(document);
                 }
-                fileCount++;
-                file = getBatchFile(fileCount);
+                status.setLastBatch(status.getLastBatch() + 1);
+                file = getBatchFile(status.getLastBatch());
+                executer.saveResumeStatus();
             }
 
             if (resumeDeleteDir) {
