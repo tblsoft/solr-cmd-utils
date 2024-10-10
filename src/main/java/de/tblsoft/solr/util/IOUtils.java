@@ -166,4 +166,8 @@ public class IOUtils {
         Path path = Paths.get(filePath);
         return java.nio.file.Files.exists(path);
     }
+
+    public static boolean fileExists(File file) {
+        return file.exists();
+    }
 }

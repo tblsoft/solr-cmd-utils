@@ -529,7 +529,7 @@ public class PipelineExecuter implements Serializable {
 
     public ResumeStatusDTO getResumeStatus() {
         if(resumeStatus == null) {
-            resumeStatus = new ResumeStatusDTO();
+            resumeStatus = loadResumeStatus();
         }
         return resumeStatus;
     }
@@ -566,7 +566,7 @@ public class PipelineExecuter implements Serializable {
 
     public ResumeStatusDTO loadResumeStatus() {
         try {
-            if(IOUtils.fileExists(getResumeStatusFileName().getAbsolutePath())) {
+            if(getResumeStatusFileName().exists()) {
                 return JsonUtil.defaultMapper().readValue(getResumeStatusFileName(), ResumeStatusDTO.class);
             } else {
                 ResumeStatusDTO resumeStatus = new ResumeStatusDTO();
@@ -588,7 +588,7 @@ public class PipelineExecuter implements Serializable {
             throw new RuntimeException(e);
         }
     }
-    
+
     private File getResumeStatusFileName() {
         return new File(workDir + "/resume-status.json");
     }

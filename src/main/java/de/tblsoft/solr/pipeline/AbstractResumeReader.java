@@ -124,4 +124,7 @@ public abstract class AbstractResumeReader extends AbstractReader {
         }
     }
 
+    public Boolean getResumable() {
+        return resumable;
+    }
 }
