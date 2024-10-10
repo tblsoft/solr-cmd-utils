@@ -64,25 +64,27 @@ public abstract class AbstractResumeReader extends AbstractReader {
 
     @Override
     public void end() {
-        writeBatch();
-        executer.getResumeStatus().setCompleted(Boolean.TRUE);
-        executer.saveResumeStatus();
-        int fileCount = 0;
-        String file = getBatchFile(fileCount);
-        while(IOUtils.fileExists(file)) {
-            List<Document> docs = readJsonlFile(file);
-            for(Document document : docs) {
-                super.document(document);
+        if(resumable) {
+            writeBatch();
+            executer.getResumeStatus().setCompleted(Boolean.TRUE);
+            executer.saveResumeStatus();
+            int fileCount = 0;
+            String file = getBatchFile(fileCount);
+            while (IOUtils.fileExists(file)) {
+                List<Document> docs = readJsonlFile(file);
+                for (Document document : docs) {
+                    super.document(document);
+                }
+                fileCount++;
+                file = getBatchFile(fileCount);
             }
-            fileCount++;
-            file = getBatchFile(fileCount);
-        }
 
-        if(resumeDeleteDir) {
-            try {
-                FileUtils.deleteDirectory(new File(executer.getWorkDir()));
-            } catch (IOException e) {
-                // ignore error
+            if (resumeDeleteDir) {
+                try {
+                    FileUtils.deleteDirectory(new File(executer.getWorkDir()));
+                } catch (IOException e) {
+                    // ignore error
+                }
             }
         }
 
