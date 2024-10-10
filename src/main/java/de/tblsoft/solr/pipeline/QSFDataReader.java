@@ -1,6 +1,8 @@
 package de.tblsoft.solr.pipeline;
 
-import com.quasiris.qsf.commons.ai.ModelRepositoryManager;
+import com.quasiris.qsf.commons.repo.ModelRepositoryManager;
+import com.quasiris.qsf.commons.repo.config.ModelRepositoryConfig;
+import com.quasiris.qsf.commons.repo.config.ModelRepositoryConfigBuilder;
 import de.tblsoft.solr.pipeline.bean.Pipeline;
 import de.tblsoft.solr.pipeline.bean.Reader;
 
@@ -21,13 +23,16 @@ public class QSFDataReader extends AbstractReader {
         String pipeline = getProperty("pipeline", "pipeline.yml");
         String filenameProperty = getProperty("filenameProperty", "filename");
 
+        ModelRepositoryConfig modelRepositoryConfig = ModelRepositoryConfigBuilder.create().
+                modelBasePath(modelBasePath).
+                modelBaseUrl(modelBaseUrl).
+                build();
         try {
             ModelRepositoryManager modelRepositoryManager = ModelRepositoryManager.Builder.create().
                     groupId(groupId).
                     artifactId(artifactId).
                     version(version).
-                    modelBasePath(modelBasePath).
-                    modelBaseUrl(modelBaseUrl).
+                    config(modelRepositoryConfig).
                     build();
 
 

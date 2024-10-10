@@ -1,6 +1,8 @@
 package de.tblsoft.solr.pipeline.filter;
 
-import com.quasiris.qsf.commons.ai.ModelRepositoryManager;
+import com.quasiris.qsf.commons.repo.ModelRepositoryManager;
+import com.quasiris.qsf.commons.repo.config.ModelRepositoryConfig;
+import com.quasiris.qsf.commons.repo.config.ModelRepositoryConfigBuilder;
 import de.tblsoft.solr.pipeline.AbstractFilter;
 import de.tblsoft.solr.pipeline.bean.Document;
 import de.tblsoft.solr.pipeline.bean.Field;
@@ -44,6 +46,8 @@ public class OpenNlpPosTagFilter extends AbstractFilter {
     private String modelBaseUrl;
     private String modelBasePath;
 
+    private ModelRepositoryConfig modelRepositoryConfig;
+
     private SentenceDetectorME sentenceDetector;
     private POSTaggerME posTagger;
     private Tokenizer tokenizer;
@@ -55,6 +59,11 @@ public class OpenNlpPosTagFilter extends AbstractFilter {
         posTaggerModel = getProperty("posTaggerModel", "org.apache.opennlp|de-pos-maxent|1.5|de-pos-maxent.bin");
         modelBaseUrl = getProperty("modelBaseUrl", null);
         modelBasePath = getProperty("modelBasePath", null);
+
+        modelRepositoryConfig = ModelRepositoryConfigBuilder.create().
+                modelBasePath(modelBasePath).
+                modelBaseUrl(modelBaseUrl).
+                build();
 
         try {
             this.sentenceDetector = initSentenceDetector();
@@ -71,8 +80,7 @@ public class OpenNlpPosTagFilter extends AbstractFilter {
         ModelRepositoryManager loader = ModelRepositoryManager.Builder.create().
                 groupId("").artifactId("").version("").
                 shortId(shortId).
-                modelBasePath(modelBasePath).
-                modelBaseUrl(modelBaseUrl).
+                config(modelRepositoryConfig).
                 build();
 
         String fileName = shortId.split(Pattern.quote("|")) [3];

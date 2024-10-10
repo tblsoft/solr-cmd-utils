@@ -11,6 +11,7 @@ import org.apache.commons.io.filefilter.WildcardFileFilter;
 import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -148,5 +149,21 @@ public class IOUtils {
         Stream<String> lines = java.nio.file.Files.lines(Paths.get(fileName), charSet);
         result = lines.collect(Collectors.toList());
         return result;
+    }
+
+    public static void createDirectoryIfNotExists(String directoryPath) {
+        Path path = Paths.get(directoryPath);
+        if (java.nio.file.Files.notExists(path)) {
+            try {
+                java.nio.file.Files.createDirectories(path);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    public static boolean fileExists(String filePath) {
+        Path path = Paths.get(filePath);
+        return java.nio.file.Files.exists(path);
     }
 }

@@ -1,6 +1,8 @@
 package de.tblsoft.solr.pipeline.processor;
 
-import com.quasiris.qsf.commons.ai.ModelRepositoryManager;
+import com.quasiris.qsf.commons.repo.ModelRepositoryManager;
+import com.quasiris.qsf.commons.repo.config.ModelRepositoryConfig;
+import com.quasiris.qsf.commons.repo.config.ModelRepositoryConfigBuilder;
 import de.tblsoft.solr.pipeline.AbstractProcessor;
 
 public class QSFDataRepositoryUploadProcessor extends AbstractProcessor {
@@ -16,13 +18,18 @@ public class QSFDataRepositoryUploadProcessor extends AbstractProcessor {
         String sourceDir = getProperty("sourceDir", null);
 
         try {
+             ModelRepositoryConfig modelRepositoryConfig = ModelRepositoryConfigBuilder.create().
+                     modelBasePath(modelBasePath).
+                     uploadBaseUrl(uploadBaseUrl).
+                     modelBaseUrl(modelBaseUrl).
+                     build();
+
+
             ModelRepositoryManager modelRepositoryManager = ModelRepositoryManager.Builder.create().
                     groupId(groupId).
                     artifactId(artifactId).
                     version(version).
-                    modelBasePath(modelBasePath).
-                    modelBaseUrl(modelBaseUrl).
-                    uploadBaseUrl(uploadBaseUrl).
+                    config(modelRepositoryConfig).
                     build();
 
             modelRepositoryManager.saveAndUpload(sourceDir);

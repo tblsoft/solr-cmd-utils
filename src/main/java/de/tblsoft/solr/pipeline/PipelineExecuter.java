@@ -4,23 +4,17 @@ import com.google.common.base.Strings;
 import com.quasiris.qsc.exception.CancelPipelineException;
 import com.quasiris.qsc.exception.DelegatedPipelineException;
 import com.quasiris.qsc.writer.QscDataPushWriter;
+import com.quasiris.qsf.commons.util.JsonUtil;
 import de.tblsoft.solr.compare.SolrCompareFilter;
 import de.tblsoft.solr.http.HTTPHelper;
-import de.tblsoft.solr.pipeline.bean.Document;
-import de.tblsoft.solr.pipeline.bean.Filter;
-import de.tblsoft.solr.pipeline.bean.Pipeline;
-import de.tblsoft.solr.pipeline.bean.Processor;
-import de.tblsoft.solr.pipeline.bean.Reader;
+import de.tblsoft.solr.pipeline.bean.*;
 import de.tblsoft.solr.pipeline.filter.*;
 import de.tblsoft.solr.pipeline.filter.nlp.SearchQueryAnalyzerFilter;
 import de.tblsoft.solr.pipeline.nlp.squad.SquadReader;
 import de.tblsoft.solr.pipeline.nlp.squad.SquadWriter;
-import de.tblsoft.solr.pipeline.processor.DownloadResourcesProcessor;
-import de.tblsoft.solr.pipeline.processor.Json2SingleDocumentsProcessor;
-import de.tblsoft.solr.pipeline.processor.NoopProcessor;
-import de.tblsoft.solr.pipeline.processor.OpenNLPPosTaggerTrainProcessor;
-import de.tblsoft.solr.pipeline.processor.QSFDataRepositoryUploadProcessor;
+import de.tblsoft.solr.pipeline.processor.*;
 import de.tblsoft.solr.pipeline.reader.ElasticFacetReader;
+import de.tblsoft.solr.pipeline.resume.ResumeStatusDTO;
 import de.tblsoft.solr.util.IOUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -34,12 +28,7 @@ import java.io.FileInputStream;
 import java.io.Serializable;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Created by tblsoft on 23.01.16.
@@ -61,6 +50,8 @@ public class PipelineExecuter implements Serializable {
 
     private String webHookCancel;
 
+    private String webHookHeartBeat;
+
     private List<ProcessorIF> preProcessorList;
 
     private List<FilterIF> filterList;
@@ -76,6 +67,12 @@ public class PipelineExecuter implements Serializable {
     private String processId;
 
     private Long expectedDocumentCount = -1L;
+
+    private ResumeStatusDTO resumeStatus;
+
+    private String baseWorkDir = "/tmp";
+
+    private String workDir;
 
     private static Map<String, Class> classRegestriy = new HashMap<String, Class>();
     static {
@@ -245,10 +242,13 @@ public class PipelineExecuter implements Serializable {
                 processId = UUID.randomUUID().toString();
             }
 
+            workDir = baseWorkDir + "/" + processId;
+
             webHookStart = pipeline.getWebHookStart();
             webHookEnd = pipeline.getWebHookEnd();
             webHookError = pipeline.getWebHookError();
             webHookCancel = pipeline.getWebHookCancel();
+            webHookHeartBeat = pipeline.getWebHookHeartBeat();
 
             HTTPHelper.webHook(webHookStart,
                     "status", "start",
@@ -411,6 +411,13 @@ public class PipelineExecuter implements Serializable {
         }
     }
 
+    public void heaertBeat() {
+        if(webHookHeartBeat !=null) {
+            HTTPHelper.webHook(webHookHeartBeat,
+                    "processId", getProcessId());
+        }
+    }
+
     private void onWebhookError(Exception exception) {
         if (exception instanceof CancelPipelineException && webHookCancel != null) {
             try {
@@ -520,6 +527,17 @@ public class PipelineExecuter implements Serializable {
         this.processId = processId;
     }
 
+    public ResumeStatusDTO getResumeStatus() {
+        if(resumeStatus == null) {
+            resumeStatus = new ResumeStatusDTO();
+        }
+        return resumeStatus;
+    }
+
+    public void setResumeStatus(ResumeStatusDTO resumeStatus) {
+        this.resumeStatus = resumeStatus;
+    }
+
     /**
      * Getter for property 'expectedDocumentCount'.
      *
@@ -540,6 +558,39 @@ public class PipelineExecuter implements Serializable {
 
     public Pipeline getPipeline(String id) {
         return pipelineMap.get(id);
+    }
+
+    public String getWorkDir() {
+        return workDir;
+    }
+
+    public ResumeStatusDTO loadResumeStatus() {
+        try {
+            if(IOUtils.fileExists(getResumeStatusFileName().getAbsolutePath())) {
+                return JsonUtil.defaultMapper().readValue(getResumeStatusFileName(), ResumeStatusDTO.class);
+            } else {
+                ResumeStatusDTO resumeStatus = new ResumeStatusDTO();
+                resumeStatus.setCompleted(Boolean.FALSE);
+                return resumeStatus;
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void saveResumeStatus() {
+        if(resumeStatus == null) {
+            return;
+        }
+        try {
+            JsonUtil.defaultMapper().writeValue(getResumeStatusFileName(), resumeStatus);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+    
+    private File getResumeStatusFileName() {
+        return new File(workDir + "/resume-status.json");
     }
 
 }

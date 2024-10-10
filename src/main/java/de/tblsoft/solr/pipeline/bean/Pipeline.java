@@ -22,6 +22,8 @@ public class Pipeline {
 
     private String webHookCancel;
 
+    private String webHookHeartBeat;
+
     private Map<String,String> variables = new HashMap<>();
 
     private Reader reader;
@@ -128,6 +130,15 @@ public class Pipeline {
 
     public void setWebHookCancel(String webHookCancel) {
         this.webHookCancel = webHookCancel;
+    }
+
+
+    public String getWebHookHeartBeat() {
+        return webHookHeartBeat;
+    }
+
+    public void setWebHookHeartBeat(String webHookHeartBeat) {
+        this.webHookHeartBeat = webHookHeartBeat;
     }
 
     /**

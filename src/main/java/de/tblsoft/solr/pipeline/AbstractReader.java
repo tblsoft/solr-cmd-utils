@@ -1,5 +1,6 @@
 package de.tblsoft.solr.pipeline;
 
+import de.tblsoft.solr.pipeline.bean.Document;
 import de.tblsoft.solr.pipeline.bean.Reader;
 import org.apache.commons.lang3.text.StrSubstitutor;
 
@@ -40,6 +41,10 @@ public abstract class AbstractReader implements ReaderIF {
     @Override
     public void end() {
 
+    }
+
+    public void document(Document document) {
+        executer.document(document);
     }
 
     @Override
