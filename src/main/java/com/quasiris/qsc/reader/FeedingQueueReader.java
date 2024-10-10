@@ -6,6 +6,7 @@ import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
 import com.jayway.jsonpath.PathNotFoundException;
 import de.tblsoft.solr.pipeline.AbstractReader;
+import de.tblsoft.solr.pipeline.AbstractResumeReader;
 import de.tblsoft.solr.pipeline.bean.Document;
 import de.tblsoft.solr.pipeline.filter.SimpleMapping;
 import de.tblsoft.solr.util.IOUtils;
@@ -18,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class FeedingQueueReader extends AbstractReader {
+public class FeedingQueueReader extends AbstractResumeReader {
 
     private static Logger LOG = LoggerFactory.getLogger(FeedingQueueReader.class);
 
@@ -45,13 +46,13 @@ public class FeedingQueueReader extends AbstractReader {
                         Document document = new Document();
                         document.setField("id", feedingQueue.getDocumentId());
                         document.setField("operation", "delete");
-                        executer.document(document);
+                        document(document);
                     } else {
                         Document document = parseJsonDocument(feedingQueue.getPayload());
                         document.setField("id", feedingQueue.getDocumentId());
                         document.setField("batchId", feedingQueue.getBatchId());
                         document.setField("processId", executer.getProcessId());
-                        executer.document(document);
+                        document(document);
                     }
                 } catch (Exception e) {
                     LOG.error("could not map document with id " + feedingQueue.getId() +
