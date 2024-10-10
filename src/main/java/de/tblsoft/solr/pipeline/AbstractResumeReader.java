@@ -29,8 +29,8 @@ public abstract class AbstractResumeReader extends AbstractReader {
     private Boolean resumeDeleteDir = true;
 
     public void initResume() {
-        resumeBatchSize = getPropertyAsInteger("batchSize", resumeBatchSize);
-        resumeDeleteDir = getPropertyAsBoolean("deleteDir", resumeDeleteDir);
+        resumeBatchSize = getPropertyAsInteger("resumeBatchSize", resumeBatchSize);
+        resumeDeleteDir = getPropertyAsBoolean("resumeDeleteDir", resumeDeleteDir);
         resumable = getPropertyAsBoolean("resumable", resumable);
         IOUtils.createDirectoryIfNotExists(executer.getWorkDir() + "/resume");
     }
