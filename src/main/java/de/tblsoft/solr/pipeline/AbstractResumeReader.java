@@ -53,6 +53,9 @@ public abstract class AbstractResumeReader extends AbstractReader {
     }
 
     private void writeBatch() {
+        if(documents.isEmpty()) {
+            return;
+        }
         String file = getBatchFile(batchCount);
         serializeToJsonl(documents, file);
 
