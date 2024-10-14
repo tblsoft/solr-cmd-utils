@@ -69,8 +69,9 @@ public class PipelineExecuter implements Serializable {
     private Long expectedDocumentCount = -1L;
 
     private ResumeStatusDTO resumeStatus;
+    private Boolean resumeable;
 
-    private String baseWorkDir = "/tmp";
+    private String baseWorkDir = "/work";
 
     private String workDir;
 
@@ -249,6 +250,12 @@ public class PipelineExecuter implements Serializable {
             webHookError = pipeline.getWebHookError();
             webHookCancel = pipeline.getWebHookCancel();
             webHookHeartBeat = pipeline.getWebHookHeartBeat();
+            resumeable = pipeline.getResumeable();
+
+            if(resumeable == null) {
+                resumeable = false;
+            }
+
 
             HTTPHelper.webHook(webHookStart,
                     "status", "start",
@@ -386,6 +393,7 @@ public class PipelineExecuter implements Serializable {
 
             if (reader != null) {
                 LOG.debug("Start the initialization for all filters.");
+                reader.init();
                 if (filterList.size() > 0) {
                     filterList.get(0).init();
                 }
@@ -530,6 +538,9 @@ public class PipelineExecuter implements Serializable {
     public ResumeStatusDTO getResumeStatus() {
         if(resumeStatus == null) {
             resumeStatus = loadResumeStatus();
+            if(resumeStatus.getContext() == null) {
+                resumeStatus.setContext(new HashMap<>());
+            }
         }
         return resumeStatus;
     }
@@ -571,6 +582,7 @@ public class PipelineExecuter implements Serializable {
             } else {
                 ResumeStatusDTO resumeStatus = new ResumeStatusDTO();
                 resumeStatus.setCompleted(Boolean.FALSE);
+                resumeStatus.setContext(new HashMap<>());
                 return resumeStatus;
             }
         } catch (Exception e) {
@@ -593,4 +605,7 @@ public class PipelineExecuter implements Serializable {
         return new File(workDir + "/resume-status.json");
     }
 
+    public Boolean getResumeable() {
+        return resumeable;
+    }
 }

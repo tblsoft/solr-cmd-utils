@@ -23,6 +23,7 @@ public class Pipeline {
     private String webHookCancel;
 
     private String webHookHeartBeat;
+    private Boolean resumeable;
 
     private Map<String,String> variables = new HashMap<>();
 
@@ -139,6 +140,14 @@ public class Pipeline {
 
     public void setWebHookHeartBeat(String webHookHeartBeat) {
         this.webHookHeartBeat = webHookHeartBeat;
+    }
+
+    public Boolean getResumeable() {
+        return resumeable;
+    }
+
+    public void setResumeable(Boolean resumeable) {
+        this.resumeable = resumeable;
     }
 
     /**

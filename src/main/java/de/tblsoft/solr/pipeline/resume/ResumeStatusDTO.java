@@ -7,6 +7,7 @@ public class ResumeStatusDTO {
     private Boolean completed;
 
     private Integer lastBatch;
+    private Integer documentCounter;
 
     private Map<String, Object> context;
 
@@ -32,5 +33,13 @@ public class ResumeStatusDTO {
 
     public void setContext(Map<String, Object> context) {
         this.context = context;
+    }
+
+    public Integer getDocumentCounter() {
+        return documentCounter;
+    }
+
+    public void setDocumentCounter(Integer documentCounter) {
+        this.documentCounter = documentCounter;
     }
 }

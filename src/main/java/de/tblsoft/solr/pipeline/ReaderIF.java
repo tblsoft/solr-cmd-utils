@@ -10,6 +10,8 @@ import java.util.Map;
  */
 public interface ReaderIF extends Serializable {
 
+    public void init();
+
     public void read();
 
     public void setPipelineExecuter(PipelineExecuter executer);

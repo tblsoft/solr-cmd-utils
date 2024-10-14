@@ -3,6 +3,7 @@ package de.tblsoft.solr.pipeline.filter;
 import com.google.common.base.Strings;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.quasiris.qsf.commons.util.ParameterUtils;
 import de.tblsoft.solr.elastic.AliasManager;
 import de.tblsoft.solr.http.ElasticHelper;
 import de.tblsoft.solr.http.HTTPHelper;
@@ -99,6 +100,13 @@ public class ElasticWriter extends AbstractFilter {
             }
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
+        }
+
+
+        if(pipelineExecuter.getResumeable()) {
+            indexUrl = ParameterUtils.getParameter(pipelineExecuter.getResumeStatus().getContext(), "ElasticWriter.indexUrl", indexUrl);
+            pipelineExecuter.getResumeStatus().getContext().put("ElasticWriter.indexUrl", indexUrl);
+            pipelineExecuter.saveResumeStatus();
         }
 
         if (delete && !"elasticupdate".equals(type)) {

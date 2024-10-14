@@ -22,6 +22,10 @@ public abstract class AbstractReader implements ReaderIF {
 
     protected Map<String,String> variables = new HashMap<>();
 
+    @Override
+    public void init() {
+
+    }
 
     @Override
     public void setVariables(Map<String,String> variables) {

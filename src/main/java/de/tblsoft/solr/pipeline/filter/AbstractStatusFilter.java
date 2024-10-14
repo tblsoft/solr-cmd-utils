@@ -39,6 +39,10 @@ public abstract class AbstractStatusFilter extends AbstractFilter {
     	webHook = getProperty("webHook", null);
     	fieldsToPrint = getPropertyAsList("fieldsToPrint", null);
 
+        if(pipelineExecuter.getResumeable() && pipelineExecuter.getResumeStatus().getDocumentCounter() != null) {
+            documentCounter = pipelineExecuter.getResumeStatus().getDocumentCounter();
+        }
+
         if(webHook != null) {
             HTTPHelper.webHook(webHook,
                     "status", "progress.start",
@@ -53,6 +57,9 @@ public abstract class AbstractStatusFilter extends AbstractFilter {
     @Override
     public void document(Document document) {
     	documentCounter++;
+        if(pipelineExecuter.getResumeable()) {
+            pipelineExecuter.getResumeStatus().setDocumentCounter(documentCounter);
+        }
     	lapCount++;
         if(printCurrentStatus()) {
             long now = System.currentTimeMillis();

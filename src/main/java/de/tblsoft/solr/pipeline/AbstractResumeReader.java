@@ -23,23 +23,23 @@ public abstract class AbstractResumeReader extends AbstractReader {
 
     private Integer batchCount = 0;
 
-    private Boolean resumable = false;
-
     private List<Document> documents = new ArrayList<>();
 
     private Boolean resumeDeleteDir = true;
 
-    public void initResume() {
+        @Override
+    public void init() {
         resumeBatchSize = getPropertyAsInteger("resumeBatchSize", resumeBatchSize);
         resumeDeleteDir = getPropertyAsBoolean("resumeDeleteDir", resumeDeleteDir);
-        resumable = getPropertyAsBoolean("resumable", resumable);
-        IOUtils.createDirectoryIfNotExists(executer.getWorkDir() + "/resume");
+        if(executer.getResumeable()) {
+            IOUtils.createDirectoryIfNotExists(executer.getWorkDir() + "/resume");
+        }
+        super.init();
     }
-
 
     @Override
     public void document(Document document) {
-        if(resumable) {
+        if(executer.getResumeable()) {
             documents.add(document);
             if(documents.size() >= resumeBatchSize) {
                 writeBatch();
@@ -68,13 +68,14 @@ public abstract class AbstractResumeReader extends AbstractReader {
 
     @Override
     public void end() {
-        if(resumable) {
+        if(executer.getResumeable()) {
             writeBatch();
             ResumeStatusDTO status = executer.getResumeStatus();
-            status.setCompleted(Boolean.TRUE);
-            if(status.getLastBatch() == null) {
+            if(status.getCompleted().equals(Boolean.FALSE)) {
                 status.setLastBatch(0);
+                status.setCompleted(Boolean.TRUE);
             }
+
             String file = getBatchFile(status.getLastBatch());
             while (IOUtils.fileExists(file)) {
                 List<Document> docs = readJsonlFile(file);
@@ -126,9 +127,5 @@ public abstract class AbstractResumeReader extends AbstractReader {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    public Boolean getResumable() {
-        return resumable;
     }
 }

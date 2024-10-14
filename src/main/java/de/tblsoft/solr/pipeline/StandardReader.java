@@ -39,6 +39,11 @@ public class StandardReader extends SolrXmlParser implements ReaderIF {
     protected Map<String,String> variables = new HashMap<String, String>();
 
     @Override
+    public void init() {
+
+    }
+
+    @Override
     public void field(String name, String value) {
         document.addField(name, value);
 
