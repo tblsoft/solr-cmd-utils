@@ -575,6 +575,10 @@ public class PipelineExecuter implements Serializable {
         return workDir;
     }
 
+    public void setBaseWorkDir(String baseWorkDir){
+        this.baseWorkDir = baseWorkDir;
+    }
+
     public ResumeStatusDTO loadResumeStatus() {
         try {
             if(getResumeStatusFileName().exists()) {
