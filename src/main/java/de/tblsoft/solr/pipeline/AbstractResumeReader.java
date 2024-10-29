@@ -31,7 +31,7 @@ public abstract class AbstractResumeReader extends AbstractReader {
     public void init() {
         resumeBatchSize = getPropertyAsInteger("resumeBatchSize", resumeBatchSize);
         resumeDeleteDir = getPropertyAsBoolean("resumeDeleteDir", resumeDeleteDir);
-        if(executer.getResumeable()) {
+        if(isResumable()) {
             IOUtils.createDirectoryIfNotExists(executer.getWorkDir() + "/resume");
         }
         super.init();
@@ -39,7 +39,7 @@ public abstract class AbstractResumeReader extends AbstractReader {
 
     @Override
     public void document(Document document) {
-        if(executer.getResumeable()) {
+        if(isResumable()) {
             documents.add(document);
             if(documents.size() >= resumeBatchSize) {
                 writeBatch();
@@ -68,7 +68,7 @@ public abstract class AbstractResumeReader extends AbstractReader {
 
     @Override
     public void end() {
-        if(executer.getResumeable()) {
+        if(isResumable()) {
             writeBatch();
             ResumeStatusDTO status = executer.getResumeStatus();
             if(status.getCompleted().equals(Boolean.FALSE)) {
@@ -127,5 +127,13 @@ public abstract class AbstractResumeReader extends AbstractReader {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    boolean isResumable() {
+        if(executer == null) {
+            return false;
+        }
+        return executer.getResumeable();
+
     }
 }
