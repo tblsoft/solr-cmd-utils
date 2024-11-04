@@ -47,7 +47,7 @@ public class FeedingQueueReader extends AbstractResumeReader {
                         document.setField("id", feedingQueue.getDocumentId());
                         document.setField("operation", "delete");
                         document(document);
-                    } else {
+                    } else if (isNotIgnore(feedingQueue.getOperation())) {
                         Document document = parseJsonDocument(feedingQueue.getPayload());
                         document.setField("id", feedingQueue.getDocumentId());
                         document.setField("batchId", feedingQueue.getBatchId());
@@ -66,6 +66,14 @@ public class FeedingQueueReader extends AbstractResumeReader {
             throw new RuntimeException(e);
         }
 
+    }
+
+    public static boolean isIgnore(String operation) {
+        return operation != null && operation.startsWith("ignore:");
+    }
+
+    public static boolean isNotIgnore(String operation) {
+        return !isIgnore(operation);
     }
 
 
