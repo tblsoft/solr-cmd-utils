@@ -2,6 +2,7 @@ package de.tblsoft.solr.pipeline;
 
 import de.tblsoft.solr.pipeline.bean.Document;
 import de.tblsoft.solr.pipeline.bean.Reader;
+import de.tblsoft.solr.pipeline.helper.PipelinePropertiesHelper;
 import org.apache.commons.lang3.text.StrSubstitutor;
 
 import java.util.ArrayList;
@@ -57,59 +58,23 @@ public abstract class AbstractReader implements ReaderIF {
     }
 
     public List<String> getPropertyAsList(String name, List<String> defaultValue) {
-        if(reader.getProperty() == null) {
-            return defaultValue;
-        }
-        List<String> values = (List<String>) reader.getProperty().get(name);
-        if(values != null) {
-            List<String> substitutedValues = new ArrayList<>();
-            StrSubstitutor strSubstitutor = new StrSubstitutor(variables);
-            for(String value : values) {
-                value = strSubstitutor.replace(value);
-                substitutedValues.add(value);
-            }
-
-            return substitutedValues;
-        }
-        return defaultValue;
+        return PipelinePropertiesHelper.getPropertyAsList(reader.getProperty(), variables, name, defaultValue);
     }
 
     public String[] getPropertyAsArray(String name, String[] defaultValue) {
-        List<String> list = getPropertyAsList(name, null);
-        if(list == null) {
-            return defaultValue;
-        }
-        return list.toArray(new String[list.size()]);
+        return PipelinePropertiesHelper.getPropertyAsArray(reader.getProperty(), variables, name, defaultValue);
     }
 
     public String getProperty(String name, String defaultValue) {
-        String value = (String) reader.getProperty().get(name);
-        if(value != null) {
-            StrSubstitutor strSubstitutor = new StrSubstitutor(variables);
-            value = strSubstitutor.replace(value);
-            return value;
-        }
-        return defaultValue;
+        return PipelinePropertiesHelper.getProperty(reader.getProperty(), variables, name, defaultValue);
     }
 
     public Long getPropertyAsInteger(String name, Long defaultValue) {
-        String value = getProperty(name, null);
-        if(value == null) {
-            return defaultValue;
-        }
-
-        return Long.valueOf(value);
-
+        return PipelinePropertiesHelper.getPropertyAsLong(reader.getProperty(), variables, name, defaultValue);
     }
 
     public Boolean getPropertyAsBoolean(String name, Boolean defaultValue) {
-        String value = getProperty(name, null);
-        if(value == null) {
-            return defaultValue;
-        }
-
-        return Boolean.valueOf(value);
-
+        return PipelinePropertiesHelper.getPropertyAsBoolean(reader.getProperty(), variables, name, defaultValue);
     }
 
     public String getBaseDir() {

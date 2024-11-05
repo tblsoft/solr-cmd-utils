@@ -4,9 +4,8 @@ import com.google.common.base.Strings;
 
 import de.tblsoft.solr.pipeline.bean.Document;
 import de.tblsoft.solr.pipeline.bean.Filter;
+import de.tblsoft.solr.pipeline.helper.PipelinePropertiesHelper;
 import de.tblsoft.solr.util.DateUtils;
-
-import org.apache.commons.lang3.text.StrSubstitutor;
 
 import java.util.*;
 
@@ -82,40 +81,15 @@ public abstract class AbstractFilter implements FilterIF {
     }
 
     public String getProperty(String name, String defaultValue) {
-        if(filter.getProperty() == null) {
-            return defaultValue;
-        }
-        String value = (String) filter.getProperty().get(name);
-        if(value != null) {
-            StrSubstitutor strSubstitutor = new StrSubstitutor(variables);
-            value = strSubstitutor.replace(value);
-            return value;
-        }
-        return defaultValue;
+        return PipelinePropertiesHelper.getProperty(filter.getProperty(), variables, name, defaultValue);
     }
 
     public Boolean getPropertyAsBoolean(String name, Boolean defaultValue) {
-        String value = getProperty(name,null);
-        if(value == null) {
-            return defaultValue;
-        }
-        return Boolean.valueOf(value);
+        return PipelinePropertiesHelper.getPropertyAsBoolean(filter.getProperty(), variables, name, defaultValue);
     }
 
     public List<String> getPropertyAsList(String name, List<String> defaultValue) {
-        if(filter.getProperty() == null) {
-            return defaultValue;
-        }
-        List<String> value = (List<String>) filter.getProperty().get(name);
-        if(value != null) {
-            StrSubstitutor strSubstitutor = new StrSubstitutor(variables);
-            for(int i = 0; i < value.size(); i++) {
-                value.set(i, strSubstitutor.replace(value.get(i)));
-            }
-
-            return value;
-        }
-        return defaultValue;
+        return PipelinePropertiesHelper.getPropertyAsList(filter.getProperty(), variables, name, defaultValue);
     }
 
 
@@ -128,43 +102,19 @@ public abstract class AbstractFilter implements FilterIF {
     }
 
     public Map<String, String> getPropertyAsMapping(String name,  Map<String, String> defaultValue, String splitter) {
-        if(filter.getProperty() == null) {
-            return defaultValue;
-        }
-        Map<String, String> mapping = new HashMap<>();
-        List<String> rawValues = getPropertyAsList(name, new ArrayList<>());
-        for (String rawValue : rawValues) {
-            String[] splittedValue = rawValue.split(splitter);
-            if(splittedValue.length < 2) {
-                throw new RuntimeException("The mapping is not correct configured: " + rawValue);
-            }
-            mapping.put(splittedValue[0], splittedValue[1]);
-        }
-        return mapping;
+        return PipelinePropertiesHelper.getPropertyAsMapping(filter.getProperty(), variables, name, defaultValue, splitter);
     }
 
     public int getPropertyAsInt(String name, int defaultValue) {
-        String value = getProperty(name,null);
-        if(value != null) {
-            return Integer.valueOf(value).intValue();
-        }
-        return defaultValue;
+        return PipelinePropertiesHelper.getPropertyAsInt(filter.getProperty(), variables, name, defaultValue);
     }
 
     public float getPropertyAsFloat(String name, float defaultValue) {
-        String value = getProperty(name,null);
-        if(value != null) {
-            return Float.valueOf(value);
-        }
-        return defaultValue;
+        return PipelinePropertiesHelper.getPropertyAsFloat(filter.getProperty(), variables, name, defaultValue);
     }
     
     public Date getPropertyAsDate(String name, Date defaultValue) {
-        String value = getProperty(name,null);
-        if(value != null) {
-            return DateUtils.getDate(value);
-        }
-        return defaultValue;
+        return PipelinePropertiesHelper.getPropertyAsDate(filter.getProperty(), variables, name, defaultValue);
     }
 
     public void verify(String value, String message) {
@@ -182,11 +132,7 @@ public abstract class AbstractFilter implements FilterIF {
     }
 
     public String[] getPropertyAsArray(String name, String[] defaultValue) {
-        List<String> list = getPropertyAsList(name, null);
-        if(list == null) {
-            return defaultValue;
-        }
-        return list.toArray(new String[list.size()]);
+        return PipelinePropertiesHelper.getPropertyAsArray(filter.getProperty(), variables, name, defaultValue);
     }
 
     public String getBaseDir() {

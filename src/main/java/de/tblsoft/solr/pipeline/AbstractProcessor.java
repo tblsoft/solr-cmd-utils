@@ -1,6 +1,7 @@
 package de.tblsoft.solr.pipeline;
 
 import de.tblsoft.solr.pipeline.bean.Processor;
+import de.tblsoft.solr.pipeline.helper.PipelinePropertiesHelper;
 import org.apache.commons.lang3.text.StrSubstitutor;
 
 import java.util.HashMap;
@@ -39,55 +40,23 @@ public abstract class AbstractProcessor implements ProcessorIF {
     }
 
     public List<String> getPropertyAsList(String name, List<String> defaultValue) {
-        if(processor.getProperty() == null) {
-            return defaultValue;
-        }
-        List<String> value = (List<String>) processor.getProperty().get(name);
-        if(value != null) {
-            return value;
-        }
-        return defaultValue;
+        return PipelinePropertiesHelper.getPropertyAsList(processor.getProperty(), variables, name, defaultValue);
     }
 
     public String[] getPropertyAsArray(String name, String[] defaultValue) {
-        List<String> list = getPropertyAsList(name, null);
-        if(list == null) {
-            return defaultValue;
-        }
-        return list.toArray(new String[list.size()]);
+        return PipelinePropertiesHelper.getPropertyAsArray(processor.getProperty(), variables, name, defaultValue);
     }
 
     public String getProperty(String name, String defaultValue) {
-        if(processor.getProperty() == null) {
-            return defaultValue;
-        }
-        String value = (String) processor.getProperty().get(name);
-        if(value != null) {
-            StrSubstitutor strSubstitutor = new StrSubstitutor(variables);
-            value = strSubstitutor.replace(value);
-            return value;
-        }
-        return defaultValue;
+        return PipelinePropertiesHelper.getProperty(processor.getProperty(), variables, name, defaultValue);
     }
 
     public Long getPropertyAsInteger(String name, Long defaultValue) {
-        String value = getProperty(name, null);
-        if(value == null) {
-            return defaultValue;
-        }
-
-        return Long.valueOf(value);
-
+        return PipelinePropertiesHelper.getPropertyAsLong(processor.getProperty(), variables, name, defaultValue);
     }
 
     public Boolean getPropertyAsBoolean(String name, Boolean defaultValue) {
-        String value = getProperty(name, null);
-        if(value == null) {
-            return defaultValue;
-        }
-
-        return Boolean.valueOf(value);
-
+        return PipelinePropertiesHelper.getPropertyAsBoolean(processor.getProperty(), variables, name, defaultValue);
     }
 
     public String getBaseDir() {
