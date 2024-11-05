@@ -10,6 +10,7 @@ import de.tblsoft.solr.http.HTTPHelper;
 import de.tblsoft.solr.pipeline.bean.*;
 import de.tblsoft.solr.pipeline.filter.*;
 import de.tblsoft.solr.pipeline.filter.nlp.SearchQueryAnalyzerFilter;
+import de.tblsoft.solr.pipeline.helper.PipelinePropertiesHelper;
 import de.tblsoft.solr.pipeline.nlp.squad.SquadReader;
 import de.tblsoft.solr.pipeline.nlp.squad.SquadWriter;
 import de.tblsoft.solr.pipeline.processor.*;
@@ -485,8 +486,8 @@ public class PipelineExecuter implements Serializable {
         try {
             Yaml yaml = new Yaml(new Constructor(Pipeline.class));
             String pipelineString = IOUtils.getString(fileName);
-            LOG.info("pipeline:\n" + pipelineString);
-            Iterable<Object> pipelines = yaml.loadAll(pipelineString);
+            LOG.info("pipeline:\n" + PipelinePropertiesHelper.maskPipeline(pipelineString));
+            Iterable<Object> pipelines = yaml.loadAll(PipelinePropertiesHelper.unmaskPipeline(pipelineString));
             List<Pipeline> ret = new ArrayList<>();
             for(Object obj : pipelines) {
                 ret.add((Pipeline) obj);

@@ -1,11 +1,16 @@
 package de.tblsoft.solr.pipeline.helper;
 
 import de.tblsoft.solr.util.DateUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.text.StrSubstitutor;
 
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class PipelinePropertiesHelper {
+
+    public static final Pattern MASK_REGEX = Pattern.compile("mask\\((?<content>[^\\n]*)\\)");
 
     public static String getProperty(Map<String, ?> property,
                                      Map<String, String> variables,
@@ -127,5 +132,26 @@ public class PipelinePropertiesHelper {
 
         return Long.valueOf(value);
 
+    }
+
+    public static String maskPipeline(String pipelineTxt) {
+        if (StringUtils.isBlank(pipelineTxt)) {
+            return pipelineTxt;
+        }
+        Matcher matcher = MASK_REGEX.matcher(pipelineTxt);
+        return matcher.replaceAll("***");
+    }
+
+    public static String unmaskPipeline(String pipelineTxt) {
+        if (StringUtils.isBlank(pipelineTxt)) {
+            return pipelineTxt;
+        }
+        Matcher matcher = MASK_REGEX.matcher(pipelineTxt);
+        StringBuffer result = new StringBuffer();
+        while (matcher.find()) {
+            matcher.appendReplacement(result, matcher.group("content"));
+        }
+        matcher.appendTail(result);
+        return result.toString();
     }
 }
