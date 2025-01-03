@@ -7,13 +7,10 @@ import de.tblsoft.solr.util.IOUtils;
 import org.apache.commons.io.FileUtils;
 import org.jsoup.parser.Parser;
 
-import javax.script.Compilable;
-import javax.script.CompiledScript;
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import org.graalvm.polyglot.*;
 
 
 public class RichJavaScriptFilter extends AbstractFilter {
@@ -21,9 +18,9 @@ public class RichJavaScriptFilter extends AbstractFilter {
 
     private String script;
 
-    private ScriptEngine engine;
+    private Source compiledScript;
 
-    private CompiledScript compiledScript;
+    private Context context;
 
     Parser htmlParser;
     Parser xmlParser;
@@ -33,8 +30,9 @@ public class RichJavaScriptFilter extends AbstractFilter {
         String internalFilename = getProperty("filename", null);
         script = getProperty("script", null);
 
-        ScriptEngineManager mgr = new ScriptEngineManager();
-        engine = mgr.getEngineByName("JavaScript");
+        context = Context.newBuilder("js")
+                    .allowAllAccess(true)
+                    .build();
 
         htmlParser = Parser.htmlParser();
         xmlParser = Parser.xmlParser();
@@ -43,9 +41,7 @@ public class RichJavaScriptFilter extends AbstractFilter {
                 filename = IOUtils.getAbsoluteFile(getBaseDir(),internalFilename);
                 script = FileUtils.readFileToString(new File(filename));
             }
-            Compilable compEngine = (Compilable) engine;
-            compiledScript = compEngine.compile(script);
-
+            compiledScript = Source.newBuilder("js", script, "RichJavaScriptFilter").build();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -57,11 +53,15 @@ public class RichJavaScriptFilter extends AbstractFilter {
         List<Document> docs = new ArrayList<>();
         docs.add(document);
         try {
-            engine.put("htmlParser", htmlParser);
-            engine.put("xmlParser", xmlParser);
-            engine.put("docs", docs);
-            engine.put("documentBuilder", new DocumentBuilder());
-            compiledScript.eval();
+            // Expose the helper function
+            Value bindings = context.getBindings("js");
+            bindings.putMember("htmlParser", htmlParser);
+            bindings.putMember("xmlParser", xmlParser);
+            bindings.putMember("docs", docs);
+            bindings.putMember("documentBuilder", new DocumentBuilder());
+            Value result = context.eval(compiledScript);
+            // Print the result
+//            System.out.println(result.asString());
 
             for(Document d : docs) {
                 super.document(d);
