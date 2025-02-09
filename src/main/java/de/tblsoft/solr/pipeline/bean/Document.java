@@ -192,6 +192,9 @@ public class Document {
             field.setDatatype(dataType);
             this.fields.add(field);
         } else {
+            if(existingField.getValues() == null) {
+                existingField.setValues(new ArrayList<>());
+            }
             existingField.getValues().addAll(values);
         }
         fieldChanged();
