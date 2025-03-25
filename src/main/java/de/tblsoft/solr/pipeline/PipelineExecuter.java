@@ -5,6 +5,7 @@ import com.quasiris.qsc.exception.CancelPipelineException;
 import com.quasiris.qsc.exception.DelegatedPipelineException;
 import com.quasiris.qsc.writer.QscDataPushWriter;
 import com.quasiris.qsf.commons.util.JsonUtil;
+import com.quasiris.qsf.commons.util.YamlFactory;
 import de.tblsoft.solr.compare.SolrCompareFilter;
 import de.tblsoft.solr.http.HTTPHelper;
 import de.tblsoft.solr.pipeline.bean.*;
@@ -62,7 +63,7 @@ public class PipelineExecuter implements Serializable {
     private ReaderIF reader;
 
     private String yamlFileName;
-    
+
     private Map<String, String> pipelineVariables = new HashMap<>();
 
     private String processId;
@@ -484,7 +485,7 @@ public class PipelineExecuter implements Serializable {
     }
     public static List<Pipeline> readPipelinesFromYamlFile(String fileName) {
         try {
-            Yaml yaml = new Yaml(new Constructor(Pipeline.class));
+            Yaml yaml = new Yaml(new Constructor(Pipeline.class, YamlFactory.createAllowAllLoadOptions()));
             String pipelineString = IOUtils.getString(fileName);
             LOG.info("pipeline:\n" + PipelinePropertiesHelper.maskPipeline(pipelineString));
             Iterable<Object> pipelines = yaml.loadAll(PipelinePropertiesHelper.unmaskPipeline(pipelineString));
@@ -523,7 +524,7 @@ public class PipelineExecuter implements Serializable {
 	public void setPipelineVariables(Map<String, String> pipelineVariables) {
 		this.pipelineVariables = pipelineVariables;
 	}
-	
+
 	public void addPipelineVariable(String name, String value) {
 		this.pipelineVariables.put(name, value);
 	}

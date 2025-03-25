@@ -1,5 +1,6 @@
 package de.tblsoft.solr.pipeline.filter;
 
+import com.quasiris.qsf.commons.util.YamlFactory;
 import de.tblsoft.solr.pipeline.AbstractFilter;
 import de.tblsoft.solr.pipeline.FilterIF;
 import de.tblsoft.solr.pipeline.PipelineExecuter;
@@ -85,7 +86,7 @@ public class ForkDocumentFilter extends AbstractFilter {
     protected FiltersPipeline readFiltersFromYamlFile(String fileName) {
         try {
             InputStream input = new FileInputStream(new File(fileName));
-            Yaml yaml = new Yaml(new Constructor(FiltersPipeline.class));
+            Yaml yaml = new Yaml(new Constructor(FiltersPipeline.class, YamlFactory.createAllowAllLoadOptions()));
             FiltersPipeline filters = (FiltersPipeline) yaml.load(input);
 
             input.close();
