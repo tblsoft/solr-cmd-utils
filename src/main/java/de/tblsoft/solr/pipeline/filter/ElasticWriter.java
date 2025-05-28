@@ -64,6 +64,7 @@ public class ElasticWriter extends AbstractFilter {
     private String bulkMethodFieldName;
 
     private boolean includeTypeName;
+    private boolean verboseLog;
 
     @Override
     public void init() {
@@ -74,6 +75,7 @@ public class ElasticWriter extends AbstractFilter {
         closeOldIndices = getPropertyAsBoolean("closeOldIndices", closeOldIndices);
         housekeepingCount = getPropertyAsInt("housekeepingCount", 5);
         housekeppingStrategy = getProperty("housekeppingStrategy", "linear");
+        verboseLog = getPropertyAsBoolean("verboseLog", false);
 
         bufferSize = getPropertyAsInt("bufferSize", 10000);
         location = getProperty("location", null);
@@ -216,6 +218,7 @@ public class ElasticWriter extends AbstractFilter {
             return;
         }
         StringBuilder bulkRequest = new StringBuilder();
+        String response = null;
         try {
 
             for (Document document : buffer) {
@@ -249,16 +252,17 @@ public class ElasticWriter extends AbstractFilter {
 
             String bulkUrl = ElasticHelper.getBulkUrl(indexUrl);
             LOG.debug("bulk url: {} bulkRequest: {}", bulkUrl, bulkRequest);
-            String response = HTTPHelper.post(bulkUrl, bulkRequest.toString(), "application/json");
+            response = HTTPHelper.post(bulkUrl, bulkRequest.toString(), "application/json");
             ElasticBulkResponse elasticBulkResponse = gson.fromJson(response, ElasticBulkResponse.class);
 
             if(Boolean.TRUE.equals(elasticBulkResponse.getErrors())) {
-                LOG.error("There was an error processing the bulk request {} with message: {}", bulkRequest.toString(), response );
                 throw new Exception("There was an error processing the bulk request");
             }
         } catch (Exception e) {
-            LOG.info("There was an error processing the bulk request: " + e.getMessage());
-            LOG.info(bulkRequest.toString());
+            if (verboseLog) {
+                LOG.error("There was an error processing the bulk request {}\n with message: {}\n", bulkRequest, response);
+            }
+            LOG.error("Exception processing the bulk request: ", e);
 
             if(failOnError) {
                 throw new RuntimeException(e);
