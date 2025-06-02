@@ -6,6 +6,7 @@ import de.tblsoft.solr.pipeline.bean.Document;
 import de.tblsoft.solr.pipeline.bean.Reader;
 import de.tblsoft.solr.util.IOUtils;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
 import java.util.List;
@@ -18,6 +19,8 @@ public class ElasticReader extends AbstractReader {
 	private String url;
 	private String scroll;
 	private String body;
+	private boolean verboseLog;
+
 
 	@Override
 	public void read() {
@@ -33,6 +36,7 @@ public class ElasticReader extends AbstractReader {
 			url = getProperty("url", null);
 			scroll = getProperty("scroll", "1m");
 			body = getProperty("body", null);
+			verboseLog = getPropertyAsBoolean("verboseLog", false);
 
 			String requestFilename = getProperty("requestFilename", null);
 			ElasticScrollQuery elasticScrollQuery = new ElasticScrollQuery(url);
@@ -48,7 +52,7 @@ public class ElasticReader extends AbstractReader {
 
 
 			List<Document> docs;
-			while((docs = elasticScrollQuery.nextDocuments())  != null) {
+			while((docs = scrollQuery(elasticScrollQuery)) != null) {
 				for(Document document: docs) {
 					executer.document(document);
 				}
@@ -58,6 +62,17 @@ public class ElasticReader extends AbstractReader {
 			throw new RuntimeException(e);
 		}
 
+	}
+
+	private List<Document> scrollQuery(ElasticScrollQuery elasticScrollQuery) throws Exception {
+		try {
+			return elasticScrollQuery.nextDocuments();
+		} catch (IllegalStateException ex) {
+			if (verboseLog) {
+				throw new IllegalStateException(ex);
+			}
+			throw new IllegalStateException(StringUtils.left(ex.getMessage(), 1024));
+		}
 	}
 
 	@Override
