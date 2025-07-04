@@ -2,7 +2,7 @@ package de.tblsoft.solr.schema;
 
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrServerException;
-import org.apache.solr.client.solrj.impl.HttpSolrClient;
+import org.apache.solr.client.solrj.impl.HttpJdkSolrClient;
 import org.apache.solr.client.solrj.request.schema.SchemaRequest;
 import org.apache.solr.client.solrj.response.schema.SchemaResponse;
 
@@ -28,7 +28,7 @@ public class SolrSchemaManager {
     private List<String> fieldBlackList = new ArrayList<String>();
 
     public SolrSchemaManager(String solrUrl) {
-        solrClient = new HttpSolrClient(solrUrl);
+        solrClient = new HttpJdkSolrClient.Builder(solrUrl).build();
         fieldBlackList.add("_text_");
         fieldBlackList.add("_version_");
         fieldBlackList.add("id");

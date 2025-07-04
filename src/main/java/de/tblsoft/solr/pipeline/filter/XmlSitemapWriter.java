@@ -6,8 +6,8 @@ import de.tblsoft.solr.sitemap.bean.Sitemap;
 import de.tblsoft.solr.sitemap.bean.Sitemapindex;
 import de.tblsoft.solr.util.DateUtils;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.Marshaller;
+import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.Marshaller;
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;

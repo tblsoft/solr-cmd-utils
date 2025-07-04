@@ -1,6 +1,6 @@
 package de.tblsoft.solr.sitemap.bean;
 
-import javax.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlElement;
 
 /**
  * Created by tblsoft on 15.12.16.

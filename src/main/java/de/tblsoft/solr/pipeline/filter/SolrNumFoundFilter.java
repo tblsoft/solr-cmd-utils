@@ -6,7 +6,7 @@ import de.tblsoft.solr.pipeline.bean.Document;
 import org.apache.http.NameValuePair;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
-import org.apache.solr.client.solrj.impl.HttpSolrClient;
+import org.apache.solr.client.solrj.impl.HttpJdkSolrClient;
 import org.apache.solr.client.solrj.response.QueryResponse;
 
 import java.util.List;
@@ -27,7 +27,7 @@ public class SolrNumFoundFilter extends AbstractFilter {
     public void init() {
         String solrUrl = getProperty("solrUrl", null);
         verify(solrUrl, "You must configure the property solrUrl: http://localhost:8983/solr/techproducts");
-        solr = new HttpSolrClient(solrUrl);
+        solr = new HttpJdkSolrClient.Builder(solrUrl).build();
         super.init();
     }
 

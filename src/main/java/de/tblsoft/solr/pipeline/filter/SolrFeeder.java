@@ -5,7 +5,7 @@ import de.tblsoft.solr.pipeline.bean.Document;
 import de.tblsoft.solr.pipeline.bean.Field;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrServerException;
-import org.apache.solr.client.solrj.impl.HttpSolrClient;
+import org.apache.solr.client.solrj.impl.HttpJdkSolrClient;
 import org.apache.solr.common.SolrInputDocument;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,7 +58,7 @@ public class SolrFeeder extends AbstractFilter {
 
 
         if(threads==1 && queueSize == 1 && user == null) {
-            this.server = new HttpSolrClient(serverUrl);
+            this.server = new HttpJdkSolrClient.Builder(serverUrl).build();
         }
         try {
             if(deleteIndex) {

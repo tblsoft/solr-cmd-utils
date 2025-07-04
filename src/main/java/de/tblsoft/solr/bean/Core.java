@@ -1,6 +1,6 @@
 package de.tblsoft.solr.bean;
 
-import javax.xml.bind.annotation.XmlAttribute;
+import jakarta.xml.bind.annotation.XmlAttribute;
 
 /**
  * Created by tblsoft

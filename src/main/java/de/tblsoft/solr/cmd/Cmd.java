@@ -34,8 +34,8 @@ public class Cmd {
     public static void main(String[] args) throws Exception {
         SolrArgs solrArgs = new SolrArgs();
         Cmd cmd = new Cmd();
-        cmd.jc = new JCommander(solrArgs, args);
-
+        cmd.jc = new JCommander(solrArgs);
+        cmd.jc.parse(args);
 
         String command = solrArgs.getCommand();
 
@@ -74,18 +74,18 @@ public class Cmd {
         } else if ("countRequests".equals(command)) {
             cmd.countRequests(solrArgs);
         } else {
-            JCommander.getConsole().println("--comand=feedFileToSolr");
-            JCommander.getConsole().println("--comand=indexFileToSolr");
-            JCommander.getConsole().println("--comand=solrDump");
-            JCommander.getConsole().println("--comand=retrieveFromSolr");
-            JCommander.getConsole().println("--comand=deleteByQuery");
-            JCommander.getConsole().println("--comand=truncate");
-            JCommander.getConsole().println("--comand=xmllint");
-            JCommander.getConsole().println("--comand=numFound");
-            JCommander.getConsole().println("--comand=xPath");
-            JCommander.getConsole().println("--comand=extractNouns");
-            JCommander.getConsole().println("--comand=countUsedFields");
-            JCommander.getConsole().println("--comand=extractSpecialCharacters");
+            cmd.jc.getConsole().println("--comand=feedFileToSolr");
+            cmd.jc.getConsole().println("--comand=indexFileToSolr");
+            cmd.jc.getConsole().println("--comand=solrDump");
+            cmd.jc.getConsole().println("--comand=retrieveFromSolr");
+            cmd.jc.getConsole().println("--comand=deleteByQuery");
+            cmd.jc.getConsole().println("--comand=truncate");
+            cmd.jc.getConsole().println("--comand=xmllint");
+            cmd.jc.getConsole().println("--comand=numFound");
+            cmd.jc.getConsole().println("--comand=xPath");
+            cmd.jc.getConsole().println("--comand=extractNouns");
+            cmd.jc.getConsole().println("--comand=countUsedFields");
+            cmd.jc.getConsole().println("--comand=extractSpecialCharacters");
         }
 
     }
@@ -460,7 +460,7 @@ public class Cmd {
     }
 
     void printHelp(String help) {
-        JCommander.getConsole().println(help);
+        jc.getConsole().println(help);
 
     }
 

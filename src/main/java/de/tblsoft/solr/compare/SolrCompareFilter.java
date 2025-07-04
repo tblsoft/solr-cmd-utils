@@ -6,7 +6,7 @@ import de.tblsoft.solr.pipeline.bean.SolrUrl;
 import org.apache.commons.lang3.text.StrSubstitutor;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
-import org.apache.solr.client.solrj.impl.HttpSolrClient;
+import org.apache.solr.client.solrj.impl.HttpJdkSolrClient;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocument;
 
@@ -37,8 +37,10 @@ public class SolrCompareFilter extends AbstractFilter {
         solrReferenceUrl = new SolrUrl(filter.getProperty(), "solrReferenceUrl");
         solrTestUrl = new SolrUrl(filter.getProperty(), "solrTestUrl");
 
-        solrReferenceClient = new HttpSolrClient(solrReferenceUrl.getSolrClientBaseUrl());
-        solrTestClient = new HttpSolrClient(solrTestUrl.getSolrClientBaseUrl());
+        solrReferenceClient = new HttpJdkSolrClient.Builder(solrReferenceUrl.getSolrClientBaseUrl())
+                .build();
+        solrTestClient = new HttpJdkSolrClient.Builder(solrTestUrl.getSolrClientBaseUrl())
+                .build();
 
         idField = getProperty("idField", "id");
     }

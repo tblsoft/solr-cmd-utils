@@ -3,9 +3,9 @@ package de.tblsoft.solr.http;
 import de.tblsoft.solr.bean.SolrConfiguration;
 import org.apache.commons.io.FileUtils;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
+import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.Marshaller;
+import jakarta.xml.bind.Unmarshaller;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
