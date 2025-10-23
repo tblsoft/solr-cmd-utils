@@ -6,12 +6,10 @@ import de.tblsoft.solr.util.DateUtils;
 import de.tblsoft.solr.util.InstantUtils;
 import de.tblsoft.solr.util.JsonUtil;
 
-import java.io.IOException;
 import java.net.URISyntaxException;
-import java.time.Instant;
 import java.util.Date;
 import java.util.List;
-import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 /**
  * Created by tbl on 15.07.18.
@@ -40,10 +38,27 @@ public class AliasManager {
     public static List<String> getIndexesByPrefix(String elasticUrl, String prefix) {
         try {
             String url = ElasticHelper.getCatlUrl(elasticUrl) + "/" + prefix + separator + "*?format=json";
-            return JsonUtil.parse(url,"$.[*].index");
+            List<String> allIndexes = JsonUtil.parse(url,"$.[*].index");
+
+            List<String> filtered = allIndexes.stream()
+                    .filter(i -> matchesPrefixBeforeLastUnderscore(prefix, i))
+                    .collect(Collectors.toList());
+
+            return filtered;
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private static boolean matchesPrefixBeforeLastUnderscore(String prefix, String index) {
+        int last = index.lastIndexOf('_');
+        if (last < 0) return false; // must have at least one _
+
+        // split by last _
+        String left = index.substring(0, last);
+        String right = index.substring(last + 1); // not used, but could check if needed
+
+        return left.equals(prefix);
     }
 
     public static String getIndexPrefixByUrl(String elasticUrl) {
