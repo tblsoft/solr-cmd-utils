@@ -16,11 +16,20 @@ import java.util.List;
  */
 public class ElasticReader extends AbstractReader {
 
-	private String url;
-	private String scroll;
-	private String body;
-	private boolean verboseLog;
+	protected String url;
+	protected String scroll;
+	protected String body;
+	protected boolean verboseLog;
 
+
+	@Override
+	public void init() {
+		url = getProperty("url", null);
+		scroll = getProperty("scroll", "1m");
+		body = getProperty("body", null);
+		verboseLog = getPropertyAsBoolean("verboseLog", false);
+		super.init();
+	}
 
 	@Override
 	public void read() {
@@ -30,14 +39,6 @@ public class ElasticReader extends AbstractReader {
 		String scrollId = "";
 		boolean hasHits = false;
 		try {
-			
-			
-			
-			url = getProperty("url", null);
-			scroll = getProperty("scroll", "1m");
-			body = getProperty("body", null);
-			verboseLog = getPropertyAsBoolean("verboseLog", false);
-
 			String requestFilename = getProperty("requestFilename", null);
 			ElasticScrollQuery elasticScrollQuery = new ElasticScrollQuery(url);
 			elasticScrollQuery.setScroll(scroll);
