@@ -151,7 +151,7 @@
         <dependency>
             <groupId>org.mozilla</groupId>
             <artifactId>rhino</artifactId>
-            <version>1.8.0</version>
+            <version>1.8.1</version>
         </dependency>
 
         <dependency>
@@ -194,7 +194,7 @@
         <dependency>
             <groupId>com.quasiris.qsf</groupId>
             <artifactId>qsf-commons</artifactId>
-            <version>7.9-SNAPSHOT</version>
+            <version>7.9</version>
         </dependency>
         <dependency>
             <groupId>org.apache.opennlp</groupId>
