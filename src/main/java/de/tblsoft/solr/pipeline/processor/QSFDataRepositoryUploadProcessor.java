@@ -11,6 +11,7 @@ public class QSFDataRepositoryUploadProcessor extends AbstractProcessor {
     public void process() {
         String groupId = getProperty("groupId", null);
         String artifactId = getProperty("artifactId", null);
+        String locale = getProperty("locale", null);
         String version = getProperty("version", null);
         String modelBasePath = getProperty("modelBasePath", null);
         String modelBaseUrl = getProperty("modelBaseUrl", null);
@@ -29,6 +30,7 @@ public class QSFDataRepositoryUploadProcessor extends AbstractProcessor {
                     groupId(groupId).
                     artifactId(artifactId).
                     version(version).
+                    locale(locale).
                     config(modelRepositoryConfig).
                     build();
 
