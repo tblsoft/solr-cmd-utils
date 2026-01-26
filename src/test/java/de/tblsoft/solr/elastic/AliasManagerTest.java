@@ -34,7 +34,7 @@ public class AliasManagerTest {
     @Test
     public void getIndexesByPrefix() {
 
-        String prefix = "tblsoft_foo_bar";
+        String prefix = "tblsoft";
 
         String elasticUrl = "http://localhost:9200/" + prefix + "/my-type";
         List<String> expectedResult =
@@ -59,7 +59,8 @@ public class AliasManagerTest {
                         "tblsoft_2018-08-25-14.22.33",
                         "tblsoft_2018-08-26-14.22.33",
                         "tblsoft_2018-08-27-14.22.33",
-                        "tblsoft_2018-08-28-14.22.33"
+                        "tblsoft_2018-08-28-14.22.33",
+                        "tblsoft_1970_init"
                 );
 
         try (MockedStatic<JsonUtil> jsonMock = mockStatic(JsonUtil.class)) {
