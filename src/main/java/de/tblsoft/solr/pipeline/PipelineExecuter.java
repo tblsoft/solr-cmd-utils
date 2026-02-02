@@ -73,6 +73,11 @@ public class PipelineExecuter implements Serializable {
     private ResumeStatusDTO resumeStatus;
     private Boolean resumeable;
 
+    private boolean timing;
+    private Map<String, long[]> filterTimings = new LinkedHashMap<>();
+    private String currentTimedFilter;
+    private long currentFilterStart;
+
     private String baseWorkDir = "/work";
 
     private String workDir;
@@ -258,6 +263,8 @@ public class PipelineExecuter implements Serializable {
                 resumeable = false;
             }
 
+            timing = Boolean.TRUE.equals(pipeline.getTiming());
+
 
             HTTPHelper.webHook(webHookStart,
                     "status", "start",
@@ -403,6 +410,8 @@ public class PipelineExecuter implements Serializable {
                 reader.read();
                 LOG.debug("Finalize the pipeline.");
                 end();
+                stopTiming();
+                logTimingSummary();
             }
 
 
@@ -613,5 +622,44 @@ public class PipelineExecuter implements Serializable {
 
     public Boolean getResumeable() {
         return resumeable;
+    }
+
+    public boolean isTiming() {
+        return timing;
+    }
+
+    public void startTiming(String filterId) {
+        if (!timing) {
+            return;
+        }
+        long now = System.nanoTime();
+        if (currentTimedFilter != null) {
+            long[] acc = filterTimings.computeIfAbsent(currentTimedFilter, k -> new long[1]);
+            acc[0] += now - currentFilterStart;
+        }
+        currentTimedFilter = filterId;
+        currentFilterStart = now;
+    }
+
+    public void stopTiming() {
+        if (!timing || currentTimedFilter == null) {
+            return;
+        }
+        long now = System.nanoTime();
+        long[] acc = filterTimings.computeIfAbsent(currentTimedFilter, k -> new long[1]);
+        acc[0] += now - currentFilterStart;
+        currentTimedFilter = null;
+    }
+
+    private void logTimingSummary() {
+        if (!timing || filterTimings.isEmpty()) {
+            return;
+        }
+        StringBuilder sb = new StringBuilder("Filter timing summary:\n");
+        for (Map.Entry<String, long[]> entry : filterTimings.entrySet()) {
+            long ms = entry.getValue()[0] / 1_000_000;
+            sb.append("  ").append(entry.getKey()).append(": ").append(ms).append(" ms\n");
+        }
+        LOG.info(sb.toString());
     }
 }

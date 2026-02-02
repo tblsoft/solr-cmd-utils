@@ -25,6 +25,8 @@ public class Pipeline {
     private String webHookHeartBeat;
     private Boolean resumeable;
 
+    private Boolean timing;
+
     private Map<String,String> variables = new HashMap<>();
 
     private Reader reader;
@@ -148,6 +150,14 @@ public class Pipeline {
 
     public void setResumeable(Boolean resumeable) {
         this.resumeable = resumeable;
+    }
+
+    public Boolean getTiming() {
+        return timing;
+    }
+
+    public void setTiming(Boolean timing) {
+        this.timing = timing;
     }
 
     /**
