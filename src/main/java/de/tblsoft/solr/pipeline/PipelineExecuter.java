@@ -652,6 +652,7 @@ public class PipelineExecuter implements Serializable {
     }
 
     private void logTimingSummary() {
+        LOG.info("Filter timing enabled: " + timing + " with entries count: " + filterTimings.size());
         if (!timing || filterTimings.isEmpty()) {
             return;
         }
