@@ -36,7 +36,7 @@ public class FeedingQueueReader extends AbstractResumeReader {
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
         try {
-            InputStream inputStream = IOUtils.getInputStream(url);
+            InputStream inputStream = executer.timeCallable("FeedingQueueReader.getInputStream", () -> IOUtils.getInputStream(url));
             FeedingQueue[] feedingQueueList = objectMapper.readValue(inputStream, FeedingQueue[].class);
 
             for(FeedingQueue feedingQueue : feedingQueueList ) {
@@ -62,7 +62,7 @@ public class FeedingQueueReader extends AbstractResumeReader {
                 }
             }
 
-        } catch (IOException e) {
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
 

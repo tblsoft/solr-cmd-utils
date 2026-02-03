@@ -719,6 +719,61 @@ public class PipelineExecuter implements Serializable {
         currentTimedFilter = null;
     }
 
+    /**
+     * Time a block of code with a custom label without stopping the current timer.
+     * Usage: pipelineExecuter.time("myOperation", () -> { ... });
+     */
+    public void time(String label, Runnable action) {
+        if (!timing) {
+            action.run();
+            return;
+        }
+        long start = System.nanoTime();
+        try {
+            action.run();
+        } finally {
+            long elapsed = System.nanoTime() - start;
+            long[] acc = filterTimings.computeIfAbsent(label, k -> new long[1]);
+            acc[0] += elapsed;
+        }
+    }
+
+    /**
+     * Time a block of code with a custom label and return a result without stopping the current timer.
+     * Usage: Result r = pipelineExecuter.time("myOperation", () -> computeResult());
+     */
+    public <T> T time(String label, java.util.function.Supplier<T> action) {
+        if (!timing) {
+            return action.get();
+        }
+        long start = System.nanoTime();
+        try {
+            return action.get();
+        } finally {
+            long elapsed = System.nanoTime() - start;
+            long[] acc = filterTimings.computeIfAbsent(label, k -> new long[1]);
+            acc[0] += elapsed;
+        }
+    }
+
+    /**
+     * Time a block of code that may throw checked exceptions.
+     * Usage: InputStream is = pipelineExecuter.timeCallable("fetch", () -> IOUtils.getInputStream(url));
+     */
+    public <T> T timeCallable(String label, java.util.concurrent.Callable<T> action) throws Exception {
+        if (!timing) {
+            return action.call();
+        }
+        long start = System.nanoTime();
+        try {
+            return action.call();
+        } finally {
+            long elapsed = System.nanoTime() - start;
+            long[] acc = filterTimings.computeIfAbsent(label, k -> new long[1]);
+            acc[0] += elapsed;
+        }
+    }
+
     private void logTimingSummary() {
         LOG.info("Filter timing enabled: " + timing + " with entries count: " + filterTimings.size());
         if (!timing || filterTimings.isEmpty()) {
