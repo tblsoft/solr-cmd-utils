@@ -1,11 +1,11 @@
 package de.tblsoft.solr.pipeline;
 
 import com.google.common.base.Strings;
-
 import de.tblsoft.solr.pipeline.bean.Document;
 import de.tblsoft.solr.pipeline.bean.Filter;
 import de.tblsoft.solr.pipeline.helper.PipelinePropertiesHelper;
-import de.tblsoft.solr.util.DateUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
@@ -13,6 +13,8 @@ import java.util.*;
  * Created by tblsoft on 23.01.16.
  */
 public abstract class AbstractFilter implements FilterIF {
+
+    private static Logger LOG = LoggerFactory.getLogger(AbstractFilter.class);
 
     protected FilterIF nextFilter;
 
@@ -50,9 +52,6 @@ public abstract class AbstractFilter implements FilterIF {
 
     @Override
     public void document(Document document) {
-        if (pipelineExecuter != null && pipelineExecuter.isTiming()) {
-            pipelineExecuter.startTiming(nextFilter.getId());
-        }
         List<Document> docs = null;
         try {
             docs = flatMap(document);
@@ -80,6 +79,9 @@ public abstract class AbstractFilter implements FilterIF {
     public void end() {
         if (pipelineExecuter != null && pipelineExecuter.isTiming()) {
             pipelineExecuter.startTiming(nextFilter.getId() + ".end");
+            if(nextFilter.getId() == null) {
+                LOG.info("tbltest nextFilter class" + nextFilter.getClass().toString());
+            }
         }
         nextFilter.end();
     }

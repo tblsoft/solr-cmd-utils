@@ -491,13 +491,21 @@ public class PipelineExecuter implements Serializable {
     //}
 
     public void document(Document document) {
-        filterList.get(0).document(document);
+        FilterIF f = filterList.get(0);
+        if (isTiming()) {
+            startTiming(f.getId());
+        }
+        f.document(document);
     }
 
 
     public void end() {
         reader.end();
-        filterList.get(0).end();
+        FilterIF f = filterList.get(0);
+        if (isTiming()) {
+            startTiming(f.getId() + ".end");
+        }
+        f.end();
     }
 
     /**
