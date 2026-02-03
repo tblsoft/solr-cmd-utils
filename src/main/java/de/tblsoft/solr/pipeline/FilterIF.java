@@ -25,6 +25,8 @@ public interface FilterIF extends Serializable {
 
     public String getId();
 
+    public void setId(String id);
+
     public void setVariables(Map<String,String> variables);
 
     void setPipelineExecuter(PipelineExecuter pipelineExecuter);

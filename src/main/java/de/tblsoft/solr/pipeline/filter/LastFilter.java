@@ -12,7 +12,7 @@ import java.util.Map;
  */
 public class LastFilter implements FilterIF {
 
-
+    private String id;
 
     @Override
     public void init() {
@@ -46,7 +46,12 @@ public class LastFilter implements FilterIF {
 
     @Override
     public String getId() {
-        return null;
+        return id;
+    }
+
+    @Override
+    public void setId(String id) {
+        this.id = id;
     }
 
     @Override

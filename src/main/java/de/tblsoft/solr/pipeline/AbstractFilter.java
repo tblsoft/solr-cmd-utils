@@ -79,9 +79,6 @@ public abstract class AbstractFilter implements FilterIF {
     public void end() {
         if (pipelineExecuter != null && pipelineExecuter.isTiming()) {
             pipelineExecuter.startTiming(nextFilter.getId() + ".end");
-            if(nextFilter.getId() == null) {
-                LOG.info("tbltest nextFilter class" + nextFilter.getClass().toString());
-            }
         }
         nextFilter.end();
     }
