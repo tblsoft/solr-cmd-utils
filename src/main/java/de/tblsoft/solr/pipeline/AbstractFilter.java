@@ -36,6 +36,9 @@ public abstract class AbstractFilter implements FilterIF {
 
     @Override
     public void init() {
+        if (pipelineExecuter != null && pipelineExecuter.isTiming()) {
+            pipelineExecuter.startTiming(getId() + ".init");
+        }
         nextFilter.init();
 
     }
@@ -75,6 +78,9 @@ public abstract class AbstractFilter implements FilterIF {
 
     @Override
     public void end() {
+        if (pipelineExecuter != null && pipelineExecuter.isTiming()) {
+            pipelineExecuter.startTiming(getId() + ".end");
+        }
         nextFilter.end();
     }
 

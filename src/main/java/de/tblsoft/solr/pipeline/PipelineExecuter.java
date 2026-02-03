@@ -415,6 +415,7 @@ public class PipelineExecuter implements Serializable {
                 if (filterList.size() > 0) {
                     filterList.get(0).init();
                 }
+                stopTiming();
                 LOG.debug("Read the input from the configured reader.");
                 reader.read();
                 LOG.debug("Finalize the pipeline.");
