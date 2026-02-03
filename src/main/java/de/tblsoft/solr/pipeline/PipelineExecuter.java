@@ -629,6 +629,7 @@ public class PipelineExecuter implements Serializable {
     }
 
     public void startTiming(String filterId) {
+        LOG.info("startTiming for filterId: " +  filterId);
         if (!timing) {
             return;
         }
@@ -642,6 +643,7 @@ public class PipelineExecuter implements Serializable {
     }
 
     public void stopTiming() {
+        LOG.info("stopTiming for currentTimedFilter: " +  currentTimedFilter);
         if (!timing || currentTimedFilter == null) {
             return;
         }
