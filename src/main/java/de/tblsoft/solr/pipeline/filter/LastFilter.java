@@ -14,6 +14,10 @@ public class LastFilter implements FilterIF {
 
     private String id;
 
+    public LastFilter() {
+        this.id = "LastFilter";
+    }
+
     @Override
     public void init() {
 
