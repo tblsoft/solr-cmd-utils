@@ -14,6 +14,8 @@ public interface ProcessorIF {
 
     void setProcessor(Processor processor);
 
+    Processor getProcessor();
+
     void setBaseDir(String baseDir);
 
     void setVariables(Map<String, String> variables);

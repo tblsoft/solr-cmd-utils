@@ -39,6 +39,11 @@ public abstract class AbstractProcessor implements ProcessorIF {
         this.processor = processor;
     }
 
+    @Override
+    public Processor getProcessor() {
+        return this.processor;
+    }
+
     public List<String> getPropertyAsList(String name, List<String> defaultValue) {
         return PipelinePropertiesHelper.getPropertyAsList(processor.getProperty(), variables, name, defaultValue);
     }

@@ -406,8 +406,10 @@ public class PipelineExecuter implements Serializable {
 
             LOG.debug("Process the pre processors.");
             for (ProcessorIF processorIF : preProcessorList) {
+                startTiming(getProcessorId(processorIF, "pre"));
                 processorIF.process();
             }
+            stopTiming();
 
             if (reader != null) {
                 String readerId = getReaderId();
@@ -426,15 +428,16 @@ public class PipelineExecuter implements Serializable {
                 startTiming(readerId + ".end");
                 end();
                 stopTiming();
-                logTimingSummary();
             }
 
 
             LOG.debug("Process the post processors.");
             for (ProcessorIF processorIF : postProcessorList) {
+                startTiming(getProcessorId(processorIF, "post"));
                 processorIF.process();
             }
-
+            stopTiming();
+            logTimingSummary();
 
             HTTPHelper.webHook(webHookEnd,
                     "status", "end",
@@ -656,6 +659,22 @@ public class PipelineExecuter implements Serializable {
             return clazz.substring(clazz.lastIndexOf('.') + 1);
         }
         return clazz != null ? clazz : "Reader";
+    }
+
+    private String getProcessorId(ProcessorIF processorIF, String prefix) {
+        Processor processor = processorIF.getProcessor();
+        if (processor == null) {
+            return prefix + "Processor";
+        }
+        String name = processor.getName();
+        if (name != null) {
+            return prefix + ":" + name;
+        }
+        String clazz = processor.getClazz();
+        if (clazz != null && clazz.contains(".")) {
+            return prefix + ":" + clazz.substring(clazz.lastIndexOf('.') + 1);
+        }
+        return clazz != null ? prefix + ":" + clazz : prefix + "Processor";
     }
 
     public void startTiming(String filterId) {
