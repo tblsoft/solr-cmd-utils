@@ -418,10 +418,16 @@ public class PipelineExecuter implements Serializable {
                 LOG.debug("Start the initialization for all filters.");
                 startTiming(readerId + ".init");
                 reader.init();
-                if (filterList.size() > 0) {
-                    filterList.get(0).init();
-                }
                 stopTiming();
+                if (filterList.size() > 0) {
+
+                    FilterIF f = filterList.get(0);
+                    if (isTiming()) {
+                        startTiming(f.getId() + ".init");
+                    }
+                    f.init();
+                }
+
                 LOG.debug("Read the input from the configured reader.");
                 startTiming(readerId + ".read");
                 reader.read();

@@ -37,7 +37,7 @@ public abstract class AbstractFilter implements FilterIF {
     @Override
     public void init() {
         if (pipelineExecuter != null && pipelineExecuter.isTiming()) {
-            pipelineExecuter.startTiming(getId() + ".init");
+            pipelineExecuter.startTiming(nextFilter.getId() + ".init");
         }
         nextFilter.init();
 
@@ -51,7 +51,7 @@ public abstract class AbstractFilter implements FilterIF {
     @Override
     public void document(Document document) {
         if (pipelineExecuter != null && pipelineExecuter.isTiming()) {
-            pipelineExecuter.startTiming(getId());
+            pipelineExecuter.startTiming(nextFilter.getId());
         }
         List<Document> docs = null;
         try {
@@ -79,7 +79,7 @@ public abstract class AbstractFilter implements FilterIF {
     @Override
     public void end() {
         if (pipelineExecuter != null && pipelineExecuter.isTiming()) {
-            pipelineExecuter.startTiming(getId() + ".end");
+            pipelineExecuter.startTiming(nextFilter.getId() + ".end");
         }
         nextFilter.end();
     }
