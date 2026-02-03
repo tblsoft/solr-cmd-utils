@@ -309,10 +309,19 @@ public class PipelineExecuter implements Serializable {
         }
         FilterIF lastFilter = null;
         FilterIF filterInstance = null;
+        int filterIndex = 0;
         for(Filter filter : pipeline.getFilter()) {
             if(filter.getDisabled() != null && filter.getDisabled()) {
                 continue;
             }
+            if (filter.getId() == null) {
+                String className = filter.getClazz();
+                if (className.contains(".")) {
+                    className = className.substring(className.lastIndexOf('.') + 1);
+                }
+                filter.setId(className + "-" + filterIndex);
+            }
+            filterIndex++;
             filterInstance = createFilterInstance(filter);
             filterInstance.setBaseDir(baseDir);
             filterInstance.setVariables(pipeline.getVariables());
@@ -629,7 +638,6 @@ public class PipelineExecuter implements Serializable {
     }
 
     public void startTiming(String filterId) {
-        LOG.info("startTiming for filterId: " +  filterId);
         if (!timing) {
             return;
         }
@@ -643,7 +651,6 @@ public class PipelineExecuter implements Serializable {
     }
 
     public void stopTiming() {
-        LOG.info("stopTiming for currentTimedFilter: " +  currentTimedFilter);
         if (!timing || currentTimedFilter == null) {
             return;
         }
