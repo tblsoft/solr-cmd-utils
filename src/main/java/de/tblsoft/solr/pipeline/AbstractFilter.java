@@ -156,6 +156,11 @@ public abstract class AbstractFilter implements FilterIF {
     }
 
     @Override
+    public void setId(String id) {
+        this.filter.setId(id);
+    }
+
+    @Override
     public void setPipelineExecuter(PipelineExecuter pipelineExecuter) {
         this.pipelineExecuter = pipelineExecuter;
     }
