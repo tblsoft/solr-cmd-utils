@@ -410,15 +410,20 @@ public class PipelineExecuter implements Serializable {
             }
 
             if (reader != null) {
+                String readerId = getReaderId();
                 LOG.debug("Start the initialization for all filters.");
+                startTiming(readerId + ".init");
                 reader.init();
                 if (filterList.size() > 0) {
                     filterList.get(0).init();
                 }
                 stopTiming();
                 LOG.debug("Read the input from the configured reader.");
+                startTiming(readerId + ".read");
                 reader.read();
+                stopTiming();
                 LOG.debug("Finalize the pipeline.");
+                startTiming(readerId + ".end");
                 end();
                 stopTiming();
                 logTimingSummary();
@@ -636,6 +641,21 @@ public class PipelineExecuter implements Serializable {
 
     public boolean isTiming() {
         return timing;
+    }
+
+    private String getReaderId() {
+        if (pipeline.getReader() == null) {
+            return "Reader";
+        }
+        String name = pipeline.getReader().getName();
+        if (name != null) {
+            return name;
+        }
+        String clazz = pipeline.getReader().getClazz();
+        if (clazz != null && clazz.contains(".")) {
+            return clazz.substring(clazz.lastIndexOf('.') + 1);
+        }
+        return clazz != null ? clazz : "Reader";
     }
 
     public void startTiming(String filterId) {
