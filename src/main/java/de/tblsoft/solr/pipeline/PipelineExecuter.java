@@ -77,6 +77,7 @@ public class PipelineExecuter implements Serializable {
     private Map<String, long[]> filterTimings = new LinkedHashMap<>();
     private String currentTimedFilter;
     private long currentFilterStart;
+    private long pipelineStartTime;
 
     private String baseWorkDir = "/work";
 
@@ -400,6 +401,7 @@ public class PipelineExecuter implements Serializable {
 
     public void execute() {
         try {
+            pipelineStartTime = System.nanoTime();
             LOG.debug("Start the initialization.");
             init();
 
@@ -710,6 +712,9 @@ public class PipelineExecuter implements Serializable {
             long ms = entry.getValue()[0] / 1_000_000;
             sb.append("  ").append(entry.getKey()).append(": ").append(ms).append(" ms\n");
         }
+        long totalMs = (System.nanoTime() - pipelineStartTime) / 1_000_000;
+        sb.append("  ----\n");
+        sb.append("  TOTAL: ").append(totalMs).append(" ms\n");
         LOG.info(sb.toString());
     }
 }
