@@ -52,6 +52,9 @@ public abstract class AbstractFilter implements FilterIF {
 
     @Override
     public void document(Document document) {
+        if (pipelineExecuter != null && pipelineExecuter.isTiming()) {
+            pipelineExecuter.startTiming(nextFilter.getId());
+        }
         List<Document> docs = null;
         try {
             docs = flatMap(document);

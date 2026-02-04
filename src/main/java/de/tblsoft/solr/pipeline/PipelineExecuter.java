@@ -775,11 +775,11 @@ public class PipelineExecuter implements Serializable {
     }
 
     private void logTimingSummary() {
-        LOG.info("Filter timing enabled: " + timing + " with entries count: " + filterTimings.size());
         if (!timing || filterTimings.isEmpty()) {
             return;
         }
-        StringBuilder sb = new StringBuilder("Filter timing summary:\n");
+        StringBuilder sb = new StringBuilder("Filter timing summary for pipeline: + " +
+                pipeline.getName() + " and id: " + pipeline.getId() + "\n");
         for (Map.Entry<String, long[]> entry : filterTimings.entrySet()) {
             long ms = entry.getValue()[0] / 1_000_000;
             sb.append("  ").append(entry.getKey()).append(": ").append(ms).append(" ms\n");
