@@ -499,6 +499,9 @@ public class PipelineExecuter implements Serializable {
             startTiming(f.getId());
         }
         f.document(document);
+        if (isTiming()) {
+            startTiming(getReaderId() + ".read");
+        }
     }
 
 
