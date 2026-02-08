@@ -51,7 +51,7 @@ public class ElasticWriter extends AbstractFilter {
 
     private boolean detectNumberValues = true;
 
-    private boolean failOnError = true;
+    protected boolean failOnError = true;
 
     private String indexUrl;
     private Integer housekeepingCount;
@@ -64,7 +64,7 @@ public class ElasticWriter extends AbstractFilter {
     private String bulkMethodFieldName;
 
     private boolean includeTypeName;
-    private boolean verboseLog;
+    protected boolean verboseLog;
 
     @Override
     public void init() {
@@ -218,7 +218,6 @@ public class ElasticWriter extends AbstractFilter {
             return;
         }
         StringBuilder bulkRequest = new StringBuilder();
-        String response = null;
         try {
 
             for (Document document : buffer) {
@@ -250,17 +249,10 @@ public class ElasticWriter extends AbstractFilter {
 
             }
 
-            String bulkUrl = ElasticHelper.getBulkUrl(indexUrl);
-            LOG.debug("bulk url: {} bulkRequest: {}", bulkUrl, bulkRequest);
-            response = HTTPHelper.post(bulkUrl, bulkRequest.toString(), "application/json");
-            ElasticBulkResponse elasticBulkResponse = gson.fromJson(response, ElasticBulkResponse.class);
-
-            if(Boolean.TRUE.equals(elasticBulkResponse.getErrors())) {
-                throw new Exception("There was an error processing the bulk request");
-            }
+            sendBulkPayload(bulkRequest.toString());
         } catch (Exception e) {
             if (verboseLog) {
-                LOG.error("There was an error processing the bulk request {}\n with message: {}\n", bulkRequest, response);
+                LOG.error("There was an error processing the bulk request {}\n", bulkRequest);
             }
             LOG.error("Exception processing the bulk request: ", e);
 
@@ -271,6 +263,27 @@ public class ElasticWriter extends AbstractFilter {
             }
         }
 
+    }
+
+    /**
+     * Send the bulk payload to Elasticsearch. Subclasses can override this
+     * to change the sending strategy (e.g. async).
+     *
+     * @param bulkPayload the NDJSON bulk request body
+     * @throws Exception if the request fails or the response contains errors
+     */
+    protected void sendBulkPayload(String bulkPayload) throws Exception {
+        String bulkUrl = ElasticHelper.getBulkUrl(indexUrl);
+        LOG.debug("bulk url: {} bulkRequest: {}", bulkUrl, bulkPayload);
+        String response = HTTPHelper.post(bulkUrl, bulkPayload, "application/json");
+        ElasticBulkResponse elasticBulkResponse = gson.fromJson(response, ElasticBulkResponse.class);
+
+        if(Boolean.TRUE.equals(elasticBulkResponse.getErrors())) {
+            if (verboseLog) {
+                LOG.error("Bulk response contained errors. bulkRequest: {}\n response: {}\n", bulkPayload, response);
+            }
+            throw new Exception("There was an error processing the bulk request");
+        }
     }
 
     private boolean isDeleteBulkMethod(Document document) {

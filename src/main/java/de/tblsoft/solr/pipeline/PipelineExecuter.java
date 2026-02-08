@@ -117,6 +117,7 @@ public class PipelineExecuter implements Serializable {
         classRegestriy.put("solrcmdutils.DocumentJoinerFilter", DocumentJoinerFilter.class);
         classRegestriy.put("solrcmdutils.JsonWriter", JsonWriter.class);
         classRegestriy.put("solrcmdutils.ElasticWriter", ElasticWriter.class);
+        classRegestriy.put("solrcmdutils.AsyncElasticWriter", AsyncElasticWriter.class);
         classRegestriy.put("solrcmdutils.CSVReader", CSVReader.class);
         classRegestriy.put("solrcmdutils.JdbcReader", JdbcReader.class);
         classRegestriy.put("solrcmdutils.SolrQueryLogReader", SolrQueryLogReader.class);
