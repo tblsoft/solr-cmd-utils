@@ -700,6 +700,10 @@ public class PipelineExecuter implements Serializable {
         return clazz != null ? prefix + ":" + clazz : prefix + "Processor";
     }
 
+    public String getCurrentTimedFilter() {
+        return currentTimedFilter;
+    }
+
     public void startTiming(String filterId) {
         if (!timing) {
             return;

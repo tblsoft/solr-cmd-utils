@@ -38,11 +38,15 @@ public abstract class AbstractFilter implements FilterIF {
 
     @Override
     public void init() {
+        String savedTimer = null;
         if (pipelineExecuter != null && pipelineExecuter.isTiming()) {
+            savedTimer = pipelineExecuter.getCurrentTimedFilter();
             pipelineExecuter.startTiming(nextFilter.getId() + ".init");
         }
         nextFilter.init();
-
+        if (savedTimer != null) {
+            pipelineExecuter.startTiming(savedTimer);
+        }
     }
 
     @Override
@@ -61,11 +65,18 @@ public abstract class AbstractFilter implements FilterIF {
         }
 
         if(docs != null) {
+            String savedTimer = null;
             if (pipelineExecuter != null && pipelineExecuter.isTiming()) {
-                pipelineExecuter.startTiming(nextFilter.getId());
+                savedTimer = pipelineExecuter.getCurrentTimedFilter();
             }
             for (Document doc : docs) {
+                if (pipelineExecuter != null && pipelineExecuter.isTiming()) {
+                    pipelineExecuter.startTiming(nextFilter.getId());
+                }
                 nextFilter.document(doc);
+            }
+            if (savedTimer != null) {
+                pipelineExecuter.startTiming(savedTimer);
             }
         }
     }
@@ -80,10 +91,15 @@ public abstract class AbstractFilter implements FilterIF {
 
     @Override
     public void end() {
+        String savedTimer = null;
         if (pipelineExecuter != null && pipelineExecuter.isTiming()) {
+            savedTimer = pipelineExecuter.getCurrentTimedFilter();
             pipelineExecuter.startTiming(nextFilter.getId() + ".end");
         }
         nextFilter.end();
+        if (savedTimer != null) {
+            pipelineExecuter.startTiming(savedTimer);
+        }
     }
 
     @Override
