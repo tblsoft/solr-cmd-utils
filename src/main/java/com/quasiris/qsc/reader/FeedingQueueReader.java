@@ -44,12 +44,13 @@ public class FeedingQueueReader extends AbstractResumeReader {
                  try {
                     if ("delete".equals(feedingQueue.getOperation())) {
                         Document document = new Document();
-                        document.setField("id", feedingQueue.getDocumentId());
-                        document.setField("operation", "delete");
+                        document.setId(feedingQueue.getDocumentId());
+                        document.setOperation("delete");
                         document(document);
                     } else if (isNotIgnore(feedingQueue.getOperation())) {
                         Document document = parseJsonDocument(feedingQueue.getPayload());
-                        document.setField("id", feedingQueue.getDocumentId());
+                        document.setId(feedingQueue.getDocumentId());
+                        document.setOperation(feedingQueue.getOperation());
                         document.setField("batchId", feedingQueue.getBatchId());
                         document.setField("processId", executer.getProcessId());
                         document(document);

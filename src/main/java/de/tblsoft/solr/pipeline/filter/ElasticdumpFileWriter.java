@@ -6,6 +6,7 @@ import com.google.gson.GsonBuilder;
 import de.tblsoft.solr.pipeline.AbstractFilter;
 import de.tblsoft.solr.pipeline.bean.Document;
 import de.tblsoft.solr.pipeline.bean.Field;
+import de.tblsoft.solr.util.DocumentIdHelper;
 import de.tblsoft.solr.util.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -36,6 +37,7 @@ public class ElasticdumpFileWriter extends AbstractFilter {
 	private boolean delete;
 
 	private String idField;
+	private boolean useExplicitIdField;
 
 	@Override
 	public void init() {
@@ -49,6 +51,7 @@ public class ElasticdumpFileWriter extends AbstractFilter {
 		type = getProperty("type", null);
 		format = getProperty("format", "elasticdump");
 		idField = getProperty("idField", null);
+		useExplicitIdField = getPropertyAsBoolean("useExplicitIdField", false);
 
 		gson = new GsonBuilder().create();
 
@@ -90,11 +93,9 @@ public class ElasticdumpFileWriter extends AbstractFilter {
 	public void document(Document document) {
 		Map<String, Object> jsonDocument = mapToJson(document);
 		if(!jsonDocument.isEmpty()) {
-			String id;
-			if (Strings.isStringEmpty(idField)) {
+			String id = DocumentIdHelper.resolveId(document, idField, useExplicitIdField);
+			if (Strings.isStringEmpty(id)) {
 				id = UUID.randomUUID().toString();
-			} else {
-				id = document.getFieldValue(idField);
 			}
 
 			String serializedDoc = null;

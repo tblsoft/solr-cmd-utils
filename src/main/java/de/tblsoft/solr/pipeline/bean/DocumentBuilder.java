@@ -11,6 +11,16 @@ public class DocumentBuilder {
         return new DocumentBuilder();
     }
 
+    public DocumentBuilder id(String id) {
+        document.setId(id);
+        return this;
+    }
+
+    public DocumentBuilder operation(String operation) {
+        document.setOperation(operation);
+        return this;
+    }
+
     public DocumentBuilder field(String name, String value) {
         document.addField(name,value);
         return this;

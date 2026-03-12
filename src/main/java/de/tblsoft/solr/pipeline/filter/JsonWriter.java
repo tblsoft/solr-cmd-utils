@@ -9,6 +9,7 @@ import de.tblsoft.solr.http.HTTPHelper;
 import de.tblsoft.solr.pipeline.AbstractFilter;
 import de.tblsoft.solr.pipeline.bean.Document;
 import de.tblsoft.solr.pipeline.bean.Field;
+import de.tblsoft.solr.util.DocumentIdHelper;
 import de.tblsoft.solr.util.IOUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -39,6 +40,7 @@ public class JsonWriter extends AbstractFilter {
     private boolean delete;
     
     private String idField;
+    private boolean useExplicitIdField;
 
     private String absoluteFilename;
 
@@ -56,6 +58,7 @@ public class JsonWriter extends AbstractFilter {
         elasticMappingLocation = getProperty("elasticMappingLocation", null);
 
         idField = getProperty("idField", null);
+        useExplicitIdField = getPropertyAsBoolean("useExplicitIdField", false);
 
         GsonBuilder builder = new GsonBuilder();
         if(pretty) {
@@ -103,7 +106,7 @@ public class JsonWriter extends AbstractFilter {
             if("elastic".equals(type)) {
             	String elasticLocation = location;
             	if(idField != null) {
-            		String id = document.getFieldValue(idField);
+            		String id = DocumentIdHelper.resolveId(document, idField, useExplicitIdField);
             		elasticLocation = ElasticHelper.getIndexUrlWithId(location, id);
             	}
             	
@@ -118,7 +121,7 @@ public class JsonWriter extends AbstractFilter {
             	if(idField == null) {
             		throw new RuntimeException("For a document update a id field is required.");
             	}
-            	String id = document.getFieldValue(idField);
+            	String id = DocumentIdHelper.resolveId(document, idField, useExplicitIdField);
         		String elasticUpdateLocation = ElasticHelper.getUpdateUrl(location, id);
         		
         		String updateJson = "{ \"doc\" : " + json + "}";

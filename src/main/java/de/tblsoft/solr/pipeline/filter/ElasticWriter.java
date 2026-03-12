@@ -12,6 +12,7 @@ import de.tblsoft.solr.pipeline.bean.Document;
 import de.tblsoft.solr.pipeline.bean.ElasticBulkResponse;
 import de.tblsoft.solr.pipeline.bean.ElasticResponse;
 import de.tblsoft.solr.pipeline.bean.Field;
+import de.tblsoft.solr.util.DocumentIdHelper;
 import de.tblsoft.solr.util.IOUtils;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -65,6 +66,7 @@ public class ElasticWriter extends AbstractFilter {
 
     private boolean includeTypeName;
     protected boolean verboseLog;
+    private boolean useExplicitIdField;
 
     @Override
     public void init() {
@@ -88,6 +90,7 @@ public class ElasticWriter extends AbstractFilter {
 
         idField = getProperty("idField", null);
         hashId = getPropertyAsBoolean("hashId", false);
+        useExplicitIdField = getPropertyAsBoolean("useExplicitIdField", false);
         includeTypeName = getPropertyAsBoolean("includeTypeName", false);
         jsonDatePattern = getProperty("jsonDatePattern", "yyyy-MM-dd'T'HH:mm:ssZ");
 
@@ -225,13 +228,11 @@ public class ElasticWriter extends AbstractFilter {
                 if (jsonDocument.isEmpty()) {
                     continue;
                 }
-                String id;
-                if (Strings.isNullOrEmpty(idField)) {
+                String id = DocumentIdHelper.resolveId(document, idField, useExplicitIdField);
+                if (Strings.isNullOrEmpty(id)) {
                     id = UUID.randomUUID().toString();
                 } else if(hashId) {
-                    id= DigestUtils.md5Hex(document.getFieldValue(idField));
-                } else {
-                    id = document.getFieldValue(idField);
+                    id = DigestUtils.md5Hex(id);
                 }
                 String index = ElasticHelper.getIndexFromUrl(indexUrl);
                 String type = ElasticHelper.getTypeFromUrl(location);
@@ -290,7 +291,10 @@ public class ElasticWriter extends AbstractFilter {
         if(Strings.isNullOrEmpty(bulkMethodFieldName)) {
             return false;
         }
-        String bulkMethod = document.getFieldValue(bulkMethodFieldName);
+        String bulkMethod = document.getOperation();
+        if(bulkMethod == null) {
+            bulkMethod = document.getFieldValue(bulkMethodFieldName);
+        }
         if("delete".equals(bulkMethod)) {
             return true;
         }

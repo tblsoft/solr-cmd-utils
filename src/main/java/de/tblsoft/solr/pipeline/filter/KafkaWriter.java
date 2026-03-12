@@ -2,6 +2,7 @@ package de.tblsoft.solr.pipeline.filter;
 
 import de.tblsoft.solr.pipeline.AbstractFilter;
 import de.tblsoft.solr.pipeline.bean.Document;
+import de.tblsoft.solr.util.DocumentIdHelper;
 import org.apache.kafka.clients.producer.*;
 import org.apache.kafka.common.serialization.StringSerializer;
 
@@ -15,6 +16,7 @@ public class KafkaWriter extends AbstractFilter {
     private Producer<String, String> producer;
 
     private String idField = "id";
+    private boolean useExplicitIdField;
 
     private String topic;
 
@@ -25,7 +27,7 @@ public class KafkaWriter extends AbstractFilter {
             String kafkaServers = getProperty("kafkaServers", "localhost:9092");
             String clientId = getProperty("clientId", "solr-cmd-utils");
             topic = getProperty("topic", null);
-
+            useExplicitIdField = getPropertyAsBoolean("useExplicitIdField", false);
 
             producer = createProducer(kafkaServers, clientId);
 
@@ -52,7 +54,7 @@ public class KafkaWriter extends AbstractFilter {
     @Override
     public void document(Document document) {
         try {
-            String id = document.getFieldValue(idField);
+            String id = DocumentIdHelper.resolveId(document, idField, useExplicitIdField);
             final ProducerRecord<String, String> record =
                     new ProducerRecord<String, String>(topic, id, document.toString());
             RecordMetadata metadata = producer.send(record).get();

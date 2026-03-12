@@ -9,10 +9,30 @@ import java.util.*;
  */
 public class Document {
 
+    private String id;
+
+    private String operation;
+
     private List<Field> fields = new ArrayList<Field>();
 
     private Long size;
 
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getOperation() {
+        return operation;
+    }
+
+    public void setOperation(String operation) {
+        this.operation = operation;
+    }
 
     public List<Field> getFields() {
         return fields;
@@ -23,6 +43,8 @@ public class Document {
     }
 
     public Document(Document copy) {
+        this.id = copy.id;
+        this.operation = copy.operation;
         for (Field field : copy.getFields()) {
             this.fields.add(new Field(field));
         }
@@ -224,7 +246,9 @@ public class Document {
     @Override
     public String toString() {
         return "Document{" +
-                "fields=" + fields +
+                "id='" + id + '\'' +
+                ", operation='" + operation + '\'' +
+                ", fields=" + fields +
                 '}';
     }
 

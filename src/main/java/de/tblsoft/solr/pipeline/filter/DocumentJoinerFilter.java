@@ -6,6 +6,7 @@ import de.tblsoft.solr.pipeline.PipelineExecuter;
 import de.tblsoft.solr.pipeline.bean.Document;
 import de.tblsoft.solr.pipeline.bean.Field;
 import de.tblsoft.solr.pipeline.bean.Pipeline;
+import de.tblsoft.solr.util.DocumentIdHelper;
 
 import java.util.Map;
 
@@ -16,11 +17,14 @@ public class DocumentJoinerFilter extends AbstractFilter {
     private Map<String, Document> lookupMap;
 
     private String key;
+    private boolean useExplicitIdField;
+
 
     @Override
     public void init() {
         String pipelineId = getProperty("pipelineId", null);
         key = getProperty("key", "id");
+        useExplicitIdField = getPropertyAsBoolean("useExplicitIdField", false);
         Pipeline pipeline = pipelineExecuter.getPipeline(pipelineId);
 
         PipelineExecuter pipelineExecuter = new PipelineExecuter(pipeline, getBaseDir());
@@ -36,7 +40,8 @@ public class DocumentJoinerFilter extends AbstractFilter {
 
     @Override
     public void document(Document document) {
-        Document joinDocument = lookupMap.get(document.getFieldValue(key));
+        String keyValue = DocumentIdHelper.resolveId(document, key, useExplicitIdField);
+        Document joinDocument = lookupMap.get(keyValue);
         if(joinDocument != null) {
             for (Field fieldToJoin : joinDocument.getFields()) {
                 if(!fieldToJoin.getName().equals(key)) {

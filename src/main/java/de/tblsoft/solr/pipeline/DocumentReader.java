@@ -49,7 +49,10 @@ public class DocumentReader extends AbstractReader {
         for(Object obj: jsonHits){
             Map<String, Object> doc = (Map<String, Object>) obj;
             Document document = new Document();
-            for(Map.Entry<String, Object> entry : doc.entrySet()) {
+            for (Map.Entry<String, Object> entry : doc.entrySet()) {
+                if ("id".equals(entry.getKey()) && entry.getValue() != null) {
+                    document.setId(entry.getValue().toString());
+                }
                 document.setField(entry.getKey(), entry.getValue());
             }
             executer.document(document);

@@ -7,6 +7,7 @@ import com.quasiris.qsc.writer.dto.QscFeedingDocument;
 import de.tblsoft.solr.http.HTTPHelper;
 import de.tblsoft.solr.pipeline.AbstractFilter;
 import de.tblsoft.solr.pipeline.bean.Document;
+import de.tblsoft.solr.util.DocumentIdHelper;
 import de.tblsoft.solr.util.DocumentMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,6 +28,7 @@ public class QscDataPushWriter extends AbstractFilter {
 
     private int batchSize = 100;
     private String idField = "id";
+    private boolean useExplicitIdField;
     private String url;
     private List<String> header;
 
@@ -37,6 +39,7 @@ public class QscDataPushWriter extends AbstractFilter {
         header = getPropertyAsList("header", new ArrayList<>());
         batchSize = getPropertyAsInt("batchSize", 100);
         idField = getProperty("idField", "id");
+        useExplicitIdField = getPropertyAsBoolean("useExplicitIdField", false);
 
         objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
 
@@ -68,7 +71,7 @@ public class QscDataPushWriter extends AbstractFilter {
         Header header = new Header();
         header.setAction("update");
 
-        String id = document.getFieldValue(idField);
+        String id = DocumentIdHelper.resolveId(document, idField, useExplicitIdField);
         if(id == null) {
             id = UUID.randomUUID().toString();
         }
