@@ -19,4 +19,6 @@ public interface ProcessorIF {
     void setBaseDir(String baseDir);
 
     void setVariables(Map<String, String> variables);
+
+    void setPipelineExecuter(PipelineExecuter pipelineExecuter);
 }

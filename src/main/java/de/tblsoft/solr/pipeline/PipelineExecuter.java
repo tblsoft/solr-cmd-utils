@@ -372,6 +372,7 @@ public class PipelineExecuter implements Serializable {
             processorInstance.setProcessor(processor);
             processorInstance.setVariables(pipeline.getVariables());
             processorInstance.setBaseDir(baseDir);
+            processorInstance.setPipelineExecuter(this);
             processorInstanceList.add(processorInstance);
 
         }

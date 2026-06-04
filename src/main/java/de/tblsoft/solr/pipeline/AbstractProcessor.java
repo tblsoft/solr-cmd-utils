@@ -71,4 +71,8 @@ public abstract class AbstractProcessor implements ProcessorIF {
     public void setBaseDir(String baseDir) {
         this.baseDir = baseDir;
     }
+
+    public void setPipelineExecuter(PipelineExecuter pipelineExecuter) {
+        this.executer = pipelineExecuter;
+    }
 }
