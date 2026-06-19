@@ -140,8 +140,9 @@ public class ElasticWriter extends AbstractFilter {
                     String response = HTTPHelper.put(mappingUrl, mappingJson, "application/json");
                     ElasticResponse elasticResponse = gson.fromJson(response, ElasticResponse.class);
                     if(!Boolean.TRUE.equals(elasticResponse.getAcknowledged())) {
-                        LOG.error("Could not create mapping for url: {} mappingJson: {} error: {} ",
-                                mappingUrl, mappingJson, response);
+                        LOG.error("Could not create mapping for url: {} mappingJson: {}",
+                                mappingUrl, mappingJson);
+                        LOG.error("Could not create mapping error: {} ", response);
                         throw new RuntimeException("Could not create mapping");
                     }
 
