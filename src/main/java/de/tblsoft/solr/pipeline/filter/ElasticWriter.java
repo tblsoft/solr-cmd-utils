@@ -40,6 +40,7 @@ public class ElasticWriter extends AbstractFilter {
     private boolean delete;
 
     private String idField;
+    private String documentIdField;
     private Boolean hashId = false;
 
     protected List<Document> buffer = new ArrayList<Document>();
@@ -89,6 +90,7 @@ public class ElasticWriter extends AbstractFilter {
         elasticMappingLocation = getProperty("elasticMappingLocation", null);
 
         idField = getProperty("idField", null);
+        documentIdField = getProperty("documentIdField", null);
         hashId = getPropertyAsBoolean("hashId", false);
         useExplicitIdField = getPropertyAsBoolean("useExplicitIdField", false);
         includeTypeName = getPropertyAsBoolean("includeTypeName", false);
@@ -242,6 +244,9 @@ public class ElasticWriter extends AbstractFilter {
                     String bulkMethod = createBulkMethod("delete", index, type, id);
                     bulkRequest.append(bulkMethod).append(" \n");
                 } else {
+                    if (!Strings.isNullOrEmpty(documentIdField)) {
+                        jsonDocument.put(documentIdField, id);
+                    }
                     String bulkMethod = createBulkMethod("index", index, type, id);
                     String json = gson.toJson(jsonDocument);
                     bulkRequest.append(bulkMethod).append(" \n");
