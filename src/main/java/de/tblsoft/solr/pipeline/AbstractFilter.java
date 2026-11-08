@@ -103,6 +103,11 @@ public abstract class AbstractFilter implements FilterIF {
     }
 
     @Override
+    public void flush() {
+        nextFilter.flush();
+    }
+
+    @Override
     public void setNextFilter(FilterIF filter){
         this.nextFilter=filter;
     }

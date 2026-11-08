@@ -73,6 +73,12 @@ public class AsyncElasticWriter extends ElasticWriter {
     }
 
     @Override
+    public void flush() {
+        super.flush();
+        awaitAllFutures();
+    }
+
+    @Override
     public void end() {
         // Flush the remaining buffer (async submit via sendBulkPayload)
         procesBuffer();

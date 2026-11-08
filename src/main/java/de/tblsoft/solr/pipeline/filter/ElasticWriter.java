@@ -469,6 +469,14 @@ public class ElasticWriter extends AbstractFilter {
     }
 
     @Override
+    public void flush() {
+        procesBuffer();
+        buffer = new ArrayList<>();
+        currentBufferContentSize = 0;
+        super.flush();
+    }
+
+    @Override
     public void end() {
         procesBuffer();
         if(housekeepingEnabled) {

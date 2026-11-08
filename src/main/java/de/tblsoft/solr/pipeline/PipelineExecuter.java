@@ -507,6 +507,10 @@ public class PipelineExecuter implements Serializable {
     }
 
 
+    public void flush() {
+        filterList.get(0).flush();
+    }
+
     public void end() {
         reader.end();
         FilterIF f = filterList.get(0);

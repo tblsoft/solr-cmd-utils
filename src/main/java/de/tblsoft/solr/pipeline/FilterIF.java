@@ -17,6 +17,9 @@ public interface FilterIF extends Serializable {
 
     public void end();
 
+    default void flush() {
+    }
+
     public void setFilterConfig(Filter filter);
 
     public void setNextFilter(FilterIF filter);

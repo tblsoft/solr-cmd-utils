@@ -82,6 +82,7 @@ public abstract class AbstractResumeReader extends AbstractReader {
                 for (Document document : docs) {
                     super.document(document);
                 }
+                executer.flush();
                 status.setLastBatch(status.getLastBatch() + 1);
                 file = getBatchFile(status.getLastBatch());
                 executer.saveResumeStatus();
