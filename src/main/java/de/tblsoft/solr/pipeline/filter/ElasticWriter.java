@@ -301,7 +301,7 @@ public class ElasticWriter extends AbstractFilter {
         if(bulkMethod == null) {
             bulkMethod = document.getFieldValue(bulkMethodFieldName);
         }
-        if("delete".equals(bulkMethod)) {
+        if("delete".equalsIgnoreCase(bulkMethod)) {
             return true;
         }
         return false;

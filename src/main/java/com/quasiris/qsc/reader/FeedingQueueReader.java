@@ -42,7 +42,7 @@ public class FeedingQueueReader extends AbstractResumeReader {
             for(FeedingQueue feedingQueue : feedingQueueList ) {
 
                  try {
-                    if ("delete".equals(feedingQueue.getOperation())) {
+                    if ("delete".equalsIgnoreCase(feedingQueue.getOperation())) {
                         Document document = new Document();
                         document.setId(feedingQueue.getDocumentId());
                         document.setOperation("delete");
